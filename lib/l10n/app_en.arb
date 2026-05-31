@@ -1,0 +1,344 @@
+{
+  "@@locale": "en",
+  "@@x-author": "Kultivar",
+
+  "appTitle": "Kultivar",
+  "@appTitle": {
+    "description": "App display name shown in the app bar."
+  },
+
+  "navHome": "Home",
+  "navAnalytics": "Analytics",
+  "navArchive": "Archive",
+  "navNotes": "Notes",
+  "navStrains": "Strains",
+  "navCosts": "Costs",
+  "navSettings": "Settings",
+  "@navHome": { "description": "Bottom-nav label for the Home tab." },
+  "@navAnalytics": { "description": "Bottom-nav label for the Analytics tab." },
+  "@navArchive": { "description": "Bottom-nav label for the Harvest Archive tab." },
+  "@navNotes": { "description": "Bottom-nav label for the Notes tab." },
+  "@navStrains": { "description": "Bottom-nav label for the Strain library tab." },
+  "@navCosts": { "description": "Bottom-nav label for the Expense Tracker tab." },
+  "@navSettings": { "description": "Bottom-nav label for the Settings screen." },
+
+  "commonSave": "Save",
+  "commonCancel": "Cancel",
+  "commonDelete": "Delete",
+  "commonEdit": "Edit",
+  "commonDone": "Done",
+  "commonClose": "Close",
+  "commonAdd": "Add",
+  "commonShare": "Share",
+  "commonSearch": "Search",
+  "commonFilter": "Filter",
+  "commonClearFilter": "Clear filter",
+  "@commonSave": { "description": "Generic Save button." },
+  "@commonCancel": { "description": "Generic Cancel button." },
+  "@commonDelete": { "description": "Generic Delete button." },
+  "@commonEdit": { "description": "Generic Edit button." },
+  "@commonDone": { "description": "Generic Done / dismiss action." },
+  "@commonClose": { "description": "Generic Close action." },
+  "@commonAdd": { "description": "Generic Add action — e.g. add plant, add note." },
+  "@commonShare": { "description": "Generic Share action — fires the system share sheet." },
+  "@commonSearch": { "description": "Search button / hint." },
+  "@commonFilter": { "description": "Filter action / chip label." },
+  "@commonClearFilter": { "description": "Action that resets the active filter." },
+
+  "homeAppBarTitle": "Kultivar",
+  "homeActivePlants": "{count, plural, =0{No active plants} =1{1 active} other{{count} active}}",
+  "@homeActivePlants": {
+    "description": "Plant-count badge in the Home app bar.",
+    "placeholders": {
+      "count": { "type": "int", "example": "3" }
+    }
+  },
+  "homeEmptyTitle": "Your first grow\nis waiting.",
+  "homeEmptySubtitle": "Create a grow space to start tracking.\nEverything unlocks from there.",
+  "@homeEmptyTitle": {
+    "description": "Hero heading shown on the Home tab when no grow spaces exist. May contain a newline."
+  },
+  "@homeEmptySubtitle": {
+    "description": "Subheading under the empty-state hero on Home."
+  },
+
+  "settingsLanguage": "Language",
+  "settingsLanguageSubtitle": "{lang} · Restart not required",
+  "@settingsLanguageSubtitle": {
+    "description": "Subtitle of the language picker — shows the current language name.",
+    "placeholders": {
+      "lang": { "type": "String", "example": "English" }
+    }
+  },
+  "settingsLanguageEnglish": "English",
+  "settingsLanguageSpanish": "Spanish",
+  "settingsLanguageGerman": "German",
+  "settingsLanguageFrench": "French",
+  "settingsLanguagePortuguese": "Portuguese",
+  "settingsLanguageItalian": "Italian",
+  "settingsLanguageDutch": "Dutch",
+  "settingsLanguageAfrikaans": "Afrikaans",
+  "settingsLanguageZulu": "isiZulu",
+  "@settingsLanguageAfrikaans": {
+    "description": "F12 — Afrikaans option in the language picker."
+  },
+  "@settingsLanguageZulu": {
+    "description": "F12 — Zulu (isiZulu) option in the language picker. Stored as the autonym 'isiZulu' to read naturally to a Zulu-first user."
+  },
+  "settingsLanguageSystem": "System default",
+  "@settingsLanguageSystem": {
+    "description": "Pseudo-option that resets to the OS locale."
+  },
+
+  "settingsSectionDataExport": "Data Export",
+  "settingsSectionBackup": "Backup & Restore",
+  "settingsSectionNotifications": "Notifications",
+  "settingsSectionAppearance": "Appearance",
+  "settingsSectionPrivacy": "Privacy",
+  "settingsSectionCommunity": "Community",
+  "settingsSectionApp": "App",
+
+  "settingsDarkMode": "Dark Mode",
+  "settingsFahrenheit": "Use Fahrenheit",
+  "settingsFahrenheitSubtitle": "Show temperatures in °F instead of °C",
+  "settingsCurrency": "Currency",
+  "settingsCurrencySubtitle": "Used for expenses and cost/gram (currently {symbol})",
+  "@settingsCurrencySubtitle": {
+    "description": "Subtitle of the currency picker — interpolates the active symbol.",
+    "placeholders": {
+      "symbol": { "type": "String", "example": "£" }
+    }
+  },
+
+  "settingsNotifDrying": "Drying Check Reminders",
+  "settingsNotifDryingSubtitle": "Remind me 3 days after harvest",
+  "settingsNotifCuring": "Curing Complete",
+  "settingsNotifCuringSubtitle": "Notify when curing finishes",
+  "settingsNotifBurping": "Burping Reminders",
+  "settingsNotifBurpingSubtitle": "Remind to burp curing jars",
+  "settingsNotifEnvAlerts": "Environment Alerts",
+  "settingsNotifEnvAlertsSubtitle": "Alert when temp or humidity leaves the optimal range",
+  "settingsNotifWatering": "Watering Reminders",
+  "settingsNotifWateringSubtitle": "Remind to water on your set schedule",
+  "settingsNotifFeeding": "Feeding Reminders",
+  "settingsNotifFeedingSubtitle": "Remind to feed nutrients on your set schedule",
+  "settingsNotifIpm": "IPM Reminders",
+  "settingsNotifIpmSubtitle": "Remind for preventative pest management sprays",
+  "settingsNotifTargetHarvest": "Target Harvest Reminders",
+  "settingsNotifTargetHarvestSubtitle": "Remind 7 days and 1 day before target harvest",
+  "settingsSnoozeDuration": "Snooze Duration",
+
+  "settingsExportAll": "Export All Data",
+  "settingsExportAllSubtitle": "Plants, notes & logs as a ZIP of CSVs",
+  "settingsExportPlants": "Export Plants",
+  "settingsExportPlantsSubtitle": "All plants with grow dates & weights as CSV",
+  "settingsExportHarvests": "Export Harvest Logs",
+  "settingsExportHarvestsSubtitle": "Yield data as CSV",
+  "settingsExportEnv": "Export Environment Logs",
+  "settingsExportEnvSubtitle": "Temp / humidity history as CSV",
+  "settingsExportNotes": "Export Notes",
+  "settingsExportNotesSubtitle": "All grow journal entries as CSV",
+  "settingsExportExpenses": "Export Expenses",
+  "settingsExportExpensesSubtitle": "All cost entries as CSV",
+
+  "settingsExportBackup": "Export Backup",
+  "settingsImportBackup": "Import Backup",
+  "settingsImportBackupSubtitle": "Replaces all current data · ZIP or JSON",
+  "settingsBackupShareCloud": "Send to Cloud / Drive",
+  "settingsBackupShareCloudSubtitle": "Share latest backup to iCloud, Google Drive, Dropbox…",
+  "settingsBackupAbout": "About Auto-Backup",
+  "settingsBackupAboutSubtitle": "How automatic backups & cloud sync work",
+  "settingsBackupEncrypt": "Encrypt backups",
+
+  "settingsAppLock": "App Lock",
+  "settingsUseBiometrics": "Use Biometrics",
+  "settingsUseBiometricsSubtitle": "Face ID or fingerprint instead of PIN",
+  "settingsChangePin": "Change PIN",
+  "settingsChangePinSubtitle": "Set a new 4-digit PIN",
+
+  "settingsCommunityShare": "Share Anonymous Grow Data",
+
+  "settingsExitDemo": "Exit Demo Mode",
+  "settingsExitDemoSubtitle": "Clear sample data and start your own journal",
+  "settingsReplayOnboarding": "Replay Onboarding",
+  "settingsReplayOnboardingSubtitle": "See the welcome screens again",
+  "settingsReclaimStorage": "Reclaim Storage",
+  "settingsReclaimStorageSubtitle": "Delete orphaned photo files",
+  "settingsClearAll": "Clear All Data",
+  "settingsClearAllSubtitle": "Permanently delete everything",
+
+  "settingsDarkModeFollowingSystem": "Following system setting ({mode})",
+  "@settingsDarkModeFollowingSystem": {
+    "description": "Subtitle when theme mode is `system`. The mode placeholder resolves to the localized 'dark' or 'light' word.",
+    "placeholders": {
+      "mode": { "type": "String", "example": "dark" }
+    }
+  },
+  "settingsDarkModeDarkActive": "Dark theme active",
+  "settingsDarkModeLightActive": "Light theme active",
+  "themeModeDark": "dark",
+  "themeModeLight": "light",
+  "@themeModeDark": { "description": "Lower-cased word used inside the system-mode parenthetical." },
+  "@themeModeLight": { "description": "Lower-cased word used inside the system-mode parenthetical." },
+
+  "settingsSnoozeDurationSubtitle": "Defer care reminders by {hours}h when you tap \"Snooze\"",
+  "@settingsSnoozeDurationSubtitle": {
+    "description": "Snooze duration tile subtitle.",
+    "placeholders": {
+      "hours": { "type": "int", "example": "4" }
+    }
+  },
+
+  "settingsAppLockSubtitleOn": "PIN required on open",
+  "settingsAppLockSubtitleOff": "Tap to set up a PIN",
+
+  "settingsBackupEncryptSubtitleOn": "AES-256 · passphrase required to restore",
+  "settingsBackupEncryptSubtitleOff": "Protect backup ZIPs with a passphrase",
+
+  "settingsCommunityShareSubtitleOn": "Anonymously contributing harvest benchmarks",
+  "settingsCommunityShareSubtitleOff": "Not sharing — tap to opt back in",
+  "settingsCommunityShareSubtitlePrompt": "Help growers compare yields — no personal data stored",
+
+  "settingsBackupSubtitleNever": "All data + photos as ZIP archive",
+  "settingsBackupSubtitleAgo": "Last backup: {ago}",
+  "@settingsBackupSubtitleAgo": {
+    "description": "Subtitle on the Export Backup tile after a backup has run. The ago placeholder is pre-localized.",
+    "placeholders": {
+      "ago": { "type": "String", "example": "2d ago" }
+    }
+  },
+  "agoJustNow": "just now",
+  "agoMinutes": "{minutes}min ago",
+  "@agoMinutes": {
+    "description": "Compact 'X minutes ago' phrase used in the backup tile subtitle.",
+    "placeholders": {
+      "minutes": { "type": "int", "example": "5" }
+    }
+  },
+  "agoHours": "{hours}h ago",
+  "@agoHours": {
+    "placeholders": {
+      "hours": { "type": "int", "example": "3" }
+    }
+  },
+  "agoDays": "{days}d ago",
+  "@agoDays": {
+    "placeholders": {
+      "days": { "type": "int", "example": "2" }
+    }
+  },
+
+  "settingsBackupBannerNoBackup": "No backup yet — export one to protect your data.",
+  "settingsBackupBannerStale": "{days, plural, =1{Backup is 1 day old. Export a fresh one.} other{Backup is {days} days old. Export a fresh one.}}",
+  "@settingsBackupBannerStale": {
+    "description": "Red urgency banner: backup is at least 14 days old.",
+    "placeholders": {
+      "days": { "type": "int", "example": "21" }
+    }
+  },
+  "settingsBackupBannerAging": "{days, plural, =1{Backup is 1 day old. Consider exporting soon.} other{Backup is {days} days old. Consider exporting soon.}}",
+  "@settingsBackupBannerAging": {
+    "description": "Amber warning banner: backup is at least 7 days old.",
+    "placeholders": {
+      "days": { "type": "int", "example": "10" }
+    }
+  },
+
+  "statusGrowing": "Growing",
+  "statusDrying": "Drying",
+  "statusCuring": "Curing",
+  "statusHarvested": "Harvested",
+  "statusCompleted": "Completed",
+  "statusRemoved": "Removed",
+  "@statusGrowing": { "description": "Plant status label — actively growing." },
+  "@statusDrying": { "description": "Plant status label — drying after harvest." },
+  "@statusCuring": { "description": "Plant status label — curing in jars." },
+  "@statusHarvested": { "description": "Plant status label — harvest day, not yet drying." },
+  "@statusCompleted": { "description": "Plant status label — entire grow cycle done." },
+  "@statusRemoved": { "description": "Plant status label — culled / archived early." },
+
+  "notesTitle": "Plant Notes",
+  "notesAddButton": "Add Note",
+  "notesEmptyNoPlantsTitle": "No Plants Yet",
+  "notesEmptyNoPlantsBody": "Add a plant in the Home tab\nto start taking notes.",
+  "notesEmptyNoNotes": "No notes yet",
+  "notesEmptyNoNotesPrompt": "No notes yet — tap a plant to add one.",
+  "notesAddToSheetTitle": "Add note to…",
+  "notesAddNoPlantToast": "Add a plant in the Home tab first",
+
+  "archiveTitle": "Harvest Archive",
+  "archiveFilterAll": "All",
+  "archiveFilterMonth": "This Month",
+  "archiveFilterYear": "This Year",
+  "archiveEmptyNoHarvestsTitle": "No Harvests Yet",
+  "archiveEmptyNoHarvestsBody": "Your completed grows will appear here.\nMark a plant as harvested to log your first.",
+  "archiveEmptyNoMatchTitle": "No Records Match",
+  "archiveEmptyNoMatchBody": "Try adjusting the date or space filter\nto find what you're looking for.",
+  "archiveEmptyNoMatchAction": "Clear Filters",
+  "archiveSectionHarvested": "Harvested Plants",
+  "archiveSectionRemoved": "Removed / Culled Plants",
+
+  "strainsEmptyTitle": "No Strains Yet",
+  "strainsEmptyBody": "Tap + to add your own, or browse the Catalog tab.",
+  "strainsEmptyAddAction": "Add Strain",
+  "strainsFilteredEmpty": "No strains match",
+  "strainsClearFilters": "Clear filters",
+
+  "costsEmptyTitle": "No expenses logged yet",
+  "costsEmptyBody": "Track seeds, nutrients, electricity and more.\nSee your real cost-per-gram at harvest.",
+  "costsEmptyAddAction": "Log First Expense",
+
+  "onboardingSkip": "Skip for now",
+  "onboardingProgress": "Step {current} of {total} · {label}",
+  "@onboardingProgress": {
+    "description": "Progress bar caption above the segmented bar.",
+    "placeholders": {
+      "current": { "type": "int", "example": "1" },
+      "total":   { "type": "int", "example": "2" },
+      "label":   { "type": "String", "example": "Create your space" }
+    }
+  },
+
+  "onboardingWelcomeTagline": "Built for serious growers.",
+  "onboardingWelcomeCta": "Set Up My First Space",
+  "onboardingWelcomeDemo": "Explore with sample data",
+  "onboardingWelcomeDemoCaption": "Pre-loaded with 6 completed grows and live analytics.",
+
+  "onboardingSpaceStepLabel": "Create your space",
+  "onboardingSpaceTitle": "Create Your\nFirst Space",
+  "onboardingSpaceBody": "A space is any environment where\nyou grow — a tent, room, or plot.",
+  "onboardingSpaceCta": "Create Space",
+
+  "onboardingPlantStepLabel": "Add your first plant",
+  "onboardingPlantTitle": "Add Your\nFirst Plant",
+  "onboardingPlantBody": "Optional — you can always add plants\nfrom the home screen.",
+  "onboardingPlantAddingTo": "Adding to: {space}",
+  "@onboardingPlantAddingTo": {
+    "description": "Chip shown on the Plant step when a space was created in the previous step.",
+    "placeholders": {
+      "space": { "type": "String", "example": "Flower Room" }
+    }
+  },
+  "onboardingPlantCta": "Start Growing",
+  "onboardingPlantStartDate": "Start date",
+  "onboardingPlantStartToday": "Today",
+  "onboardingPlantStartTapChange": "Tap to change",
+  "onboardingPlantStartDaysAgo": "{days, plural, =1{1 day ago} other{{days} days ago}}",
+  "@onboardingPlantStartDaysAgo": {
+    "placeholders": {
+      "days": { "type": "int", "example": "3" }
+    }
+  },
+  "onboardingPlantGenetics": "Genetics",
+  "onboardingPlantPhotoperiod": "Photoperiod",
+  "onboardingPlantAutoflower": "Autoflower",
+
+  "onboardingCommunityTitle": "You're Not\nGrowing Alone",
+  "onboardingCommunityBody": "Kultivar can optionally share anonymous\nharvest data with the community.",
+  "onboardingCommunityCta": "Continue Setup",
+
+  "onboardingProTitle": "Grow Without\nLimits",
+  "onboardingProBody": "Upgrade to Kultivar Pro and unlock\neverything serious growers need.",
+  "onboardingProCta": "See Plans & Pricing",
+  "onboardingProSkip": "Maybe Later — Start Free"
+}

@@ -1,0 +1,44 @@
+# SR9 — Fastlane configuration for automated screenshot capture.
+#
+# `fastlane screenshots` boots a fresh simulator for each device class
+# + locale combination listed in `Snapfile`, runs the
+# `RunnerUITests/RunnerUITests.swift` driver to navigate through the
+# key screens, and dumps PNGs into `fastlane/screenshots/<locale>/`.
+#
+# The captured PNGs are NOT committed to git — they're regenerated
+# from the running app every time, so the screenshots always reflect
+# the latest UI.  Add `fastlane/screenshots/**/*.png` to `.gitignore`
+# (already done) before the first run if you're in doubt.
+
+default_platform(:ios)
+
+platform :ios do
+  desc "Capture App Store screenshots across device classes and locales"
+  lane :screenshots do
+    # `clear_previous_screenshots: true` is required when re-running
+    # the lane on the same machine — without it old screenshots from
+    # prior runs leak into the upload set.
+    capture_ios_screenshots(
+      clear_previous_screenshots: true
+    )
+  end
+
+  desc "Upload captured screenshots to App Store Connect"
+  lane :upload_screenshots do
+    deliver(
+      skip_binary_upload: true,
+      skip_metadata: true,
+      skip_screenshots: false,
+      overwrite_screenshots: true,
+      force: true,
+      run_precheck_before_submit: false,
+      precheck_include_in_app_purchases: false
+    )
+  end
+
+  desc "Capture + upload in one go"
+  lane :screenshots_and_upload do
+    screenshots
+    upload_screenshots
+  end
+end

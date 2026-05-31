@@ -1,0 +1,19 @@
+# gen-l10n config for the Kultivar app (F11).
+#
+# Run `flutter pub get` (or any build) to regenerate
+# `.dart_tool/flutter_gen/gen_l10n/app_localizations*.dart`.
+#
+# Conventions:
+#   * `app_en.arb` is the template (`template-arb-file`) — every key
+#     declared here is required in every other locale, and the
+#     `@<key>` metadata blocks live here only.
+#   * `output-class: AppLocalizations` matches the import path
+#     `package:flutter_gen/gen_l10n/app_localizations.dart`.
+#   * `synthetic-package: true` (default) places the generated files
+#     inside `.dart_tool` rather than the source tree — keeps `lib/`
+#     diff-clean and the regenerated files out of git.
+arb-dir: lib/l10n
+template-arb-file: app_en.arb
+output-localization-file: app_localizations.dart
+output-class: AppLocalizations
+nullable-getter: false

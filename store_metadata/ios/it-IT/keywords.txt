@@ -1,0 +1,1 @@
+coltivazione,cannabis,diario,varietà,raccolto,resa,VPD,concia,tracker,pianta,giardino,idroponica

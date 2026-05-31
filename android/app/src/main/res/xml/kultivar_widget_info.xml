@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  AppWidgetProviderInfo for the Kultivar glance widget.
+  minWidth/minHeight in dp → roughly 2×2 cells on the launcher grid.
+  updatePeriodMillis is capped by Android at 1 800 000 ms (30 min) regardless.
+  The widget is also refreshed from Flutter via HomeWidget.updateWidget().
+-->
+<appwidget-provider
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:minWidth="180dp"
+    android:minHeight="110dp"
+    android:targetCellWidth="2"
+    android:targetCellHeight="2"
+    android:updatePeriodMillis="1800000"
+    android:initialLayout="@layout/kultivar_widget"
+    android:resizeMode="horizontal|vertical"
+    android:widgetCategory="home_screen"
+    android:description="@string/widget_description" />

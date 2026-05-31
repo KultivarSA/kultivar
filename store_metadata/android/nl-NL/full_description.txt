@@ -1,0 +1,37 @@
+Kultivar is de kweek-tracker voor thuiskwekers die willen onthouden wat werkte — en wat niet.
+
+Volg elke plant van zaad tot uitharding. Leg voedingen, snoeibeurten, watergiften, IPM-behandelingen en observaties vast tegen een rassenbibliotheek. Zie je gemiddelde opbrengst, je kosten per gram en een volledig PDF-kweekverslag bij het einde van elke cyclus. Je gegevens blijven standaard op je toestel.
+
+WAAROM KULTIVAR
+
+• Plantdagboek dat over cycli heen blijft bestaan. Vind in drie taps terug "welke voeding gebruikte ik op die Blue Dream afgelopen zomer?".
+• Volledige levenscyclus-automaat — Groei → Geoogst → Drogen → Uitharden → Voltooid, met fasegerichte herinneringen.
+• Klimaatregistratie per kweekruimte (tent / kamer / outdoor) met temperatuur, luchtvochtigheid, VPD-rekenmachine en waarschuwingen buiten bereik.
+• Faseafhankelijke herinneringsintervallen — water en voeding passen zich automatisch aan tussen kiemplant, vegetatief, bloei en spoel.
+• Fototijdlijn per plant met datum-overlay en categoriegekleurde rand — scan de strook en herken meteen "dit is een voedingsfoto uit week 4".
+• Kwaliteitsbeoordeling bij oogst — halve sterren voor algemeen + geur + effect + uiterlijk, plus aroma-, smaak- en effectnotities, vastgelegd terwijl het vers is.
+• Uitgaventracker — registreer kosten in 22 valuta, zie kosten per gram zodra een droog gewicht is ingevuld.
+• Rassenbibliotheek met vergelijkingen — ingebouwde catalogus met bloeidagen en landras-filter; voeg eigen rassen toe met volledig profiel.
+• Cross-cycle vergelijking — leg twee voltooide cycli naast elkaar om te zien wat er werkelijk verschilt tussen je beste en slechtste run.
+• Kweekverslagen — elke voltooide cyclus genereert een deelbare PDF.
+• Spraaknotities — voeg snel een audio-observatie toe als je geen tijd hebt om te typen.
+• Vrije tags op planten en notities.
+• Back-up en herstel met AES-256-GCM-versleutelde ZIPs (wachtwoordzin-beveiligd; manipulatie wordt gedetecteerd bij ontsleuteling).
+• App-vergrendeling met biometrie + PIN-back-up.
+• 7 talen ingebouwd — Engels, Duits, Spaans, Frans, Italiaans, Nederlands, Portugees.
+
+PRIJZEN
+
+• Gratis — 1 ruimte, 3 actieve planten, 60 dagen historiek, volledige rassenbibliotheek met vergelijkingen.
+• Lifetime Local — eenmalige aankoop, onbeperkt planten en ruimtes, volledige analytics. Geen clouddiensten, geen abonnement.
+• Pro Cloud — abonnement met community-percentielbenchmarks en (binnenkort) synchronisatie tussen apparaten.
+
+Je kunt Kultivar van begin tot eind gebruiken zonder ooit een account aan te maken. Geen tracking, geen advertenties, geen verkoop van gegevens.
+
+PRIVACY
+
+Kultivar stelt privacy voorop. Je kweekdagboek leeft in versleutelde lokale opslag. Community-benchmarks zijn opt-in en alleen actief in Pro Cloud. Crashrapporten gaan alleen met expliciete toestemming naar Sentry. Volledige privacyverklaring in de app, onder Instellingen → Privacy.
+
+DISCLAIMER
+
+Kultivar is voor volwassenen die in hun rechtsgebied wettelijk cannabis mogen telen. Controleer altijd de lokale wetgeving. Geen medisch advies.

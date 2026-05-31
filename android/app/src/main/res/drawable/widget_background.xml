@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Rounded-corner background for the Kultivar home-screen widget -->
+<shape xmlns:android="http://schemas.android.com/apk/res/android"
+    android:shape="rectangle">
+    <solid android:color="#EF13131A" />
+    <corners android:radius="16dp" />
+    <stroke android:width="1dp" android:color="#2A2A3D" />
+</shape>

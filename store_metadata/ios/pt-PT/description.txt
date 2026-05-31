@@ -1,0 +1,39 @@
+Kultivar é o diário de cultivo desenhado para cultivadores caseiros que querem lembrar-se do que funcionou — e do que não funcionou.
+
+Acompanhe cada planta da semente à cura. Registe fertilizações, podas, regas, tratamentos IPM e observações face a uma biblioteca de variedades. Consulte o seu rendimento médio, o custo por grama e um relatório PDF completo no final de cada ciclo. Os seus dados ficam no dispositivo por predefinição.
+
+PORQUÊ KULTIVAR
+
+• Diário por planta que sobrevive entre ciclos.
+• Máquina de estados completa — Crescimento → Colhido → Secagem → Cura → Concluído, com lembretes específicos por fase.
+• Registo ambiental por espaço com temperatura, humidade, calculadora VPD e alertas fora de intervalo.
+• Cadências de lembrete adaptadas à fase — rega e fertilização entre plântula, vegetativo, floração e flush.
+• Linha do tempo de fotografias com data sobreposta e bordo tingido por categoria.
+• Avaliação de qualidade na colheita — meias-estrelas mais notas de aroma, sabor e efeito.
+• Controlo de despesas em 22 moedas; custo por grama assim que houver peso seco.
+• Biblioteca de variedades com comparações e variedades próprias.
+• Comparação lado a lado de dois cultivos concluídos.
+• Relatórios de cultivo em PDF.
+• Notas de voz.
+• Etiquetas livres em plantas e notas.
+• Cópia de segurança e restauro com ZIPs encriptados AES-256-GCM.
+• Bloqueio da app com Face ID / Touch ID + PIN.
+• 7 idiomas integrados.
+
+PREÇOS
+
+• Gratuito — 1 espaço, 3 plantas ativas, 60 dias de histórico, biblioteca completa de variedades.
+• Lifetime Local — compra única, uso ilimitado. Sem cloud, sem mensalidades.
+• Pro Cloud — subscrição com benchmarks da comunidade e sincronização entre dispositivos (em breve).
+
+Pode usar sem criar conta. Sem rastreio, sem publicidade, sem venda de dados.
+
+PRIVACIDADE
+
+O seu diário vive em armazenamento local encriptado. Benchmarks da comunidade opt-in e só ativos em Pro Cloud. Os relatórios de falhas requerem consentimento explícito. Política de privacidade completa na app, em Definições → Privacidade.
+
+As subscrições renovam-se automaticamente exceto se canceladas pelo menos 24 horas antes do fim do período atual. Gira nas definições da sua conta App Store.
+
+AVISO
+
+O Kultivar destina-se a adultos legalmente autorizados a cultivar canábis na sua jurisdição. Verifique sempre a legislação local. Não fornece aconselhamento médico.

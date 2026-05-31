@@ -1,0 +1,37 @@
+Kultivar ist der Anbau-Tracker für Hobbygärtner, die sich merken wollen, was funktioniert hat — und was nicht.
+
+Begleite jede Pflanze von der Aussaat bis zur Reife. Erfasse Düngung, Trainingsschnitte, Bewässerung, Schädlingsbehandlungen und Beobachtungen — alles verknüpft mit einer Sortenbibliothek. Sieh deinen Durchschnittsertrag, Kosten pro Gramm und einen vollständigen PDF-Anbaubericht nach jedem Zyklus. Deine Daten bleiben standardmäßig auf deinem Gerät.
+
+WARUM KULTIVAR
+
+• Tagebuch pro Pflanze, das zyklusübergreifend bestehen bleibt — frag dich nicht mehr, welche Nährstoffe du letzten Sommer benutzt hast.
+• Vollständiger Lebenszyklus-Automat — Wachstum → Ernte → Trocknung → Aushärtung → Abgeschlossen, mit phasenspezifischen Erinnerungen.
+• Klimaprotokolle pro Anbauplatz (Zelt / Raum / Outdoor) mit Temperatur, Luftfeuchte, VPD-Rechner und Warnungen bei Bereichsüberschreitungen.
+• Phasenangepasste Erinnerungsintervalle — Bewässerung und Düngung passen sich automatisch zwischen Sämling, Veg-, Blüte- und Spülphase an.
+• Foto-Zeitleiste mit Datums-Overlay und kategoriegetönten Rändern — auf einen Blick erkennbar: „Das ist ein Düngefoto aus Woche 4".
+• Qualitätsbewertung bei der Ernte — halbe Sterne für Gesamteindruck, Duft, Wirkung und Optik plus Aroma-, Geschmacks- und Wirkungsnotizen.
+• Ausgaben-Tracker — Kosten in 22 Währungen erfassen, Kosten pro Gramm sehen, sobald ein Trockengewicht eingetragen ist.
+• Sortenbibliothek mit Vergleichen — eingebauter Katalog mit Blütezeiten und Landrassen-Filter; eigene Sorten mit vollem Profil hinzufügen.
+• Cross-Cycle-Vergleich — zwei abgeschlossene Zyklen nebeneinander legen, um zu sehen, was zwischen deinem besten und schlechtesten Lauf wirklich anders war.
+• Anbauberichte — jeder abgeschlossene Zyklus erzeugt ein teilbares PDF.
+• Sprachnotizen — schnelle Audio-Beobachtungen, wenn keine Zeit zum Tippen ist.
+• Frei wählbare Tags auf Pflanzen und Notizen.
+• Backup + Wiederherstellung mit AES-256-GCM-verschlüsselten ZIPs (passphrasen-geschützt; Manipulation wird beim Entschlüsseln erkannt).
+• App-Sperre mit Biometrie + PIN-Fallback.
+• 7 Sprachen integriert — Englisch, Deutsch, Spanisch, Französisch, Italienisch, Niederländisch, Portugiesisch.
+
+PREISE
+
+• Kostenlos — 1 Anbauplatz, 3 aktive Pflanzen, 60 Tage Analytics-Verlauf, volle Sortenbibliothek mit Vergleichen.
+• Lifetime Local — Einmalkauf, unbegrenzte Pflanzen und Anbauplätze, volle Analytics. Keine Cloud-Dienste, keine wiederkehrenden Gebühren.
+• Pro Cloud — Abonnement mit Community-Perzentil-Benchmarks und (bald) Cross-Device-Sync.
+
+Du kannst Kultivar vollständig ohne Konto nutzen. Kein Tracking, keine Werbung, kein Datenverkauf.
+
+DATENSCHUTZ
+
+Dein Anbaujournal liegt in verschlüsseltem lokalen Speicher. Community-Benchmarks sind Opt-in und nur unter Pro Cloud aktiv. Absturzberichte werden nur mit ausdrücklicher Zustimmung an Sentry gesendet. Vollständige Datenschutzerklärung in der App unter Einstellungen → Datenschutz.
+
+HAFTUNGSAUSSCHLUSS
+
+Kultivar richtet sich an Erwachsene, denen der Cannabis-Anbau in ihrer Rechtsordnung erlaubt ist. Lokale Gesetze immer prüfen. Keine medizinische Beratung.

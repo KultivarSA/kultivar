@@ -1,0 +1,39 @@
+Kultivar is the grow-cycle tracker designed for home growers who want to remember what worked — and what didn't.
+
+Track every plant from seed to cure. Log feedings, training cuts, watering, IPM sprays, and observations against a per-strain library. See your average yield, your cost-per-gram, and a full PDF grow report once each cycle wraps. Your data stays on your device by default.
+
+WHY GROWERS USE KULTIVAR
+
+• Per-plant journal that survives across cycles — pull up "what nutes did I run on that Blue Dream last summer?" in three taps.
+• Full lifecycle state machine — Growing → Harvested → Drying → Curing → Completed. Each stage gets reminder presets and the right next-action prompts.
+• Environment logging per grow space (tent / room / outdoor) with temperature, humidity, VPD calculator, and out-of-range alerts.
+• Stage-aware reminder cadences — watering and feeding intervals automatically adjust between seedling, veg, flower, and flush.
+• Photo timeline with date overlay and category-tinted borders — scan the strip and immediately read "this is a feeding photo from week 4".
+• Quality assessment on harvest — half-star ratings for overall + smell + effect + bag appeal, plus aroma / flavor / effect tasting notes, captured while it's fresh.
+• Expense tracker — log costs in 22 supported currencies, see cost-per-gram once a dry weight lands.
+• Strain library with comparisons — built-in catalog with flowering days, landrace filter; add your own strains.
+• Cross-grow comparison — line up two completed cycles side-by-side to see what's different between your best and worst runs.
+• Grow reports — every completed cycle generates a sharable PDF.
+• Voice notes — attach a quick audio observation when you don't have time to type.
+• Free-form tags on plants and notes.
+• Backup + restore with AES-256-GCM encrypted ZIPs (passphrase-protected; tampering is detected on decrypt).
+• App Lock with Face ID / Touch ID + PIN fallback.
+• 7 languages — English, German, Spanish, French, Italian, Dutch, Portuguese.
+
+PRICING
+
+• Free — 1 grow space, 3 active plants, 60 days of analytics history, full built-in strain library + comparisons.
+• Lifetime Local — one-time purchase, unlimited plants and spaces, full analytics, exports. No cloud services, no recurring fees.
+• Pro Cloud — subscription that adds community percentile benchmarking and (coming soon) cross-device sync.
+
+You can use Kultivar end-to-end without ever creating an account. No tracking, no ads, no data sale.
+
+PRIVACY
+
+Your grow journal lives in encrypted local storage. Community benchmarks are opt-in and only fire when you're on Pro Cloud. Crash reports require explicit consent. Full privacy policy in-app under Settings → Privacy.
+
+Subscriptions auto-renew unless cancelled at least 24 hours before the end of the current period. Manage in your App Store account settings.
+
+DISCLAIMER
+
+Kultivar is for adults legally allowed to cultivate cannabis in their jurisdiction. Always check local laws. Not for medical advice.

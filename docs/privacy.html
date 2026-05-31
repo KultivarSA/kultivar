@@ -1,0 +1,257 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#0A0A0F">
+  <meta name="color-scheme" content="dark">
+  <meta name="robots" content="index,follow">
+  <meta name="description" content="How Kultivar stores your grow data and what we never share.">
+  <title>Privacy Policy — Kultivar</title>
+  <link rel="icon" type="image/png" href="favicon.png">
+  <style>
+  :root {
+    --bg: #0A0A0F;
+    --surface-1: #13131A;
+    --surface-2: #1C1C27;
+    --border: #2A2A3D;
+    --border-faint: #26263B;
+    --primary: #00C896;
+    --text-primary: #F0F0FF;
+    --text-secondary: #9090AA;
+    --text-muted: #5A5A70;
+    --max-width: 720px;
+  }
+
+  * { box-sizing: border-box; }
+
+  html { -webkit-text-size-adjust: 100%; }
+
+  body {
+    margin: 0;
+    padding: 0;
+    background: var(--bg);
+    color: var(--text-primary);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto,
+      Oxygen-Sans, Ubuntu, Cantarell, "Helvetica Neue", sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  .container {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    padding: 32px 24px 80px;
+  }
+
+  header.site {
+    border-bottom: 1px solid var(--border-faint);
+    padding: 20px 24px;
+    background: var(--surface-1);
+  }
+
+  header.site .brand {
+    max-width: var(--max-width);
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  header.site .wordmark {
+    color: var(--primary);
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: -0.2px;
+    text-decoration: none;
+  }
+
+  .meta {
+    color: var(--text-muted);
+    font-size: 13px;
+    margin: 0 0 32px;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    color: var(--text-primary);
+    letter-spacing: -0.2px;
+    line-height: 1.25;
+    margin: 32px 0 12px;
+  }
+  h1 { font-size: 28px; margin-top: 0; }
+  h2 { font-size: 22px; }
+  h3 { font-size: 18px; }
+  h4 { font-size: 16px; color: var(--text-secondary); }
+
+  p, ul, ol { margin: 0 0 16px; color: var(--text-primary); }
+
+  ul, ol { padding-left: 24px; }
+  li { margin-bottom: 6px; }
+
+  a {
+    color: var(--primary);
+    text-decoration: none;
+    border-bottom: 1px solid rgba(0, 200, 150, 0.35);
+    transition: border-color 0.15s ease;
+  }
+  a:hover { border-bottom-color: var(--primary); }
+
+  hr {
+    border: none;
+    border-top: 1px solid var(--border-faint);
+    margin: 32px 0;
+  }
+
+  code {
+    background: var(--surface-2);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-size: 14px;
+    font-family: "SF Mono", Menlo, Consolas, "Liberation Mono", monospace;
+    color: var(--primary);
+  }
+
+  strong { color: var(--text-primary); }
+
+  footer.site {
+    border-top: 1px solid var(--border-faint);
+    padding: 24px;
+    color: var(--text-muted);
+    font-size: 13px;
+    text-align: center;
+  }
+
+  footer.site a { color: var(--text-secondary); border-bottom-color: transparent; }
+  footer.site a:hover { color: var(--primary); }
+
+  @media (max-width: 480px) {
+    .container { padding: 24px 16px 64px; }
+    h1 { font-size: 24px; }
+    h2 { font-size: 20px; }
+  }
+</style>
+</head>
+<body>
+  <header class="site">
+    <div class="brand">
+      <a class="wordmark" href="./">Kultivar</a>
+    </div>
+  </header>
+  <main class="container">
+    <p class="meta">Version 2026-05-29 · <a href="./">Back to index</a></p>
+<h1>Privacy Policy</h1>
+<p><strong>Last updated:</strong> 29 May 2026</p>
+<p>Kultivar is built around a single principle: <strong>your grow data lives on your device by default.</strong> We don't have an account system, we don't build profiles, and we don't sell anything to advertisers. This document explains exactly what data the app touches, where it goes, and what control you have over it.</p>
+<hr>
+<h2>What we collect — and where it lives</h2>
+<h3>Data that stays on your device</h3>
+<p>Everything you log inside Kultivar — plants, grow spaces, photos, notes, watering schedules, environment readings, harvest weights, expenses, training records — is stored <strong>locally on your device only</strong> in an encrypted Hive database.</p>
+<p>We do not have a copy of this data. We can't see it, can't recover it if your device is lost, and can't share it with anyone.</p>
+<h3>Optional anonymous community data</h3>
+<p>If you opt into the <strong>community benchmark</strong> feature (<em>Settings → Community → Share anonymous grow data</em>), Kultivar uploads the following to our community database (Supabase):</p>
+<ul>
+  <li>Strain name (normalised — lowercase, trimmed)</li>
+  <li>Dry weight in grams</li>
+  <li>Total grow days, vegetative days, flowering days</li>
+  <li>Whether the plant was an autoflower or a clone</li>
+  <li>Optional growing medium / light type / training techniques</li>
+  <li>App version (for sample bucketing)</li>
+</ul>
+<p>We <strong>do not</strong> upload:</p>
+<ul>
+  <li>Your name, email, or any account identifier (we have none)</li>
+  <li>Photos</li>
+  <li>Notes</li>
+  <li>Personal observations</li>
+  <li>IP address (Supabase logs request IPs at the infrastructure layer</li>
+</ul>
+<p>but Kultivar's application code does not store or correlate them   with submissions)</p>
+<ul>
+  <li>Device identifiers</li>
+</ul>
+<p>Each submission is independent. There is no link between two submissions from the same device. You can switch the opt-in off at any time; we have no way of identifying <em>your</em> past submissions to delete them on request because they aren't tied to you.</p>
+<h3>Subscription data (RevenueCat)</h3>
+<p>If you purchase Kultivar Pro Cloud or Lifetime Local, the App Store / Play Store handles the transaction. Kultivar uses <a href="https://www.revenuecat.com" rel="noopener noreferrer" target="_blank">RevenueCat</a> — a subscription infrastructure provider — to validate your entitlement on each device and to support "Restore Purchases".</p>
+<p>RevenueCat receives:</p>
+<ul>
+  <li>An anonymous device identifier generated by the store</li>
+  <li>Your subscription product ID and renewal status</li>
+</ul>
+<p>RevenueCat <strong>does not</strong> receive any of your grow data. See <a href="https://www.revenuecat.com/privacy/" rel="noopener noreferrer" target="_blank">RevenueCat's privacy policy</a> for how they handle the identifiers we send.</p>
+<h3>Optional crash reports (Sentry)</h3>
+<p>Production builds of Kultivar may ship with crash reporting enabled via <a href="https://sentry.io" rel="noopener noreferrer" target="_blank">Sentry</a>. When the app crashes or hits an unhandled error, Sentry receives:</p>
+<ul>
+  <li>The error name + stack trace</li>
+  <li>The operation that failed (e.g. <code>StorageService.savePlants</code>)</li>
+  <li>App version + OS version</li>
+  <li>Anonymous, randomly-generated installation ID</li>
+</ul>
+<p>Sentry <strong>does not</strong> receive any of your grow data, photo files, or notes.</p>
+<p>If you'd prefer not to send crash reports at all, build Kultivar yourself from source without supplying the <code>SENTRY_DSN</code> build flag — see <code>BUILD.md</code> in the project repository.</p>
+<h3>Weather data (Open-Meteo)</h3>
+<p>When you enable the outdoor weather card for a grow space, Kultivar calls <a href="https://open-meteo.com" rel="noopener noreferrer" target="_blank">Open-Meteo</a> — a free public weather API — with the latitude + longitude you set for that space (or that you allow the app to detect via your device's location services).</p>
+<p>The latitude / longitude is <strong>only</strong> sent to Open-Meteo at the moment the card is being refreshed. It is not stored on any of our servers (we don't have any servers in that loop). Open-Meteo's privacy stance is documented at <a href="https://open-meteo.com/en/terms" rel="noopener noreferrer" target="_blank">open-meteo.com/en/terms</a>.</p>
+<p>You can revoke the location permission from your operating system settings at any time; the card will fall back to showing a "Set location manually" prompt.</p>
+<hr>
+<h2>What we don't do</h2>
+<ul>
+  <li>We do not have user accounts and do not require one.</li>
+  <li>We do not sell, rent, or trade your data with anyone.</li>
+  <li>We do not embed third-party advertising SDKs.</li>
+  <li>We do not track you across other apps or websites.</li>
+  <li>We do not use cookies (Kultivar is a mobile app, not a website).</li>
+  <li>We do not profile you for marketing.</li>
+</ul>
+<hr>
+<h2>Your rights</h2>
+<p>Because the bulk of your data lives only on your device, you control it directly:</p>
+<ul>
+  <li><strong>View your data</strong> — open the app; everything is browsable.</li>
+  <li><strong>Export your data</strong> — <em>Settings → Backup → Export Backup</em> writes</li>
+</ul>
+<p>every plant, note, harvest log, and photo to an encrypted ZIP you   can store wherever you like.</p>
+<ul>
+  <li><strong>Delete your data</strong> — uninstall the app, or use *Settings → Clear</li>
+</ul>
+<p>all data* to wipe everything in place.</p>
+<ul>
+  <li><strong>Stop sharing community data</strong> — toggle *Settings → Community →</li>
+</ul>
+<p>Share anonymous grow data* off. New submissions will not be made.   Past submissions cannot be tied back to you and therefore cannot   be individually deleted.</p>
+<p>If you're a resident of the EU (GDPR) or California (CCPA), you have additional rights to data portability, correction, and deletion. The export + clear-all flows above already cover portability and deletion end-to-end for the local data. For community submissions, the anonymisation means there is no record to correct or delete against your identity.</p>
+<hr>
+<h2>Children's privacy</h2>
+<p>Kultivar is intended for adults legally permitted to cultivate cannabis in their jurisdiction. We do not knowingly collect data from anyone under 18 (or the local age of majority where higher). If you believe we have inadvertently collected data from a minor, contact us at the address below and we will delete it.</p>
+<hr>
+<h2>Security</h2>
+<ul>
+  <li>Local data sits in an encrypted Hive box on your device. The</li>
+</ul>
+<p>encryption key is stored in the platform's secure storage (iOS   Keychain, Android Keystore).</p>
+<ul>
+  <li>Backup exports are wrapped in an additional AES-256-GCM envelope</li>
+</ul>
+<p>with a PBKDF2-HMAC-SHA256 derived key — your backup passphrase is   never stored or transmitted.</p>
+<ul>
+  <li>Community submissions travel to Supabase over HTTPS.</li>
+</ul>
+<p>No system is perfectly secure. We use the best practices available to the Flutter / Dart ecosystem at the time of release, and we patch identified weaknesses promptly in subsequent updates.</p>
+<hr>
+<h2>Changes to this policy</h2>
+<p>We may update this policy from time to time — for example, when we add a new feature that touches data. The "Last updated" date at the top will reflect the change. Material changes (anything that expands what we collect or how we use it) will be surfaced in the app on first launch after the update.</p>
+<hr>
+<h2>Contact</h2>
+<p>Questions about this policy, or about your data? Reach Kultivar at:</p>
+<p><strong>support@kultivar.io</strong></p>
+<p>Kultivar is operated by <strong>Kultivar (Pty) Ltd</strong>, a private company registered in the Republic of South Africa under the Companies Act, 2008 (Reg: &lt;COMPANY_REG_PLACEHOLDER&gt;). The preflight script (<code>tools/preflight.ps1</code>) will flag the placeholder above as missing until you replace it with the actual CIPC-issued registration number.</p>
+  </main>
+  <footer class="site">
+    <p>
+      © Kultivar.
+      The in-app version of this document is identical and lives under
+      <strong>Settings → Legal</strong>.
+    </p>
+  </footer>
+</body>
+</html>

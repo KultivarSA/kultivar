@@ -1,0 +1,37 @@
+Kultivar is die kweekjoernaal vir tuiskwekers wat wil onthou wat gewerk het — en wat nie.
+
+Volg elke plant van saad tot veroudering. Lê voeding, snoeibeurte, natlek, IPM-spuitings en waarnemings vas teen 'n variëteit-biblioteek. Sien jou gemiddelde opbrengs, koste per gram en 'n volledige PDF-kweekverslag wanneer elke siklus klaar is. Jou data bly per default op jou toestel.
+
+OOR DIE WET IN SUID-AFRIKA
+
+Die Wet op Cannabis vir Private Doeleindes (Wet 7 van 2024) maak privaat volwasse kweek wettig vir persoonlike gebruik. Kultivar is 'n persoonlike dopjoernaal — geen verkope, geen aflewering, geen markplek. Wees verantwoordelik en hou by jou plaaslike munisipale beperkings.
+
+WAAROM KWEKERS KULTIVAR GEBRUIK
+
+• Plantjoernaal wat siklusse oorleef. Sien in drie tikke "watter voeding het ek verlede somer op daardie Blue Dream gebruik?"
+• Volledige lewensiklus-staatsmasjien — Groei → Geoes → Droog → Veroudering → Voltooi. Elke stadium kry sy eie herinneringe.
+• Klimaatlogboek per kweekruimte (tent / kamer / buite) met temperatuur, humiditeit, VPD-rekenaar en uit-bereik-waarskuwings.
+• Fase-aangepaste herinneringe — natlek en voeding pas hulself outomaties tussen saailing, veg, blom en spoel aan.
+• Foto-tydlyn per plant met datum-oorlegging en kategorie-getintte rand.
+• Kwaliteitsbepaling by oes — half-ster-graderings vir geheel + reuk + effek + voorkoms, plus aroma-, geur- en effeknotas.
+• Uitgawe-volger — koste in 22 geldeenhede (insluitend Rand R), koste per gram sodra 'n droë gewig vasgelê is.
+• Variëteit-biblioteek met vergelykings — ingeboude katalogus met blomdae, plus jou eie variëteite.
+• Kruis-kweek-vergelyking — sit twee voltooide siklusse langs mekaar.
+• Kweekverslae — elke voltooide siklus genereer 'n deelbare PDF.
+• Stemnotas — vinnige klanknotas wanneer jy nie tik nie.
+• Vrye etikette op plante en notas.
+• Rugsteun + herstel met AES-256-GCM enkripteerde ZIPs.
+• App-slot met biometrie + PIN.
+• 9 tale ingebou — Engels, Duits, Spaans, Frans, Italiaans, Nederlands, Portugees, Afrikaans, isiZulu.
+
+PRYSE
+
+• Gratis — 1 ruimte, 3 aktiewe plante, 60 dae analise.
+• Lifetime Local — eenmalige aankoop, onbeperkte plante en ruimtes. Geen wolkdienste, geen vaste fooie.
+• Pro Cloud — intekening met gemeenskap-persentielmaatstawwe.
+
+Kultivar werk volledig sonder dat jy 'n rekening skep. Geen opsporing, geen advertensies, geen dataverkoop.
+
+PRIVAATHEID
+
+Jou kweekjoernaal lewe in geënkripteerde plaaslike berging. Gemeenskap-maatstawwe is opt-in en aktiveer slegs in Pro Cloud. Volledige privaatheidsbeleid in die app onder Instellings → Privaatheid.

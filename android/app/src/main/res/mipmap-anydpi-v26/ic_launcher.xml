@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Adaptive launcher icon (Android 8+ / API 26+).
+
+    Three layers:
+      * background  - flat brand colour shows through on round / square
+                      / squircle launcher shapes
+      * foreground  - the logo glyph; sized so the launcher can crop
+                      the outer 33% safely on any device shape
+      * monochrome  - Android 13+ "Themed icon" support.  When the user
+                      enables Material You themed icons in Settings,
+                      the OS extracts this layer's alpha and recolours
+                      it to match the system accent.  We reuse the
+                      foreground asset; if the brand logo isn't a clean
+                      single-tone stencil it'll still render, just with
+                      slightly compressed contrast on the themed icon.
+
+    Note: flutter_launcher_icons 0.13.x sometimes omits the <monochrome>
+    element even when configured (pubspec.yaml has
+    `adaptive_icon_monochrome` set).  We override here so themed icons
+    work; the next time you regenerate launcher icons, double-check
+    this layer survived.
+-->
+<adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
+  <background android:drawable="@color/ic_launcher_background"/>
+  <foreground android:drawable="@drawable/ic_launcher_foreground"/>
+  <monochrome android:drawable="@drawable/ic_launcher_foreground"/>
+</adaptive-icon>

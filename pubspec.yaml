@@ -1,0 +1,261 @@
+name: kultivar
+description: "Kultivar — Grow Cycle Tracker"
+publish_to: "none"
+
+version: 1.0.0+1
+
+environment:
+  sdk: ">=3.0.0 <4.0.0"
+
+dependencies:
+  archive: ^4.0.0
+  # F7 voice notes — playback half of the `record` + `audioplayers`
+  # pair.  Pure plugin wrapper around the platform-native audio APIs
+  # (no win32 dep — clean against the flutter_secure_storage diamond).
+  audioplayers: ^6.1.0
+  # cryptography 2.x — pure-Dart AES-256-GCM + PBKDF2.  Used by
+  # BackupCrypto (lib/services/backup_crypto.dart) to wrap backup ZIP
+  # bytes in an authenticated, versioned envelope (F6) — independent
+  # of the archive package's built-in ZIP password.
+  cryptography: ^2.7.0
+  file_picker: ^8.0.0
+  # fl_chart 1.x — upgraded from 0.69 as part of UP3.  The 1.0 release
+  # tightened up the typed-data classes (e.g. ChartTooltipInfo is now
+  # named per chart type) and dropped a handful of deprecated APIs.
+  # See lib/widgets/*_chart.dart for the call-site patterns we settled
+  # on and how axis labels pull theming from AppColors + AppTypography.
+  fl_chart: ^1.0.0
+  flutter:
+    sdk: flutter
+  # UP1 — flutter_local_notifications 21.x.  Major API rework:
+  #   • `initialize()` requires named params now (no positional).
+  #   • `zonedSchedule()` lost `uiLocalNotificationDateInterpretation`,
+  #     replaced its 5-arg `androidScheduleMode` with a unified
+  #     `androidScheduleMode` enum.
+  #   • Notification details / actions constructors moved their
+  #     positional payload args to named.
+  # On-device regression test required for snooze + harvest alerts
+  # before each release; static checks alone don't verify the platform-
+  # channel side.  Paired with timezone ^0.11 (below).
+  flutter_local_notifications: ^21.0.0
+  # F11 — i18n.  flutter_localizations bundles Cupertino + Material
+  # translations for ~70 locales.  `intl` is pulled transitively but
+  # pinning it (below) avoids a resolver flake when a transitive
+  # bumps a major.
+  flutter_localizations:
+    sdk: flutter
+  flutter_secure_storage: ^9.2.4
+  font_awesome_flutter: ^10.0.0
+  geolocator: ^14.0.0
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+  home_widget: ^0.9.0
+  http: ^1.2.0
+  image_picker: ^1.1.2
+  # Task #87 — Apple SKStoreReviewController + Play In-App Review API.
+  # We never call this directly during onboarding; only after a
+  # high-satisfaction moment (the user views a completed Grow Report).
+  # Apple caps prompts at 3 per 365 days regardless of how often we
+  # call requestReview; we add our own 90-day local cooldown on top
+  # so a single user who completes 4 cycles in a year still only sees
+  # one prompt early on.
+  in_app_review: ^2.0.10
+  intl: any
+  local_auth: ^3.0.0
+  # package_info_plus 10 pulls win32 ^6 which conflicts with
+  # flutter_secure_storage 9.x (win32 ^5).  Hold on 8 until either:
+  #   • flutter_secure_storage 10 releases (rolls forward to win32 ^6), or
+  #   • we drop Windows from the target platforms.
+  package_info_plus: ^8.0.0
+  path: ^1.9.0
+  path_provider: ^2.1.3
+  pdf: ^3.10.8
+  printing: ^5.12.0
+  provider: ^6.1.2
+  purchases_flutter: ^8.0.0
+  # F7 voice notes — capture half.  `record` handles mic input
+  # (m4a/AAC on mobile, wav on desktop fallback); see `audioplayers`
+  # above for the playback side.
+  record: ^5.1.0
+  # Q12 — pluggable crash reporter wired through
+  # `ErrorReporter.setSink` from main.dart.  The SENTRY_DSN dart-define
+  # toggles real reporting on; when unset the in-app debug-only sink
+  # is used and Sentry isn't initialised (no network egress).
+  sentry_flutter: ^8.14.2
+  # share_plus 13 needs win32 ^6, which conflicts with
+  # flutter_secure_storage 9.x (win32 ^5).  Held on 10.x for now —
+  # see the package_info_plus note for the unblock condition.
+  share_plus: ^10.1.4
+  shared_preferences: ^2.3.2
+  supabase_flutter: ^2.8.4
+  # UP4 — coupled to flutter_local_notifications.  0.11 changed the
+  # `TZDateTime` constructor signature for fractional-second precision
+  # and dropped a couple of deprecated locations getters.  Nothing
+  # we call has changed shape; the bump is required to match the
+  # transitive constraint on the notifications package above.
+  timezone: ^0.11.0
+  # url_launcher — used by the Subscription section in Settings to
+  # deep-link into the App Store / Play Store subscription-management
+  # pages.  Apple (§3.1.1) + Google both require cancellation to happen
+  # through the platform UI, so this is the canonical handoff route.
+  url_launcher: ^6.3.0
+  uuid: ^4.0.0
+
+dev_dependencies:
+  # Generates platform-specific launcher icons from a single source PNG
+  # (Android mipmaps, iOS asset catalog, macOS, web favicon + maskable
+  # PWA icons, Windows .ico).  Run with `dart run flutter_launcher_icons`
+  # after dropping new artwork into `assets/branding/`.
+  flutter_launcher_icons: ^0.13.1
+  flutter_lints: ^3.0.0
+  flutter_native_splash: ^2.4.7
+  flutter_test:
+    sdk: flutter
+
+flutter:
+  uses-material-design: true
+  # F11 — gen-l10n picks up `lib/l10n/app_*.arb`, emits
+  # `flutter_gen/gen_l10n/app_localizations.dart` (and per-locale files)
+  # at build time.  Config lives in `l10n.yaml` at the repo root.
+  generate: true
+  # Bundle the branding folder so `Image.asset('assets/branding/...')`
+  # can pick up the logo for in-app surfaces (Home AppBar leading,
+  # any "about" screen, etc.).  The same PNGs also feed the launcher
+  # icon + native splash generators above — those write platform-
+  # specific copies into the platform folders at build time; this
+  # entry covers run-time loads from inside the Flutter app.
+  assets:
+    - assets/branding/
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Launcher icons (flutter_launcher_icons)
+#
+# Source artwork lives in `assets/branding/`.  When you update either
+# PNG, regenerate every platform's icon with:
+#
+#   dart run flutter_launcher_icons
+#
+# Artwork requirements:
+#   • icon_source.png      — 1024×1024 opaque master.  Used by iOS,
+#                            macOS, Windows, web.  Apple rejects icons
+#                            with an alpha channel — that's why
+#                            `remove_alpha_ios: true` is set below.
+#   • icon_foreground.png  — 1024×1024 transparent foreground for the
+#                            Android adaptive icon.  Keep the logo
+#                            inside the centre 66% (the "safe zone");
+#                            launchers crop to circle / squircle /
+#                            rounded-square depending on the device.
+# ─────────────────────────────────────────────────────────────────────────────
+flutter_launcher_icons:
+  # Shared master — iOS, macOS, Windows, web all pull from here.
+  image_path: "assets/branding/icon_source.png"
+
+  # Android: replaces android/app/src/main/res/mipmap-*/ic_launcher.png.
+  android: "ic_launcher"
+  # Adaptive icon = flat background + transparent foreground layer.
+  # Required for Android 8+ (Oreo) and used by all modern launchers.
+  adaptive_icon_background: "#0A0A0F"
+  adaptive_icon_foreground: "assets/branding/icon_foreground.png"
+  # Monochrome layer drives the "themed icon" surface on Android 13+
+  # (Material You).  Reusing the foreground works because the OS
+  # extracts alpha and recolours; if you want a separate stencil
+  # later, point this at its own asset.
+  adaptive_icon_monochrome: "assets/branding/icon_foreground.png"
+
+  # iOS: writes every Icon-App-*.png in the Runner asset catalog.
+  ios: true
+  # App Store Connect rejects uploads whose 1024px marketing icon
+  # contains an alpha channel — strip it during generation.
+  remove_alpha_ios: true
+
+  # macOS: writes every app_icon_*.png in the Runner asset catalog.
+  macos:
+    generate: true
+    image_path: "assets/branding/icon_source.png"
+
+  # Web: writes favicon.png, Icon-192/512.png and the maskable
+  # variants used by the installable PWA.  Background + theme colours
+  # also feed the manifest's splash screen on Android Chrome.
+  web:
+    generate: true
+    image_path: "assets/branding/icon_source.png"
+    background_color: "#0A0A0F"
+    theme_color: "#00C896"
+
+  # Windows: writes windows/runner/resources/app_icon.ico (multi-res).
+  windows:
+    generate: true
+    image_path: "assets/branding/icon_source.png"
+    icon_size: 48
+
+# ─────────────────────────────────────────────────────────────────────────────
+# Native launch screen (flutter_native_splash) — A2
+#
+# Replaces the default white Flutter splash with a brand-dark surface
+# carrying the Kultivar wordmark.  Kept dark in both light AND dark OS
+# modes intentionally — Kultivar is a dark-first app and a momentary
+# white flash before the Flutter UI paints would be jarring.
+#
+# Two asset slots:
+#   • splash_image.png         — the wordmark (white logo + typography).
+#                                 Used on iOS, legacy Android (< 12),
+#                                 and as the "branding image" on the
+#                                 bottom of the Android 12+ splash.
+#   • splash_icon_android12.png — small centred logo for Android 12+.
+#                                 The new splash API on Android 12+
+#                                 only allows a small icon (recommended
+#                                 192×192 inside a 432×432 canvas with
+#                                 lots of safe-zone padding); the OS
+#                                 enforces a circular mask.  Plain icon
+#                                 only — no wordmark.
+#
+# Regenerate after artwork changes with:
+#
+#   dart run flutter_native_splash:create
+#
+# Output is checked in so CI doesn't need to re-run the generator;
+# only run it locally when these assets or the colours change.
+# ─────────────────────────────────────────────────────────────────────────────
+flutter_native_splash:
+  # Brand-dark background everywhere.  AppColors.bg = 0xFF0A0A0F.
+  color: "#0A0A0F"
+  color_dark: "#0A0A0F"
+
+  # Wordmark image (white logo + "Kultivar" typography) used on
+  # iOS / legacy Android.  PNG with transparent background so the
+  # color above shows through.
+  image: assets/branding/splash_image.png
+  image_dark: assets/branding/splash_image.png
+
+  # ── Android 12+ splash API ───────────────────────────────────────
+  # Android 12+ replaced the legacy splash mechanism with a dedicated
+  # framework-level splash that ONLY renders a small circular icon +
+  # optional branding image at the bottom.  We provide:
+  #   • the small icon (white logo, no wordmark)
+  #   • the wordmark as the branding image so it sits below the icon
+  android_12:
+    image: assets/branding/splash_icon_android12.png
+    image_dark: assets/branding/splash_icon_android12.png
+    color: "#0A0A0F"
+    color_dark: "#0A0A0F"
+    branding: assets/branding/splash_image.png
+    branding_dark: assets/branding/splash_image.png
+
+  # ── iOS — keep the storyboard launch screen ──────────────────────
+  # iOS launches faster when we use a static image storyboard rather
+  # than animated content; the generator writes a LaunchScreen.storyboard
+  # that centres `splash_image.png` over the background colour.
+  ios_content_mode: center
+
+  # ── Web ───────────────────────────────────────────────────────────
+  # Renders an HTML splash that fades to the Flutter app once the
+  # engine boots — avoids the white flash on slow connections.
+  web: true
+  web_image_mode: center
+
+  # ── Platforms we don't ship ──────────────────────────────────────
+  # Skip Windows + Linux: this project's pubspec doesn't target them
+  # and the platform folders aren't present.  macOS uses the default
+  # NSWindow background which we'll leave alone for now.
+
+

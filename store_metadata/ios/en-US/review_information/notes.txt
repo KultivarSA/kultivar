@@ -1,0 +1,78 @@
+Hi Apple Review Team — quick orientation so your review is fast.
+
+WHAT KULTIVAR IS
+
+A private, local-first journal for adult home growers in jurisdictions where cannabis cultivation is legal. It is a tracker only: no marketplace, no commerce between users, no delivery, no purchase of cannabis or cannabis goods. We do not facilitate any controlled-substance transaction. Comparable approved apps in the same category: "GrowBuddy" (id1454193144), "Plant Diary" (id1502543620), "Strain Genie" (id1611236583).
+
+WHY THIS APP MEETS §1.4.3
+
+• Adult-use jurisdictions only. The app's onboarding, in-app legal disclaimer, and store description all state that Kultivar is for adults who are legally permitted to cultivate cannabis in their jurisdiction. We don't ask for proof of legality, in the same way GrowBuddy / Plant Diary don't — the burden sits with the user, the same as it does for "Vivino" (alcohol logging), "Smokio" (tobacco logging), etc.
+• Tracker only. No buy/sell/deliver flows. No directory of cultivators. No social features beyond opt-in anonymous yield benchmarking (no identities, no messaging).
+• Information apps. The strain library is encyclopaedic reference data (genetics, flowering days, terpene profile) for informational purposes, equivalent to a cocktail-recipe reference book.
+• No imagery of cannabis use. App icon, screenshots, and in-app artwork show abstract plant silhouettes / line-art illustrations only. No leaves, smoke, paraphernalia, or product photography.
+
+DEMO ACCOUNT / TEST CREDENTIALS
+
+None required. Kultivar is local-first — there is no account system, no login screen, no remote authentication. To explore:
+
+1. Launch the app on a fresh install.
+2. On the welcome screen, tap "Explore with sample data" (second option, below the main CTA).
+3. This seeds 6 demo plants across 2 grow spaces with realistic note history, environment logs, photos, and one completed harvest with a Grow Report PDF. Functionally identical to a user with months of activity.
+4. To exit demo mode and start fresh, go to Settings → Exit demo mode.
+
+WHERE TO TEST KEY FLOWS
+
+• Lifecycle state machine: Home → tap a sample plant → Plant Detail screen → scroll down to see the lifecycle stepper. The "Complete Cure" button is exposed for plants in the curing state; this is the cure-completion celebration overlay (A3) you'll see on a real user's first finished cycle.
+• Photo timeline: Plant Detail → Photos tab → tap any thumbnail for the full-screen viewer with pinch-zoom + category-tinted borders.
+• Grow Report: Plant Detail of a completed plant → "View Grow Report" button → renders the shareable PDF body.
+
+IN-APP PURCHASE FLOW (KULTIVAR PRO)
+
+We ship two paid tiers:
+
+1. Pro Cloud (auto-renewing subscription) — monthly + annual SKUs:
+   - pro_cloud_monthly: $4.99 / month
+   - pro_cloud_annual: $29.99 / year (50% saving headline)
+2. Lifetime Local (non-consumable IAP):
+   - lifetime_local: $49.99 one-time (regular) / $39.99 (launch promo)
+
+To see the paywall:
+
+• Settings → Subscription → "Upgrade to Pro" tile (always visible to non-Pro users)
+• OR tap "Skip for now" through onboarding and then trigger any gated feature (e.g. add a fourth plant on Free, which is capped at 3).
+
+The paywall includes:
+• Per-tier feature comparison table (Free / Lifetime Local / Pro Cloud)
+• "Restore Purchases" button (required by §3.1.1)
+• "Manage Subscription" tile for Pro Cloud users → deep-links to https://apps.apple.com/account/subscriptions per §3.1.1
+• Auto-renew disclosure copy in the legal fine print at the bottom of the paywall
+
+ENCRYPTION EXPORT COMPLIANCE
+
+Kultivar uses AES-256-GCM with PBKDF2-HMAC-SHA256 (200k iterations) to encrypt backup ZIP archives. This is exempt from EAR §740.17(b)(1) (publicly available, used for authentication only) and from ITAR. The encryption is used solely to protect the user's local data backup; it is not used for communications with any server. ITSAppUsesNonExemptEncryption is set to false in Info.plist accordingly.
+
+ACCOUNT DELETION (App Store Review Guideline 5.1.1(v))
+
+Kultivar has no account system, so there is no "delete account" button per se. The equivalent is in-app data wipe: Settings → "Clear all data" (under Data Export section) deletes every plant, note, photo, environment log, expense, harvest log, and resets the app to a fresh-install state. This satisfies the spirit of 5.1.1(v) — the user can erase all data Kultivar holds about them with a single in-app action.
+
+PRIVACY POLICY
+
+In-app: Settings → Legal → Privacy Policy.
+Hosted: <PRIVACY_URL_PLACEHOLDER — replace with the live GitHub Pages URL once the repo's Pages setting is enabled, e.g. https://<owner>.github.io/<repo>/privacy.html>
+
+DATA COLLECTION SUMMARY
+
+• Personal data: NONE. We do not collect names, emails, IP addresses, or device identifiers for our own purposes.
+• Analytics: Opt-in only. First-launch sheet asks the user to grant or decline anonymous crash + interaction telemetry via Sentry. Default is decline. Toggle persists in Settings → Privacy.
+• Community benchmarks: Opt-in only and only for Pro Cloud subscribers. Submits anonymised harvest yield + grow-day counts to compare against the community. Disabled by default.
+• Subscription validation: RevenueCat handles entitlement verification. We do not see the underlying receipt content.
+
+INTERNATIONALIZATION
+
+The app ships in 9 languages: English, German, Spanish, French, Italian, Dutch, Portuguese, Afrikaans, and isiZulu. The Afrikaans and Zulu translations are part of our South African market launch (SA's Cannabis for Private Purposes Act 7 of 2024 legalised private adult cultivation).
+
+CONTACT
+
+If anything in this review needs clarification, please reach me at: <REVIEW_CONTACT_EMAIL_PLACEHOLDER — replace before submission>
+
+Thank you.

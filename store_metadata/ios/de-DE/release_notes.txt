@@ -1,0 +1,9 @@
+Willkommen bei Kultivar 1.0.
+
+Der vollständige Lebenszyklus-Tracker für Hobbygärtner — von der Aussaat bis zur Reife. Tagebuch pro Pflanze, Klimamonitoring mit VPD, Qualitätsbewertung bei der Ernte, Ausgabenverfolgung mit Kosten-pro-Gramm-Analyse, vollständige PDF-Anbauberichte und eine eingebaute Sortenbibliothek mit Vergleichen.
+
+Verfügbar in Englisch, Deutsch, Spanisch, Französisch, Italienisch, Niederländisch und Portugiesisch.
+
+Die kostenlose Version deckt einen vollständigen ersten Anbau ab. Lifetime Local schaltet die unbegrenzte Nutzung einmalig frei. Pro Cloud ergänzt Community-Benchmarks.
+
+Privatsphäre-orientiert — dein Journal bleibt verschlüsselt auf deinem Gerät.

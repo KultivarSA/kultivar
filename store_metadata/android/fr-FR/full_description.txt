@@ -1,0 +1,37 @@
+Kultivar est le journal de culture pensé pour les cultivateurs amateurs qui veulent se souvenir de ce qui a marché — et de ce qui n'a pas marché.
+
+Suivez chaque plante de la graine à l'affinage. Notez les fertilisations, les tailles, les arrosages, les traitements IPM et les observations dans une bibliothèque de variétés. Consultez votre rendement moyen, votre coût au gramme et un rapport PDF complet à la fin de chaque cycle. Vos données restent sur votre appareil par défaut.
+
+POURQUOI KULTIVAR
+
+• Journal par plante qui traverse les cycles. Retrouvez en trois touches « quels engrais sur cette Blue Dream l'été dernier ? ».
+• Machine d'état complète du cycle de vie — Croissance → Récolté → Séchage → Affinage → Terminé, avec rappels spécifiques à chaque phase.
+• Suivi environnemental par espace (tente / pièce / extérieur) avec température, humidité, calculateur de VPD et alertes hors plage.
+• Cadences de rappel adaptées à la phase — l'arrosage et la fertilisation s'ajustent automatiquement entre semis, végétatif, floraison et flush.
+• Chronologie photo par plante avec date superposée et bordure colorée par catégorie — un coup d'œil et vous savez : « c'est une photo de fertilisation semaine 4 ».
+• Évaluation qualité à la récolte — notes en demi-étoiles pour global + odeur + effet + présentation, plus notes d'arôme, de saveur et d'effet, capturées à chaud.
+• Suivi des dépenses — saisissez les coûts dans 22 devises, voyez le coût au gramme dès qu'un poids sec est enregistré.
+• Bibliothèque de variétés avec comparaisons — catalogue intégré avec jours de floraison et filtre landraces ; ajoutez vos propres variétés avec profil complet.
+• Comparaison entre cultures — comparez deux cycles terminés côte à côte pour voir ce qui change réellement entre votre meilleure et votre pire récolte.
+• Rapports de culture — chaque cycle terminé génère un PDF partageable.
+• Notes vocales — joignez rapidement une observation audio si vous n'avez pas le temps de taper.
+• Étiquettes libres sur plantes et notes.
+• Sauvegarde et restauration via ZIPs chiffrés AES-256-GCM (protégés par phrase secrète ; toute altération est détectée au déchiffrement).
+• Verrouillage avec biométrie + code PIN de secours.
+• 7 langues intégrées — anglais, allemand, espagnol, français, italien, néerlandais, portugais.
+
+TARIFS
+
+• Gratuit — 1 espace, 3 plantes actives, 60 jours d'historique, bibliothèque complète de variétés avec comparaisons.
+• Lifetime Local — achat unique, plantes et espaces illimités, analytiques complètes. Aucun service cloud, aucun abonnement.
+• Pro Cloud — abonnement avec benchmarks communautaires par centile et (bientôt) synchronisation entre appareils.
+
+Vous pouvez utiliser Kultivar de bout en bout sans jamais créer de compte. Sans pistage, sans publicité, sans revente de données.
+
+CONFIDENTIALITÉ
+
+Kultivar est conçu autour de la vie privée. Votre journal réside dans un stockage local chiffré. Les benchmarks communautaires sont opt-in et ne se déclenchent qu'en Pro Cloud. Les rapports de crash partent vers Sentry uniquement sur consentement explicite. Politique de confidentialité complète dans l'app, sous Réglages → Confidentialité.
+
+AVERTISSEMENT
+
+Kultivar s'adresse aux adultes autorisés à cultiver le cannabis dans leur juridiction. Vérifiez toujours la législation locale. Pas de conseil médical.

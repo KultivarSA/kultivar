@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Android 6–11 (API 23–30) full-backup-content rules.
+  Referenced by android:fullBackupContent in AndroidManifest.xml.
+
+  Same inclusion policy as backup_rules.xml — SharedPreferences and
+  internal files, excluding cache and external storage.
+-->
+<full-backup-content>
+    <include domain="sharedpref" path="."/>
+    <include domain="file" path="."/>
+    <exclude domain="cache" path="."/>
+    <exclude domain="external" path="."/>
+</full-backup-content>

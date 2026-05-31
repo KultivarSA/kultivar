@@ -1,0 +1,1 @@
+N/A — see notes.txt. Kultivar is local-first and has no account system. To explore the app the reviewer can tap "Explore with sample data" on the welcome screen of a fresh install to seed 6 demo plants with realistic activity.

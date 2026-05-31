@@ -1,0 +1,39 @@
+Kultivar è il diario di coltivazione pensato per i coltivatori amatoriali che vogliono ricordarsi cosa ha funzionato — e cosa no.
+
+Segui ogni pianta dal seme alla concia. Registra fertilizzazioni, potature, irrigazioni, trattamenti IPM e osservazioni rispetto a una libreria di varietà. Vedi la resa media, il costo al grammo e un report PDF completo alla fine di ogni ciclo. I tuoi dati restano sul dispositivo per impostazione predefinita.
+
+PERCHÉ KULTIVAR
+
+• Diario per pianta che sopravvive tra i cicli.
+• Macchina a stati completa — Crescita → Raccolto → Asciugatura → Concia → Completato, promemoria specifici per fase.
+• Registrazione ambientale per spazio con temperatura, umidità, calcolatore VPD e avvisi fuori intervallo.
+• Cadenze di promemoria adattate alla fase — irrigazione e fertilizzazione si regolano fra semenzale, vegetativo, fioritura e flush.
+• Cronologia foto con sovrimpressione di data e bordo colorato per categoria.
+• Valutazione qualità al raccolto — mezze stelle più note di aroma, sapore ed effetto.
+• Tracker spese in 22 valute; costo al grammo non appena c'è un peso secco.
+• Libreria varietà con confronti e varietà personalizzate.
+• Confronto fra coltivazioni affiancate.
+• Report di coltivazione in PDF.
+• Note vocali.
+• Tag liberi su piante e note.
+• Backup e ripristino con ZIP cifrati AES-256-GCM.
+• Blocco app con Face ID / Touch ID + PIN.
+• 7 lingue integrate.
+
+PREZZI
+
+• Gratis — 1 spazio, 3 piante attive, 60 giorni di storico, libreria varietà completa.
+• Lifetime Local — acquisto una tantum, uso illimitato. Senza cloud, senza abbonamento.
+• Pro Cloud — abbonamento con benchmark community e sincronizzazione tra dispositivi (a breve).
+
+Utilizzabile senza creare account. Senza tracking, senza pubblicità, senza vendita di dati.
+
+PRIVACY
+
+Il tuo diario vive in archiviazione locale cifrata. Benchmark community opt-in e attivi solo in Pro Cloud. I report di crash richiedono consenso esplicito. Informativa privacy completa nell'app, in Impostazioni → Privacy.
+
+Gli abbonamenti si rinnovano automaticamente salvo annullamento almeno 24 ore prima della fine del periodo corrente. Gestisci dalle impostazioni del tuo account App Store.
+
+AVVERTENZA
+
+Kultivar è destinato ad adulti legalmente autorizzati a coltivare cannabis nella propria giurisdizione. Verifica sempre la normativa locale. Non fornisce consigli medici.

@@ -1,0 +1,68 @@
+# SR9 — Snapfile.  Defines which simulator device classes + which
+# locales fastlane snapshot iterates through.
+#
+# Apple's App Store Connect now only *requires* one device class
+# (the 6.9" Display — iPhone 16 Pro Max, iPhone 16 Plus).  Other
+# device classes inherit the same screenshots unless we provide
+# device-specific overrides.  We capture the two most-common modern
+# classes plus the 12.9" iPad to cover Apple's iPad-required slot.
+
+# ── Device classes ──────────────────────────────────────────────────────
+#
+# Identifiers come from `xcrun simctl list devicetypes`.  Update when
+# Apple drops a generation — usually once a year in September.
+devices([
+  "iPhone 16 Pro Max",   # 6.9" / required by App Store
+  "iPhone 16 Plus",      # 6.5" / good visual coverage
+  "iPad Pro 13-inch (M4)" # 12.9" / required for iPad-eligible apps
+])
+
+# ── Locales ─────────────────────────────────────────────────────────────
+#
+# Match the app's i18n coverage so the App Store listing shows
+# screenshots in each user's language.  Apple uses BCP-47 here — the
+# country tag isn't required, but it makes the screenshots map cleanly
+# to the Spotlight metadata locales.
+languages([
+  "en-US",
+  "de-DE",
+  "es-ES",
+  "fr-FR",
+  "it-IT",
+  "nl-NL",
+  "pt-PT",
+  "af",     # Afrikaans — no country code on App Store Connect yet
+  "zu"      # isiZulu — same, may render fallback to English
+])
+
+# ── Scheme + binary ─────────────────────────────────────────────────────
+#
+# `scheme` must match the UI-test scheme exposed in Xcode.  The
+# `RunnerUITests` scheme is created by SR9 alongside this Snapfile;
+# if you renamed it in Xcode, update here too.
+scheme("RunnerUITests")
+
+# ── Output ──────────────────────────────────────────────────────────────
+#
+# `output_directory` lives under fastlane/ so the relative paths
+# `deliver` expects work out of the box.  PNGs land in
+# fastlane/screenshots/<locale>/<DeviceClass>-<Order>_<Name>.png.
+output_directory("./screenshots")
+
+# Clear previous screenshots so an aborted run doesn't leave stale
+# pixels in the upload queue.
+clear_previous_screenshots(true)
+
+# Show only the simulator window per device — keeps the host
+# screen tidy during a long capture run.
+override_status_bar(true)
+
+# Status bar override — locks the time/battery/signal indicators so
+# every screenshot has a consistent look.  Apple recommends 9:41 AM
+# for marketing material (mirrors the time used in their own
+# keynote demos).
+override_status_bar_arguments("--time 9:41 --dataNetwork wifi --wifiBars 3 --cellularMode active --cellularBars 4 --batteryState charging --batteryLevel 100")
+
+# Verbose output during capture so failures surface immediately.
+# Comment out once the lane is reliable.
+# verbose(true)

@@ -1,0 +1,39 @@
+Kultivar ist der Anbau-Tracker für Hobbygärtner, die sich merken wollen, was funktioniert hat — und was nicht.
+
+Begleite jede Pflanze von der Aussaat bis zur Reife. Erfasse Düngung, Trainingsschnitte, Bewässerung, Schädlingsbehandlungen und Beobachtungen — alles verknüpft mit einer Sortenbibliothek. Sieh deinen Durchschnittsertrag, Kosten pro Gramm und einen vollständigen PDF-Anbaubericht nach jedem Zyklus. Deine Daten bleiben standardmäßig auf deinem Gerät.
+
+WARUM KULTIVAR
+
+• Tagebuch pro Pflanze, das zyklusübergreifend bestehen bleibt.
+• Vollständiger Lebenszyklus-Automat — Wachstum → Ernte → Trocknung → Aushärtung → Abgeschlossen, mit phasenspezifischen Erinnerungen.
+• Klimaprotokolle pro Anbauplatz mit Temperatur, Luftfeuchte, VPD-Rechner und Warnungen bei Bereichsüberschreitungen.
+• Phasenangepasste Erinnerungsintervalle — Bewässerung und Düngung passen sich zwischen Sämling, Veg-, Blüte- und Spülphase an.
+• Foto-Zeitleiste mit Datums-Overlay und kategoriegetönten Rändern.
+• Qualitätsbewertung bei der Ernte — halbe Sterne plus Aroma-, Geschmacks- und Wirkungsnotizen.
+• Ausgaben-Tracker — Kosten in 22 Währungen, Kosten pro Gramm sobald Trockengewicht vorliegt.
+• Sortenbibliothek mit Vergleichen — eingebauter Katalog plus eigene Sorten.
+• Cross-Cycle-Vergleich — zwei abgeschlossene Zyklen nebeneinander.
+• Anbauberichte als PDF.
+• Sprachnotizen für schnelle Beobachtungen.
+• Frei wählbare Tags.
+• Backup + Wiederherstellung mit AES-256-GCM-verschlüsselten ZIPs.
+• App-Sperre mit Face ID / Touch ID + PIN.
+• 7 Sprachen integriert.
+
+PREISE
+
+• Kostenlos — 1 Anbauplatz, 3 aktive Pflanzen, 60 Tage Analytics, volle Sortenbibliothek.
+• Lifetime Local — Einmalkauf, unbegrenzte Nutzung. Keine Cloud, keine Gebühren.
+• Pro Cloud — Abonnement mit Community-Perzentil-Benchmarks und kommendem Cross-Device-Sync.
+
+Vollständig ohne Konto nutzbar. Kein Tracking, keine Werbung, kein Datenverkauf.
+
+DATENSCHUTZ
+
+Dein Anbaujournal liegt verschlüsselt auf deinem Gerät. Community-Benchmarks sind Opt-in und nur unter Pro Cloud aktiv. Absturzberichte nur mit Zustimmung. Vollständige Datenschutzerklärung in der App unter Einstellungen → Datenschutz.
+
+Abonnements verlängern sich automatisch, sofern nicht mindestens 24 Stunden vor Ablauf der aktuellen Periode gekündigt. Verwaltung in den Account-Einstellungen des App Store.
+
+HAFTUNGSAUSSCHLUSS
+
+Kultivar richtet sich an Erwachsene, denen der Cannabis-Anbau in ihrer Rechtsordnung erlaubt ist. Lokale Gesetze immer prüfen. Keine medizinische Beratung.

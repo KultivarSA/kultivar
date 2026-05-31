@@ -1,0 +1,37 @@
+I-Kultivar yidayari yokukhulisa ekhelwe abakhuliseli basekhaya abafuna ukukhumbula okuye kwasebenza — nokungasebenzanga.
+
+Landela isitshalo ngasinye kusukela embewini kuya ekuvuthweni. Bhala ukondla, ukuthena, ukuchelela, ukulawula izinambuzane (i-IPM), nemibono — konke kuxhumene nelabhulali yezinhlobo. Bona umkhiqizo wakho ophakathi nendawo, izindleko ngegremu, nombiko opheleleyo we-PDF ngemva kweseshini ngayinye yokukhulisa. Idatha yakho ihlala kuthebhuleti yakho ngokuzenzakalelayo.
+
+UMTHETHO ENINGIZIMU AFRIKA
+
+UMthetho weCannabis ngezinhloso eziyimfihlo (uMthetho 7 wa-2024) wenza ukukhulisa kwabantu abadala ngokwabo kube semthethweni ekusebenziseni komuntu siqu. I-Kultivar ngumlandi womuntu siqu — akukho ukudayisa, akukho ukuletha, akuyona imakethe. Hlala usebenzelana ngokuthembekile nemithetho yedolobhakazi yakho yendawo.
+
+KUNGANI ABAKHULISI BASEBENZISA I-KULTIVAR
+
+• Idayari yesitshalo eshibalalayo. Thola ngokuthepha okuthathu: "yiziphi izinto zokondla engazisebenzisa ku-Blue Dream ehlobo elidlule?"
+• Umshini wezifundo ophelele — Kuyakhula → Kuvuniwe → Kuyoma → Kuyavuthwa → Kuqedwe.
+• Ukurekhoda i-environment ngendawo (itende / igumbi / ngaphandle) ngezinga lokushisa, umswakama, isibali se-VPD, nezexwayiso ngaphandle kwebanga.
+• Izikhumbuzo ezivumelana nesigaba — ukuchelela nokondla kuyazilungiselela phakathi kwesithombo, i-veg, i-bloom, ne-flush.
+• Umugqa wesikhathi wezithombe ngesitshalo ngasinye nge-overlay yedethi nomngcele oqhakambisa isigaba.
+• Ukuhlolwa kwekhwalithi ngesikhathi sokuvuna — izinkanyezi ezingu-½ zenani lonke + iphunga + umphumela + ukubukeka.
+• Isilandeli sezindleko — bhala izindleko ngamamali angu-22 (kuhlanganise i-Rand R), bona izindleko ngegremu.
+• Ilabhulali yezinhlobo enokuqhathaniswa — ihlanganisa izinsuku zembali, futhi yengeza ezakho.
+• Ukuqhathanisa kokukhulisa okwehlukene.
+• Imibiko yokukhulisa — ileli yokukhulisa ngayinye iqedwe ikhiqiza i-PDF.
+• Amanothi ezwi.
+• Amalebula okuzikhethela ezitshalweni nasemanothini.
+• Isipele + ukubuyisa nge-AES-256-GCM enekhrisithwe.
+• Ukuvalwa kohlelo nge-biometrics + i-PIN.
+• Izilimi eziyi-9 ezizenzelayo — IsiNgisi, IsiJalimane, IsiSpanish, IsiFulentshi, Isi-Italian, IsiDashi, IsiPutukezi, IsiBhunu, IsiZulu.
+
+AMANANI
+
+• Mahhala — indawo eyodwa, izitshalo ezi-3 ezisebenzayo, izinsuku ezingu-60 zokuhlaziya.
+• Lifetime Local — kuthenga kanye, izitshalo nezindawo ezingenamkhawulo. Akukho izinsiza ze-cloud, akukho izimali eziphindaphindekayo.
+• Pro Cloud — ngokuhleliwe, ngezilinganiso zomphakathi.
+
+I-Kultivar isebenza ngokugcwele ngaphandle kwe-akhawunti. Akukho ukulandelelwa, akukho izikhangiso, akukho ukudayiswa kwedatha.
+
+UBUMFIHLO
+
+Idayari yakho ihlala kusitoreji esikhona endaweni esithathu nge-enkriptiwe. Izilinganiso zomphakathi zibhokisha kuphela ku-Pro Cloud. Inqubomgomo yobumfihlo egcwele isohlelweni ngaphansi kweZilungiselelo → Ubumfihlo.

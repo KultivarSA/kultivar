@@ -1,0 +1,39 @@
+Kultivar is de kweek-tracker voor thuiskwekers die willen onthouden wat werkte — en wat niet.
+
+Volg elke plant van zaad tot uitharding. Leg voedingen, snoeibeurten, watergiften, IPM-behandelingen en observaties vast tegen een rassenbibliotheek. Zie je gemiddelde opbrengst, je kosten per gram en een volledig PDF-kweekverslag bij het einde van elke cyclus. Je gegevens blijven standaard op je toestel.
+
+WAAROM KULTIVAR
+
+• Plantdagboek dat over cycli heen blijft bestaan.
+• Volledige levenscyclus-automaat — Groei → Geoogst → Drogen → Uitharden → Voltooid, fasegerichte herinneringen.
+• Klimaatregistratie per kweekruimte met temperatuur, luchtvochtigheid, VPD-rekenmachine en bereik-waarschuwingen.
+• Faseafhankelijke herinneringsintervallen — water en voeding tussen kiemplant, vegetatief, bloei en spoel.
+• Fototijdlijn met datum-overlay en categoriegekleurde rand.
+• Kwaliteitsbeoordeling bij oogst — halve sterren plus aroma-, smaak- en effectnotities.
+• Uitgaventracker in 22 valuta; kosten per gram bij droog gewicht.
+• Rassenbibliotheek met vergelijkingen en eigen rassen.
+• Cross-cycle vergelijking naast elkaar.
+• Kweekverslagen in PDF.
+• Spraaknotities.
+• Vrije tags op planten en notities.
+• Back-up en herstel met AES-256-GCM-versleutelde ZIPs.
+• App-vergrendeling met Face ID / Touch ID + PIN.
+• 7 talen ingebouwd.
+
+PRIJZEN
+
+• Gratis — 1 ruimte, 3 actieve planten, 60 dagen historiek, volledige rassenbibliotheek.
+• Lifetime Local — eenmalige aankoop, onbeperkt gebruik. Geen cloud, geen abonnement.
+• Pro Cloud — abonnement met community-benchmarks en synchronisatie tussen apparaten (binnenkort).
+
+Te gebruiken zonder account aan te maken. Geen tracking, geen advertenties, geen verkoop van gegevens.
+
+PRIVACY
+
+Je dagboek leeft in versleutelde lokale opslag. Community-benchmarks opt-in en alleen actief in Pro Cloud. Crashrapporten vereisen expliciete toestemming. Volledige privacyverklaring in de app, onder Instellingen → Privacy.
+
+Abonnementen worden automatisch verlengd tenzij ten minste 24 uur voor het einde van de huidige periode geannuleerd. Beheer via de App Store-accountinstellingen.
+
+DISCLAIMER
+
+Kultivar is voor volwassenen die in hun rechtsgebied wettelijk cannabis mogen telen. Controleer altijd de lokale wetgeving. Geen medisch advies.

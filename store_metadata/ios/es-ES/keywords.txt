@@ -1,0 +1,1 @@
+cultivo,cannabis,diario,cepa,cosecha,rendimiento,VPD,curado,rastreador,planta,jardín,hidropónico

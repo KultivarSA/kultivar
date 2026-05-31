@@ -1,0 +1,9 @@
+Bem-vindo ao Kultivar 1.0.
+
+O rastreador completo do ciclo de cultivo para cultivadores caseiros — da semente à cura. Diário por planta, monitorização ambiental com VPD, avaliação de qualidade na colheita, controlo de despesas com análise de custo por grama, relatórios PDF completos e biblioteca de variedades com comparações.
+
+Disponível em inglês, alemão, espanhol, francês, italiano, neerlandês e português.
+
+A versão gratuita cobre um primeiro cultivo completo. Lifetime Local desbloqueia o uso ilimitado com uma compra única. Pro Cloud adiciona benchmarks da comunidade.
+
+Privacidade em primeiro lugar — o seu diário permanece encriptado no dispositivo.

@@ -1,0 +1,39 @@
+Kultivar est le journal de culture pensé pour les cultivateurs amateurs qui veulent se souvenir de ce qui a marché — et de ce qui n'a pas marché.
+
+Suivez chaque plante de la graine à l'affinage. Notez les fertilisations, les tailles, les arrosages, les traitements IPM et les observations dans une bibliothèque de variétés. Consultez votre rendement moyen, votre coût au gramme et un rapport PDF complet à la fin de chaque cycle. Vos données restent sur votre appareil par défaut.
+
+POURQUOI KULTIVAR
+
+• Journal par plante qui traverse les cycles.
+• Machine d'état complète — Croissance → Récolté → Séchage → Affinage → Terminé, rappels spécifiques par phase.
+• Suivi environnemental par espace avec température, humidité, calculateur de VPD et alertes hors plage.
+• Cadences de rappel adaptées à la phase — arrosage et fertilisation s'ajustent entre semis, végétatif, floraison et flush.
+• Chronologie photo avec date superposée et bordure colorée par catégorie.
+• Évaluation qualité à la récolte — demi-étoiles plus notes d'arôme, de saveur et d'effet.
+• Suivi des dépenses dans 22 devises ; coût au gramme dès qu'un poids sec est enregistré.
+• Bibliothèque de variétés avec comparaisons et ajout de variétés personnalisées.
+• Comparaison côte à côte de deux cycles terminés.
+• Rapports de culture en PDF.
+• Notes vocales.
+• Étiquettes libres sur plantes et notes.
+• Sauvegarde et restauration via ZIPs chiffrés AES-256-GCM.
+• Verrouillage avec Face ID / Touch ID + PIN.
+• 7 langues intégrées.
+
+TARIFS
+
+• Gratuit — 1 espace, 3 plantes actives, 60 jours d'historique, bibliothèque complète de variétés.
+• Lifetime Local — achat unique, usage illimité. Sans cloud, sans abonnement.
+• Pro Cloud — abonnement avec benchmarks communautaires et synchronisation entre appareils (bientôt).
+
+Utilisable sans création de compte. Sans pistage, sans publicité, sans revente de données.
+
+CONFIDENTIALITÉ
+
+Votre journal réside dans un stockage local chiffré. Les benchmarks communautaires sont opt-in et limités à Pro Cloud. Les rapports de crash exigent un consentement explicite. Politique de confidentialité complète dans l'app, sous Réglages → Confidentialité.
+
+Les abonnements se renouvellent automatiquement sauf annulation au moins 24 heures avant la fin de la période en cours. Gérez depuis les réglages de votre compte App Store.
+
+AVERTISSEMENT
+
+Kultivar s'adresse aux adultes autorisés à cultiver le cannabis dans leur juridiction. Vérifiez toujours la législation locale. Pas de conseil médical.

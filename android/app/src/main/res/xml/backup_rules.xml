@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Android 12+ (API 31+) backup and device-transfer rules.
+  Referenced by android:dataExtractionRules in AndroidManifest.xml.
+
+  We include SharedPreferences (all app data) and internal files (Hive
+  databases + grow photos stored in the app documents directory).
+  Cache and external storage are excluded — they're either reconstructible
+  or managed by the user directly.
+-->
+<data-extraction-rules>
+    <cloud-backup>
+        <include domain="sharedpref" path="."/>
+        <include domain="file" path="."/>
+        <exclude domain="cache" path="."/>
+        <exclude domain="external" path="."/>
+    </cloud-backup>
+    <device-transfer>
+        <include domain="sharedpref" path="."/>
+        <include domain="file" path="."/>
+        <exclude domain="cache" path="."/>
+        <exclude domain="external" path="."/>
+    </device-transfer>
+</data-extraction-rules>
