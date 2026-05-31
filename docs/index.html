@@ -219,28 +219,13 @@
     background: var(--bg);
     border-radius: 24px;
     overflow: hidden;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    color: var(--text-muted);
-    font-size: 13px;
-    padding: 60px 20px 20px;
-    text-align: center;
+    position: relative;
   }
-  .phone-screen .placeholder-dot {
-    width: 64px;
-    height: 64px;
-    border-radius: 50%;
-    background: rgba(0, 200, 150, 0.10);
-    border: 1px solid rgba(0, 200, 150, 0.25);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--primary);
-    font-size: 24px;
-    font-weight: 700;
-    margin-bottom: 16px;
+  .phone-screen svg.app-mock {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border-radius: 24px;
   }
   @media (max-width: 600px) {
     .phone-mockup { max-width: 240px; }
@@ -562,8 +547,103 @@
         <!-- Phone mockup — drop a real screenshot in here as <img> when ready -->
         <div class="phone-mockup" aria-hidden="true">
           <div class="phone-screen">
-            <div class="placeholder-dot">K</div>
-            <div>Screenshots land here<br>after the launch capture</div>
+            <!--
+                Inline SVG mockup of the Kultivar home grid.  Pure SVG,
+                no external assets, scales perfectly at any phone-mockup
+                size.  Mirrors the actual app's home screen aesthetic:
+                dark background, primary teal accents, status-coloured
+                rings around plant cards, day-count + stage labels.
+
+                Replaceable with a real PNG screenshot once captured
+                via the Pixel emulator playbook (see
+                store_metadata/play_console/screenshots_playbook.md):
+                swap this whole <svg> block for an <img>.
+            -->
+            <svg class="app-mock" viewBox="0 0 360 780" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Kultivar home grid mockup">
+              <!-- Background -->
+              <rect width="360" height="780" fill="#0A0A0F"/>
+
+              <!-- Status bar -->
+              <text x="20" y="34" fill="#F0F0FF" font-family="-apple-system, sans-serif" font-size="13" font-weight="600">9:41</text>
+              <circle cx="335" cy="30" r="3" fill="#F0F0FF"/>
+              <circle cx="324" cy="30" r="3" fill="#F0F0FF" opacity="0.6"/>
+              <circle cx="313" cy="30" r="3" fill="#F0F0FF" opacity="0.3"/>
+
+              <!-- App bar -->
+              <circle cx="32" cy="76" r="10" fill="#00C896"/>
+              <text x="50" y="82" fill="#F0F0FF" font-family="-apple-system, sans-serif" font-size="20" font-weight="700" letter-spacing="-0.4">Kultivar</text>
+              <circle cx="320" cy="76" r="14" fill="#1C1C27" stroke="#2A2A3D"/>
+              <text x="316" y="81" fill="#9090AA" font-family="-apple-system, sans-serif" font-size="13">🔔</text>
+
+              <!-- Filter chip row -->
+              <rect x="20" y="118" width="68" height="32" rx="16" fill="#1C1C27" stroke="#00C896" stroke-width="1.5"/>
+              <text x="32" y="138" fill="#00C896" font-family="-apple-system, sans-serif" font-size="12" font-weight="600">All</text>
+              <text x="58" y="138" fill="#00C896" font-family="-apple-system, sans-serif" font-size="11">8</text>
+              <rect x="96" y="118" width="92" height="32" rx="16" fill="#13131A" stroke="#26263B"/>
+              <text x="108" y="138" fill="#9090AA" font-family="-apple-system, sans-serif" font-size="12">Blue Dream</text>
+              <rect x="196" y="118" width="76" height="32" rx="16" fill="#13131A" stroke="#26263B"/>
+              <text x="208" y="138" fill="#9090AA" font-family="-apple-system, sans-serif" font-size="12">OG Kush</text>
+
+              <!-- Section header: Veg Tent -->
+              <text x="20" y="184" fill="#F0F0FF" font-family="-apple-system, sans-serif" font-size="16" font-weight="600">Veg Tent</text>
+              <text x="20" y="200" fill="#5A5A70" font-family="-apple-system, sans-serif" font-size="11">Indoor Tent · 4 plants</text>
+              <text x="320" y="184" fill="#9090AA" font-family="-apple-system, sans-serif" font-size="13" text-anchor="end">›</text>
+
+              <!-- Plant card 1: Blue Dream #3 (growing) -->
+              <rect x="20" y="218" width="320" height="80" rx="16" fill="#13131A" stroke="#2A2A3D"/>
+              <circle cx="56" cy="258" r="18" fill="none" stroke="#00C896" stroke-width="2"/>
+              <text x="56" y="263" fill="#00C896" font-family="-apple-system, sans-serif" font-size="14" font-weight="700" text-anchor="middle">14</text>
+              <text x="86" y="246" fill="#F0F0FF" font-family="-apple-system, sans-serif" font-size="15" font-weight="600">Blue Dream #3</text>
+              <text x="86" y="266" fill="#9090AA" font-family="-apple-system, sans-serif" font-size="12">Veg · day 14</text>
+              <rect x="86" y="276" width="62" height="18" rx="9" fill="rgba(0,200,150,0.12)"/>
+              <text x="117" y="289" fill="#00C896" font-family="-apple-system, sans-serif" font-size="10" font-weight="600" text-anchor="middle">GROWING</text>
+
+              <!-- Plant card 2: White Widow #2 (growing) -->
+              <rect x="20" y="306" width="320" height="80" rx="16" fill="#13131A" stroke="#2A2A3D"/>
+              <circle cx="56" cy="346" r="18" fill="none" stroke="#00C896" stroke-width="2"/>
+              <text x="56" y="351" fill="#00C896" font-family="-apple-system, sans-serif" font-size="14" font-weight="700" text-anchor="middle">12</text>
+              <text x="86" y="334" fill="#F0F0FF" font-family="-apple-system, sans-serif" font-size="15" font-weight="600">White Widow #2</text>
+              <text x="86" y="354" fill="#9090AA" font-family="-apple-system, sans-serif" font-size="12">Veg · day 12</text>
+              <rect x="86" y="364" width="62" height="18" rx="9" fill="rgba(0,200,150,0.12)"/>
+              <text x="117" y="377" fill="#00C896" font-family="-apple-system, sans-serif" font-size="10" font-weight="600" text-anchor="middle">GROWING</text>
+
+              <!-- Section header: Flower Room -->
+              <text x="20" y="424" fill="#F0F0FF" font-family="-apple-system, sans-serif" font-size="16" font-weight="600">Flower Room</text>
+              <text x="20" y="440" fill="#5A5A70" font-family="-apple-system, sans-serif" font-size="11">Flower Room · 2 plants</text>
+              <text x="320" y="424" fill="#9090AA" font-family="-apple-system, sans-serif" font-size="13" text-anchor="end">›</text>
+
+              <!-- Plant card 3: OG Kush #1 (flowering — amber) -->
+              <rect x="20" y="458" width="320" height="80" rx="16" fill="#13131A" stroke="#2A2A3D"/>
+              <circle cx="56" cy="498" r="18" fill="none" stroke="#FFB547" stroke-width="2"/>
+              <text x="56" y="503" fill="#FFB547" font-family="-apple-system, sans-serif" font-size="14" font-weight="700" text-anchor="middle">45</text>
+              <text x="86" y="486" fill="#F0F0FF" font-family="-apple-system, sans-serif" font-size="15" font-weight="600">OG Kush #1</text>
+              <text x="86" y="506" fill="#9090AA" font-family="-apple-system, sans-serif" font-size="12">Flower · day 45 of 56</text>
+              <rect x="86" y="516" width="74" height="18" rx="9" fill="rgba(255,181,71,0.12)"/>
+              <text x="123" y="529" fill="#FFB547" font-family="-apple-system, sans-serif" font-size="10" font-weight="600" text-anchor="middle">FLOWERING</text>
+
+              <!-- Plant card 4: Gorilla Glue (drying — purple) -->
+              <rect x="20" y="546" width="320" height="80" rx="16" fill="#13131A" stroke="#2A2A3D"/>
+              <circle cx="56" cy="586" r="18" fill="none" stroke="#7B61FF" stroke-width="2"/>
+              <text x="56" y="591" fill="#7B61FF" font-family="-apple-system, sans-serif" font-size="14" font-weight="700" text-anchor="middle">8</text>
+              <text x="86" y="574" fill="#F0F0FF" font-family="-apple-system, sans-serif" font-size="15" font-weight="600">Gorilla Glue #4</text>
+              <text x="86" y="594" fill="#9090AA" font-family="-apple-system, sans-serif" font-size="12">Curing · day 8</text>
+              <rect x="86" y="604" width="56" height="18" rx="9" fill="rgba(123,97,255,0.12)"/>
+              <text x="114" y="617" fill="#7B61FF" font-family="-apple-system, sans-serif" font-size="10" font-weight="600" text-anchor="middle">CURING</text>
+
+              <!-- Bottom nav -->
+              <rect x="0" y="700" width="360" height="80" fill="#0A0A0F"/>
+              <line x1="0" y1="700" x2="360" y2="700" stroke="#26263B"/>
+              <circle cx="50" cy="734" r="4" fill="#00C896"/>
+              <text x="50" y="754" fill="#00C896" font-family="-apple-system, sans-serif" font-size="10" font-weight="600" text-anchor="middle">Home</text>
+              <text x="122" y="738" fill="#5A5A70" font-family="-apple-system, sans-serif" font-size="12" text-anchor="middle">📈</text>
+              <text x="122" y="754" fill="#5A5A70" font-family="-apple-system, sans-serif" font-size="10" text-anchor="middle">Analytics</text>
+              <text x="194" y="738" fill="#5A5A70" font-family="-apple-system, sans-serif" font-size="12" text-anchor="middle">📦</text>
+              <text x="194" y="754" fill="#5A5A70" font-family="-apple-system, sans-serif" font-size="10" text-anchor="middle">Archive</text>
+              <text x="266" y="738" fill="#5A5A70" font-family="-apple-system, sans-serif" font-size="12" text-anchor="middle">📝</text>
+              <text x="266" y="754" fill="#5A5A70" font-family="-apple-system, sans-serif" font-size="10" text-anchor="middle">Notes</text>
+              <text x="338" y="738" fill="#5A5A70" font-family="-apple-system, sans-serif" font-size="12" text-anchor="middle">🌿</text>
+              <text x="338" y="754" fill="#5A5A70" font-family="-apple-system, sans-serif" font-size="10" text-anchor="middle">Strains</text>
+            </svg>
           </div>
         </div>
       </div>
@@ -806,6 +886,53 @@
     // privacy-first stance.
     document.getElementById('year').textContent = new Date().getFullYear();
   </script>
+
+  <!--
+      Cloudflare Web Analytics beacon.
+
+      Privacy-friendly tracking: no cookies, no IP storage, no fingerprinting,
+      no cross-site tracking.  Cloudflare's analytics matches Kultivar's
+      privacy-first brand stance much better than Google Analytics 4 (which
+      uses cookies + tracks heavily).
+
+      Activation (one-time, ~2 min):
+        1. Cloudflare dashboard -> kultivar.io -> Analytics & Logs ->
+           Web Analytics -> Enable.  Cloudflare prompts to add a site.
+        2. Site: kultivar.io.  Click "Done".
+        3. Cloudflare generates a beacon script tag containing a
+           `data-cf-beacon` JSON object with a unique token.
+        4. Replace the entire <script> block below with the one Cloudflare
+           gives you -- the token value is account+site-specific so I cannot
+           hard-code it here.
+        5. Commit + push.  Analytics start flowing immediately.
+
+      Alternative (zero-config):
+        If you turn on Cloudflare's "Automatic Setup" mode under
+        Web Analytics, the beacon is injected at the edge for proxied
+        sites (orange cloud).  You can leave this <script> block as-is
+        in that case -- both paths are mutually compatible.
+
+      What gets tracked:
+        * Page views per URL
+        * Visitor count (deduplicated by hashed fingerprint within 24h)
+        * Referrer (where visitors came from)
+        * Country (from IP, then IP is discarded)
+        * Browser + OS (anonymised)
+
+      What does NOT get tracked:
+        * Individual user identities
+        * Cross-site behaviour
+        * Email addresses
+        * Form contents
+        * Anything stored in localStorage / cookies (because there are none)
+  -->
+  <!-- Replace data-cf-beacon value with the token from Cloudflare. -->
+  <!--
+  <script defer
+    src="https://static.cloudflareinsights.com/beacon.min.js"
+    data-cf-beacon='{"token": "<CLOUDFLARE_BEACON_TOKEN_PLACEHOLDER>"}'>
+  </script>
+  -->
 
 </body>
 </html>

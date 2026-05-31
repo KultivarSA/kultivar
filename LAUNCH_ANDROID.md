@@ -9,9 +9,30 @@ the operational checklist.
 - 🔴 = blocking — without this, you cannot ship
 - 🟡 = required — must happen before public launch, schedulable
 - 🟢 = nice-to-have — boosts launch but app ships without it
+- ✅ = done
 
-If you knock off everything 🔴 by Friday of this week, you can submit
-to Play Internal Testing by Monday.
+---
+
+## 📅 Snapshot — 2026-05-31
+
+Major infrastructure landed in the last 24 hours:
+
+| | Item | Notes |
+|---|---|---|
+| ✅ | Domain `kultivar.io` | Cloudflare Registrar, ~$10/yr |
+| ✅ | Domain `kultivar.co.za` (secondary, 308 → apex) | Afrihost, R75/yr |
+| ✅ | Cloudflare DNS + orange-cloud proxy | SSL Full (strict), HSTS on |
+| ✅ | Cloudflare Email Routing (inbound) | `support@kultivar.io` → personal Gmail |
+| ✅ | Brevo SMTP (outbound) | `support@kultivar.io` sends with clean SPF/DKIM/DMARC |
+| ✅ | GitHub organization `KultivarSA` | Public, owner = MarcoPolov |
+| ✅ | GitHub repo `KultivarSA/kultivar` | Public, single clean initial commit |
+| ✅ | Live website `https://kultivar.io` | GitHub Pages from `/docs`, edge-cached at Cloudflare's JNB + CPT POPs |
+| ✅ | Privacy + Terms hosted at branded URLs | `/privacy.html`, `/terms.html` — Play Store requirement satisfied |
+| ✅ | Favicon + apple-touch-icon | Browser tab + iOS home-screen bookmarks show the Kultivar dot |
+| ⏳ | CIPC name reservation | Submitted; waiting 1-3 days for approval |
+
+If everything 🔴 below is knocked off by Friday, you can submit to
+Play Internal Testing by Monday.
 
 ---
 
@@ -21,21 +42,24 @@ to Play Internal Testing by Monday.
 
 These cost real money or take 24-48h to provision. Start now.
 
-| 🔴 | Item | Cost | Time | Where |
+| | Item | Cost | Time | Where |
 |---|---|---|---|---|
+| 🔴 | **CIPC Pty Ltd registration** (after name approval) | R125 | 20 min | [eservices.cipc.co.za](https://eservices.cipc.co.za) or BizPortal |
 | 🔴 | **Google Play Console** developer account | £25 (one-time) | 24-48h verification | [play.google.com/console](https://play.google.com/console) |
-| 🔴 | **Bank account for Play payouts** (your existing SA account is fine, just confirm IBAN/SWIFT) | £0 | Whatever your bank needs | — |
-| 🔴 | **Tax info for Google** — SA tax certificate, SARS ITR-DD form | £0 | 1 day to dig up | SARS eFiling |
-| 🔴 | **RevenueCat account** (free tier — moves to paid only when you cross $10k MRR) | £0 | 30 min | [revenuecat.com](https://www.revenuecat.com) |
-| 🟡 | **Domain** `kultivar.app` (or `.co.za` / `.io`) | ~£15/year | 30 min | Namecheap, Cloudflare Registrar |
-| 🟡 | **Email for support@** — use Cloudflare Email Routing (free) → your existing Gmail, OR Google Workspace (£5/user/month) | £0-£60/year | 1 hour | Cloudflare dashboard |
+| 🔴 | **TymeBank Business account** (free, fully online) — after CIPC reg | R0 | 1 hour | [tymebank.co.za](https://www.tymebank.co.za/business) |
+| 🔴 | **Tax info for Google** — SA tax certificate | R0 | 1 day | SARS eFiling |
+| 🔴 | **RevenueCat account** (free tier) | R0 | 30 min | [revenuecat.com](https://www.revenuecat.com) |
+| ✅ | ~~Domain `kultivar.io`~~ — done | — | — | — |
+| ✅ | ~~Email `support@kultivar.io`~~ — done | — | — | — |
 
 ### 📱 Social handles (claim them all today — they're free)
 
 🟡 Reserve every handle before someone else does. Even if you don't post
 on TikTok for months, owning the name matters.
 
-- [ ] Instagram `@kultivar.app`
+Recommended handles (matched to `kultivar.io` brand):
+
+- [ ] Instagram `@kultivar.io` (fallback: `@kultivar.app`, `@kultivarapp`)
 - [ ] TikTok `@kultivar.app`
 - [ ] X / Twitter `@kultivarapp` or `@kultivar_app` (first one usually free)
 - [ ] YouTube channel `Kultivar`
@@ -111,9 +135,26 @@ strangers do.
 
 Almost everything code-side is already shipping-ready.
 
+### 🟢 Quick wins (under 5 min each)
+
+- [ ] **Enable Cloudflare Web Analytics** for `kultivar.io` (free,
+      privacy-friendly).  Cloudflare → kultivar.io → Analytics & Logs
+      → Web Analytics → Enable.  Copy the generated beacon token, paste
+      into the commented-out `<script>` block at the bottom of
+      `docs/index.html` (search for `CLOUDFLARE_BEACON_TOKEN_PLACEHOLDER`),
+      uncomment the block, commit + push.  Preflight script flags this
+      placeholder as a TODO until activated.
+- [ ] **Fill `<REVIEW_*>` placeholders** in
+      `store_metadata/ios/en-US/review_information/` with your real
+      contact info (deferred to iOS Month 2-3 but no harm doing now).
+- [ ] **Fill `<COMPANY_REG_PLACEHOLDER>`** in `lib/legal/privacy_policy.dart`,
+      `lib/legal/terms_of_service.dart`, `docs/index.html`, and
+      `store_metadata/` once CIPC issues the registration number.
+      Single find-replace, all surfaces in sync.
+
 ### ✅ Already done
 
-- 87 development tasks complete
+- 95+ development tasks complete (see CHANGELOG.md for the full audit trail)
 - 305 tests passing
 - `flutter analyze` clean
 - All 9 locales fully translated (Afrikaans + Zulu pending native-speaker review)
