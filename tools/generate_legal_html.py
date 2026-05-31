@@ -296,6 +296,7 @@ PAGE_TEMPLATE = """<!doctype html>
   <meta name="description" content="{description}">
   <title>{title} — Kultivar</title>
   <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <style>{css}</style>
 </head>
 <body>
@@ -329,6 +330,7 @@ INDEX_HTML = """<!doctype html>
   <meta name="description" content="Kultivar — privacy policy and terms of service.">
   <title>Kultivar — Legal</title>
   <link rel="icon" type="image/png" href="favicon.png">
+  <link rel="apple-touch-icon" href="apple-touch-icon.png">
   <style>{css}</style>
   <style>
     .doc-grid {{
