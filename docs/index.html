@@ -888,50 +888,27 @@
   </script>
 
   <!--
-      Cloudflare Web Analytics beacon.
+      Cloudflare Web Analytics — auto-injected at the edge.
 
-      Privacy-friendly tracking: no cookies, no IP storage, no fingerprinting,
-      no cross-site tracking.  Cloudflare's analytics matches Kultivar's
-      privacy-first brand stance much better than Google Analytics 4 (which
-      uses cookies + tracks heavily).
+      Because kultivar.io is proxied through Cloudflare (orange cloud),
+      the beacon is injected automatically when "Web Analytics" is
+      enabled in the Cloudflare dashboard.  No <script> tag needed
+      in this HTML; the edge handles it.
 
-      Activation (one-time, ~2 min):
-        1. Cloudflare dashboard -> kultivar.io -> Analytics & Logs ->
-           Web Analytics -> Enable.  Cloudflare prompts to add a site.
-        2. Site: kultivar.io.  Click "Done".
-        3. Cloudflare generates a beacon script tag containing a
-           `data-cf-beacon` JSON object with a unique token.
-        4. Replace the entire <script> block below with the one Cloudflare
-           gives you -- the token value is account+site-specific so I cannot
-           hard-code it here.
-        5. Commit + push.  Analytics start flowing immediately.
+      Privacy posture: no cookies, no IP storage, no fingerprinting,
+      no cross-site tracking.  Matches Kultivar's privacy-first brand
+      better than Google Analytics 4.
 
-      Alternative (zero-config):
-        If you turn on Cloudflare's "Automatic Setup" mode under
-        Web Analytics, the beacon is injected at the edge for proxied
-        sites (orange cloud).  You can leave this <script> block as-is
-        in that case -- both paths are mutually compatible.
+      Tracked: page views per URL, visitor count (hashed 24h dedupe),
+      referrer, country (IP discarded after lookup), browser + OS.
 
-      What gets tracked:
-        * Page views per URL
-        * Visitor count (deduplicated by hashed fingerprint within 24h)
-        * Referrer (where visitors came from)
-        * Country (from IP, then IP is discarded)
-        * Browser + OS (anonymised)
+      Not tracked: identities, cross-site behaviour, email, form
+      contents, anything in localStorage / cookies (there are none).
 
-      What does NOT get tracked:
-        * Individual user identities
-        * Cross-site behaviour
-        * Email addresses
-        * Form contents
-        * Anything stored in localStorage / cookies (because there are none)
-  -->
-  <!-- Replace data-cf-beacon value with the token from Cloudflare. -->
-  <!--
-  <script defer
-    src="https://static.cloudflareinsights.com/beacon.min.js"
-    data-cf-beacon='{"token": "<CLOUDFLARE_BEACON_TOKEN_PLACEHOLDER>"}'>
-  </script>
+      If the orange cloud is ever turned off (DNS-only mode), the
+      auto-injection stops -- in that case, enable "Manual Setup" in
+      the Web Analytics dashboard, copy the script tag Cloudflare
+      issues, and paste it just above </body>.
   -->
 
 </body>
