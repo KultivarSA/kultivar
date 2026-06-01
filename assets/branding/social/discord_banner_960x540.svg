@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Discord server invite banner / splash — 960 × 540.
+
+  Used as the "invite splash" background when sharing the server
+  invite link.  Discord renders it at multiple sizes; 960 × 540 (16:9)
+  is the recommended source resolution.
+
+  Discord's UI overlays the server name + member count at the bottom,
+  so keep the bottom 25% relatively clean for legibility.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 540" role="img" aria-label="Kultivar Discord banner">
+  <defs>
+    <radialGradient id="dc-glow-c" cx="50%" cy="40%" r="50%">
+      <stop offset="0%" stop-color="#00C896" stop-opacity="0.18"/>
+      <stop offset="100%" stop-color="#00C896" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="dc-glow-tl" cx="10%" cy="15%" r="35%">
+      <stop offset="0%" stop-color="#7B61FF" stop-opacity="0.12"/>
+      <stop offset="100%" stop-color="#7B61FF" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="960" height="540" fill="#0A0A0F"/>
+  <rect width="960" height="540" fill="url(#dc-glow-c)"/>
+  <rect width="960" height="540" fill="url(#dc-glow-tl)"/>
+
+  <!-- Centered icon + wordmark -->
+  <g transform="translate(360, 180)">
+    <rect width="100" height="100" rx="22" fill="#00C896"
+          filter="drop-shadow(0 0 36px rgba(0,200,150,0.55))"/>
+    <path d="M 28 22 L 28 78 M 28 50 L 64 22 M 28 50 L 70 78"
+          stroke="#0A0A0F" stroke-width="7.5" stroke-linecap="round" fill="none"/>
+  </g>
+
+  <text x="480" y="340"
+        font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+        font-size="58" font-weight="700" letter-spacing="-1.4" fill="#F0F0FF"
+        text-anchor="middle">
+    Kultivar
+  </text>
+
+  <text x="480" y="380"
+        font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+        font-size="20" font-weight="500" letter-spacing="-0.2" fill="#9090AA"
+        text-anchor="middle">
+    The grower's community
+  </text>
+</svg>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+  Facebook page cover — 851 × 315 (Page) / 820 × 312 (Profile).
+
+  Renders at 851 × 315 on desktop, but Facebook crops to 640 × 360
+  on mobile -- meaning the LEFT 156px and RIGHT 56px get clipped on
+  mobile.  Centre everything.
+
+  Profile pic overlay: a circular avatar overlaps the bottom-left
+  ~150×150 region.  Wordmark is offset to the right + up to avoid it.
+-->
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 851 315" role="img" aria-label="Kultivar Facebook cover">
+  <defs>
+    <radialGradient id="fb-glow" cx="55%" cy="40%" r="55%">
+      <stop offset="0%" stop-color="#00C896" stop-opacity="0.16"/>
+      <stop offset="100%" stop-color="#00C896" stop-opacity="0"/>
+    </radialGradient>
+  </defs>
+  <rect width="851" height="315" fill="#0A0A0F"/>
+  <rect width="851" height="315" fill="url(#fb-glow)"/>
+
+  <!-- Centered brand block -->
+  <g transform="translate(290, 90)">
+    <!-- Icon -->
+    <rect width="56" height="56" rx="13" fill="#00C896"
+          filter="drop-shadow(0 0 20px rgba(0,200,150,0.5))"/>
+    <path d="M 16 13 L 16 43 M 16 28 L 36 13 M 16 28 L 40 43"
+          stroke="#0A0A0F" stroke-width="4" stroke-linecap="round" fill="none"/>
+
+    <!-- Wordmark to the right of icon -->
+    <text x="78" y="42"
+          font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+          font-size="44" font-weight="700" letter-spacing="-1" fill="#F0F0FF">
+      Kultivar
+    </text>
+  </g>
+
+  <!-- Tagline below brand block -->
+  <text x="425" y="200"
+        font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+        font-size="22" font-weight="500" letter-spacing="-0.2" fill="#9090AA"
+        text-anchor="middle">
+    Your grow journal. <tspan fill="#00C896" font-weight="700">Not theirs.</tspan>
+  </text>
+
+  <!-- URL -->
+  <text x="425" y="270"
+        font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif"
+        font-size="14" font-weight="600" fill="#5A5A70" text-anchor="middle"
+        letter-spacing="0.6">
+    KULTIVAR.IO  ·  COMING SOON TO GOOGLE PLAY
+  </text>
+</svg>
