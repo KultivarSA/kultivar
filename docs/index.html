@@ -70,23 +70,34 @@
     justify-content: space-between;
     padding: 18px 0;
   }
+  /*
+      Wordmark layout: real Kultivar icon + text, vertically centred.
+      The icon is the same favicon.png the browser tab uses, scaled
+      down for the nav.  Drop-shadow glow mirrors the original
+      green-dot placeholder, giving the icon a subtle brand-coloured
+      bloom on the dark background without darkening the icon edges.
+  */
   .wordmark {
     color: var(--primary);
     font-weight: 700;
     font-size: 20px;
     letter-spacing: -0.4px;
     text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
   }
-  .wordmark::before {
-    content: "";
-    display: inline-block;
-    width: 10px;
-    height: 10px;
-    border-radius: 50%;
-    background: var(--primary);
-    margin-right: 8px;
-    vertical-align: 1px;
-    box-shadow: 0 0 12px rgba(0, 200, 150, 0.6);
+  .wordmark-icon {
+    width: 24px;
+    height: 24px;
+    border-radius: 6px;
+    filter: drop-shadow(0 0 12px rgba(0, 200, 150, 0.45));
+    flex-shrink: 0;
+  }
+  /* Smaller variant for the footer wordmark (slightly tighter). */
+  .wordmark-sm .wordmark-icon {
+    width: 20px;
+    height: 20px;
   }
   .nav-links { display: flex; gap: 28px; }
   .nav-links a {
@@ -512,7 +523,10 @@
   <!-- ── Top nav ────────────────────────────────────────────────── -->
   <header class="nav">
     <div class="wrap nav-inner">
-      <a class="wordmark" href="#top">Kultivar</a>
+      <a class="wordmark" href="#top">
+        <img class="wordmark-icon" src="favicon.png" alt="" width="24" height="24">
+        <span>Kultivar</span>
+      </a>
       <nav class="nav-links">
         <a href="#features">Features</a>
         <a href="#pricing">Pricing</a>
@@ -831,7 +845,10 @@
     <div class="wrap">
       <div class="footer-grid">
         <div class="footer-col">
-          <a class="wordmark" href="#top" style="font-size: 18px;">Kultivar</a>
+          <a class="wordmark wordmark-sm" href="#top" style="font-size: 18px;">
+            <img class="wordmark-icon" src="favicon.png" alt="" width="20" height="20">
+            <span>Kultivar</span>
+          </a>
           <p style="margin-top: 12px;">
             The grow journal that respects your privacy.<br>
             Built in South Africa for the global grower community.

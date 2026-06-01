@@ -218,6 +218,16 @@ PAGE_CSS = """
     font-size: 18px;
     letter-spacing: -0.2px;
     text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+  }
+  header.site .wordmark-icon {
+    width: 22px;
+    height: 22px;
+    border-radius: 6px;
+    filter: drop-shadow(0 0 10px rgba(0, 200, 150, 0.45));
+    flex-shrink: 0;
   }
 
   .meta {
@@ -302,7 +312,7 @@ PAGE_TEMPLATE = """<!doctype html>
 <body>
   <header class="site">
     <div class="brand">
-      <a class="wordmark" href="./">Kultivar</a>
+      <a class="wordmark" href="./"><img class="wordmark-icon" src="favicon.png" alt="" width="22" height="22"><span>Kultivar</span></a>
     </div>
   </header>
   <main class="container">
@@ -360,7 +370,7 @@ INDEX_HTML = """<!doctype html>
 <body>
   <header class="site">
     <div class="brand">
-      <a class="wordmark" href="./">Kultivar</a>
+      <a class="wordmark" href="./"><img class="wordmark-icon" src="favicon.png" alt="" width="22" height="22"><span>Kultivar</span></a>
     </div>
   </header>
   <main class="container">
