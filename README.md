@@ -66,17 +66,19 @@ Kultivar ships with:
 
 ### Three-tier pricing, no dark patterns
 
-- **Free** — track unlimited plants and harvests, full strain library,
-  cost tracking, photo timeline, environment logging. The complete
-  hobbyist experience.
-- **Lifetime Local** (one-time IAP) — analytics history, strain
-  comparison, cross-grow comparison, home-screen widget, unlimited
-  exports.
-- **Pro Cloud** (subscription) — everything above plus community
-  yield benchmarks and (planned) cross-device sync.
+- **Free** — 1 grow space, up to 3 active plants, 60 days of analytics
+  history. Full strain library, cost tracking, photo timeline,
+  environment logging, Grow Report PDFs. Enough capacity to complete
+  a first cycle end-to-end.
+- **Lifetime Local** (one-time IAP) — unlimited spaces, unlimited
+  active plants, full analytics history, strain comparison,
+  cross-grow comparison, home-screen widget, unlimited exports.
+- **Pro Cloud** (subscription) — everything in Lifetime Local plus
+  community yield benchmarks and (planned) cross-device sync.
 
-Free is not a teaser. You can complete a full grow cycle, generate a
-PDF report, and never see a paywall.
+Free isn't a trial timer — it's the complete hobbyist experience
+capped at one cycle's worth of capacity. Your data is yours; the
+caps just decide how much new data you can add without upgrading.
 
 ---
 
