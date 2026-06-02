@@ -392,8 +392,25 @@ class DemoDataService {
 
     await UiPreferencesService.saveIsDemoMode(true);
     await OnboardingService.markComplete();
-    // Reload from storage so all listeners see the full dataset.
-    await repo.load();
+    // Flush the in-memory data to disk now so it persists across an
+    // app restart.
+    //
+    // Bug fix (real-device finding): the earlier code called
+    // `repo.load()` here on the theory that "reload from storage so
+    // all listeners see the full dataset" was needed.  In fact:
+    //
+    //   * Every addPlant / addGrowSpace / addNote etc. above already
+    //     fired notifyListeners() synchronously, so the UI sees the
+    //     full dataset without any reload.
+    //   * Disk writes from those addX calls are DEBOUNCED 300ms.
+    //     Calling load() within that window reads stale (empty) data
+    //     from SharedPreferences and OVERWRITES the correct in-memory
+    //     state -- producing the "demo banner shows but home grid is
+    //     empty" symptom Marco saw on his Samsung S22.
+    //
+    // The right call is `save()` -- forces an immediate flush of
+    // the pending debounced writes, no read involved.
+    await repo.save();
   }
 
   /// Wipes all data and resets to fresh-user state.

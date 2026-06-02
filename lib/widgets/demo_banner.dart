@@ -19,9 +19,24 @@ class DemoBanner extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    // Bug fix (real-device finding): the banner used to render flush
+    // against the top of the screen, which pushed UP into Android's
+    // system status bar (time / wifi / battery indicators).  Wrap in
+    // SafeArea so the OS-reserved area pushes the banner down, AND
+    // tint the safe-area inset the same colour so the result looks
+    // intentional rather than a strip of background poking through.
+    return ColoredBox(
+      color: AppColors.warning.withValues(alpha: 0.12),
+      child: SafeArea(
+        bottom: false,
+        child: _buildContent(context),
+      ),
+    );
+  }
+
+  Widget _buildContent(BuildContext context) {
     return Container(
       width: double.infinity,
-      color: AppColors.warning.withValues(alpha: 0.12),
       padding: const EdgeInsets.symmetric(
         horizontal: AppSpacing.pagePadding,
         vertical: 9,
