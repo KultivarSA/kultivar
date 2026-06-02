@@ -57,6 +57,13 @@ app.*.map.json
 /android/app/profile
 /android/app/release
 
+# Gradle module-level build outputs.  `flutter clean` doesn't always
+# scrub this on Windows when the daemon holds files open, so first-
+# build artifacts (intermediate .class files, R.jar, merged manifests)
+# can linger.  Treat the whole tree as build output.
+/android/build/
+/android/app/build/
+
 # SR9 — Fastlane snapshot output.  Screenshots are regenerated from
 # the running app every release, so we never commit the PNGs; they
 # only live in App Store Connect once `fastlane screenshots_and_upload`
