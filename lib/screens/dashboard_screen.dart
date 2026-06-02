@@ -1444,12 +1444,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
             ? '1 day'
             : '$dryingDays days';
 
+    // Bug fix v2: default childAspectRatio of 1.0 (square cells)
+    // wasn't enough vertical room for value (26 sp bold) + 8 px gap
+    // + label (which wraps to 2 lines for "Avg Dry Time" at 3-col
+    // S22 width).  Result was "BOTTOM OVERFLOWED BY 20 PIXELS".
+    // 0.85 gives ~19 px more height per cell — covers the gap.
     return GridView.count(
       crossAxisCount: 3,
       shrinkWrap: true,
       physics: const NeverScrollableScrollPhysics(),
       crossAxisSpacing: AppSpacing.sm,
       mainAxisSpacing: AppSpacing.sm,
+      childAspectRatio: 0.85,
       children: [
         DashboardStatCard(
           label: 'Total Yield',

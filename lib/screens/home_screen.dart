@@ -28,6 +28,7 @@ import 'calendar_screen.dart';
 import 'nutrient_calculator_screen.dart';
 import 'plant_detail_screen.dart';
 import 'search_screen.dart';
+import 'settings_screen.dart';
 import 'space_detail_screen.dart' as space_screen;
 
 class HomeScreen extends StatefulWidget {
@@ -112,16 +113,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                   child: Image.asset(
                     'assets/branding/icon_foreground.png',
-                    width: 26,
-                    height: 26,
+                    width: 22,
+                    height: 22,
                     fit: BoxFit.contain,
                     filterQuality: FilterQuality.medium,
                     excludeFromSemantics: true,
                   ),
                 ),
                 const SizedBox(width: AppSpacing.xs),
+                // Bug fix v2: was AppTypography.headlineLarge -- combined
+                // with the 4-5 action icons + "4 active" chip on the
+                // right, the AppBar overflowed by 9 px on Samsung S22.
+                // headlineMedium has the same brand presence but ~5 px
+                // narrower, which closes the gap.
                 Text('Kultivar',
-                    style: AppTypography.headlineLarge(context)
+                    style: AppTypography.headlineMedium(context)
                         .copyWith(color: AppColors.primary)),
               ],
             ),
@@ -220,12 +226,33 @@ class _HomeScreenState extends State<HomeScreen> {
                   ),
                 ),
               ),
-              // Active plant count badge
-              if (activePlants.isNotEmpty)
+              // Bug fix v2: Settings moved off the bottom nav and into
+              // the AppBar (gear icon).  Placed last so it's the
+              // rightmost item -- standard Material convention.
+              IconButton(
+                icon: Icon(Icons.settings_rounded,
+                    color: context.colTextSecondary),
+                tooltip: 'Settings',
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const SettingsScreen(),
+                  ),
+                ),
+              ),
+              // Active plant count badge.
+              //
+              // Bug fix v2: when the strain-filter icon is also
+              // present (>1 active strain), the AppBar carries 5
+              // actions + this chip + the wordmark -- which
+              // overflows the S22 by 9 px.  Hide the chip in that
+              // case; the same information lives in the Home grid
+              // header anyway.
+              if (activePlants.isNotEmpty && activeStrains.length <= 1)
                 Container(
-                  margin: const EdgeInsets.only(right: AppSpacing.md),
+                  margin: const EdgeInsets.only(right: AppSpacing.sm),
                   padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
                   decoration: BoxDecoration(
                     color: AppColors.primary.withValues(alpha: 0.12),
                     borderRadius: BorderRadius.circular(AppSpacing.radiusFull),
@@ -848,13 +875,6 @@ class _SpaceCardState extends State<_SpaceCard> {
     });
   }
 
-  static String _readingAge(DateTime t) {
-    final diff = DateTime.now().difference(t);
-    if (diff.inMinutes < 60) return '${diff.inMinutes}m ago';
-    if (diff.inHours < 24) return '${diff.inHours}h ago';
-    return '${diff.inDays}d ago';
-  }
-
   @override
   Widget build(BuildContext context) {
     final envColor = widget.isOptimal == null
@@ -913,16 +933,31 @@ class _SpaceCardState extends State<_SpaceCard> {
                     ),
                   ),
 
+                  // Bug fix v2: the env readout (temp + humidity +
+                  // age) used to sit as a SIBLING of the Expanded
+                  // name column.  On the S22 with long space names
+                  // and the two trailing icon-buttons (nutrient
+                  // calc + batch care) this caused 49-60 px of
+                  // horizontal overflow.  Moving the env readout
+                  // BELOW the name row inside the Expanded column
+                  // gives us the full card width for environment
+                  // chips instead of fighting for the same row.
                   Expanded(
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(widget.space.name,
-                            style: AppTypography.headlineSmall(context)),
+                            style: AppTypography.headlineSmall(context),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis),
                         const SizedBox(height: 2),
                         Row(children: [
-                          Text(widget.space.type,
-                              style: AppTypography.bodySmall(context)),
+                          Flexible(
+                            child: Text(widget.space.type,
+                                style: AppTypography.bodySmall(context),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis),
+                          ),
                           const SizedBox(width: AppSpacing.xs),
                           Text('·', style: AppTypography.bodySmall(context)),
                           const SizedBox(width: AppSpacing.xs),
@@ -931,44 +966,35 @@ class _SpaceCardState extends State<_SpaceCard> {
                             style: AppTypography.bodySmall(context)
                                 .copyWith(color: AppColors.primary),
                           ),
+                          if (widget.latestTemp != null ||
+                              widget.latestHumidity != null) ...[
+                            const SizedBox(width: AppSpacing.sm),
+                            if (widget.latestTemp != null) ...[
+                              Icon(Icons.thermostat,
+                                  size: 13, color: envColor),
+                              const SizedBox(width: 2),
+                              Text(
+                                formatTemp(widget.latestTemp!, decimals: 0),
+                                style: AppTypography.bodySmall(context)
+                                    .copyWith(color: envColor),
+                              ),
+                              const SizedBox(width: AppSpacing.xs),
+                            ],
+                            if (widget.latestHumidity != null) ...[
+                              Icon(Icons.water_drop,
+                                  size: 13, color: envColor),
+                              const SizedBox(width: 2),
+                              Text(
+                                '${widget.latestHumidity!.toStringAsFixed(0)}%',
+                                style: AppTypography.bodySmall(context)
+                                    .copyWith(color: envColor),
+                              ),
+                            ],
+                          ],
                         ]),
                       ],
                     ),
                   ),
-
-                  // Env readout
-                  if (widget.latestTemp != null ||
-                      widget.latestHumidity != null)
-                    Row(children: [
-                      if (widget.latestTemp != null) ...[
-                        Icon(Icons.thermostat, size: 14, color: envColor),
-                        const SizedBox(width: 3),
-                        Text(
-                          formatTemp(widget.latestTemp!, decimals: 0),
-                          style: AppTypography.bodySmall(context)
-                              .copyWith(color: envColor),
-                        ),
-                        const SizedBox(width: AppSpacing.xs),
-                      ],
-                      if (widget.latestHumidity != null) ...[
-                        Icon(Icons.water_drop, size: 14, color: envColor),
-                        const SizedBox(width: 3),
-                        Text(
-                          '${widget.latestHumidity!.toStringAsFixed(0)}%',
-                          style: AppTypography.bodySmall(context)
-                              .copyWith(color: envColor),
-                        ),
-                      ],
-                      if (widget.latestRecordedAt != null) ...[
-                        const SizedBox(width: AppSpacing.xxs),
-                        Text(
-                          _readingAge(widget.latestRecordedAt!),
-                          style: AppTypography.bodySmall(context).copyWith(
-                              color: context.colTextMuted, fontSize: 10),
-                        ),
-                      ],
-                      const SizedBox(width: AppSpacing.xs),
-                    ]),
 
                   // Nutrient calculator shortcut
                   GestureDetector(

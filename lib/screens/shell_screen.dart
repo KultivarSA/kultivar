@@ -28,7 +28,6 @@ import 'expense_tracker_screen.dart';
 import 'harvest_archive_screen.dart';
 import 'home_screen.dart';
 import 'plant_notes_tab.dart';
-import 'settings_screen.dart';
 import 'strain_library_screen.dart';
 
 class ShellScreen extends StatefulWidget {
@@ -42,7 +41,6 @@ class _ShellScreenState extends State<ShellScreen>
     with TickerProviderStateMixin {
   int _index = 0;
   bool _fabOpen = false;
-  bool _onSettings = false;
   late AnimationController _fabController;
   late Animation<double> _fabScale;
   late Animation<double> _fabRotate;
@@ -282,20 +280,13 @@ class _ShellScreenState extends State<ShellScreen>
         floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
 
         // ── Bottom nav ──────────────────────
+        //
+        // Settings is no longer a tab here -- it lives on the gear
+        // icon in the Home AppBar instead (real-device fix v2).
         bottomNavigationBar: _BottomNav(
-          index: _onSettings ? 6 : _index,
+          index: _index,
           onTap: (i) {
             _closeFab();
-            if (i == 6) {
-              setState(() => _onSettings = true);
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (_) => const SettingsScreen(),
-                ),
-              ).then((_) => setState(() => _onSettings = false));
-              return;
-            }
             setState(() => _index = i);
           },
         ),
@@ -351,12 +342,23 @@ class _ShellScreenState extends State<ShellScreen>
                 if (nameCtrl.text.trim().isEmpty) {
                   return;
                 }
-                repo.addGrowSpace(GrowSpace(
+                // Bug fix: defer the repo mutation to the next frame
+                // so notifyListeners doesn't fire during the modal's
+                // pop animation.  PR #11 tried popping before
+                // mutating, but Navigator.pop is async -- the sheet
+                // is still in the tree when the next line ran, the
+                // synchronous notifyListeners triggered a parent
+                // ShellScreen rebuild mid-pop, and Element.deactivate
+                // asserted '_dependents.isEmpty' was not true.
+                final space = GrowSpace(
                   id: repo.newId(),
                   name: nameCtrl.text.trim(),
                   type: type,
-                ));
+                );
                 Navigator.pop(ctx);
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  repo.addGrowSpace(space);
+                });
               },
             ),
           ],
@@ -694,12 +696,15 @@ class _ShellScreenState extends State<ShellScreen>
                 if (nameCtrl.text.trim().isEmpty) {
                   return;
                 }
+                // Bug fix: see _showAddSpaceSheet for the explanation.
                 final plantId = repo.newId();
                 final plantName = nameCtrl.text.trim();
-                repo.addPlant(Plant(
+                final plant = Plant(
                   id: plantId,
                   name: plantName,
-                  strain: strainText.trim().isEmpty ? 'Unknown' : strainText.trim(),
+                  strain: strainText.trim().isEmpty
+                      ? 'Unknown'
+                      : strainText.trim(),
                   startDate: startDate,
                   targetHarvestDate: targetHarvestDate,
                   growSpaceId: spaceId,
@@ -709,18 +714,21 @@ class _ShellScreenState extends State<ShellScreen>
                   lightType: lightType,
                   potSizeLitres: potSizeLitres,
                   motherPlantId: isClone ? motherPlantId : null,
-                ));
-                // Schedule harvest reminders if the user set a target date
-                // and the notification preference is enabled.
-                if (targetHarvestDate != null &&
-                    KultivarApp.notifTargetHarvestEnabled.value) {
-                  unawaited(NotificationService().scheduleHarvestReminder(
-                    plantId: plantId,
-                    plantName: plantName,
-                    targetDate: targetHarvestDate!,
-                  ));
-                }
+                );
+                final scheduleReminder = targetHarvestDate != null &&
+                    KultivarApp.notifTargetHarvestEnabled.value;
                 Navigator.pop(ctx);
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  repo.addPlant(plant);
+                  if (scheduleReminder) {
+                    unawaited(NotificationService()
+                        .scheduleHarvestReminder(
+                      plantId: plantId,
+                      plantName: plantName,
+                      targetDate: targetHarvestDate!,
+                    ));
+                  }
+                });
               },
             ),
           ],
@@ -781,18 +789,23 @@ class _ShellScreenState extends State<ShellScreen>
                 final rawTemp = double.tryParse(tempCtrl.text);
                 final hum = double.tryParse(humCtrl.text);
                 if (rawTemp == null && hum == null) return;
-                // Log only to the spaces the user kept selected.
-                for (final spaceId in selectedIds) {
-                  repo.addEnvironmentLog(EnvironmentLog(
-                    id: repo.newId(),
-                    growSpaceId: spaceId,
-                    recordedAt: DateTime.now(),
-                    temperature:
-                        rawTemp != null ? toStorageTemp(rawTemp) : null,
-                    humidity: hum,
-                  ));
-                }
+                // Bug fix: see _showAddSpaceSheet for the explanation.
+                final now = DateTime.now();
+                final storageTemp =
+                    rawTemp != null ? toStorageTemp(rawTemp) : null;
+                final ids = selectedIds.toList();
                 Navigator.pop(ctx);
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  for (final spaceId in ids) {
+                    repo.addEnvironmentLog(EnvironmentLog(
+                      id: repo.newId(),
+                      growSpaceId: spaceId,
+                      recordedAt: now,
+                      temperature: storageTemp,
+                      humidity: hum,
+                    ));
+                  }
+                });
               },
             ),
           ],
@@ -886,14 +899,18 @@ class _ShellScreenState extends State<ShellScreen>
                   );
                   return;
                 }
-                repo.addNote(PlantNote(
+                // Bug fix: see _showAddSpaceSheet for the explanation.
+                final note = PlantNote(
                   id: repo.newId(),
                   plantId: plantId!,
                   createdAt: DateTime.now(),
                   content: contentCtrl.text.trim(),
                   category: category,
-                ));
+                );
                 Navigator.pop(ctx);
+                WidgetsBinding.instance.addPostFrameCallback((_) {
+                  repo.addNote(note);
+                });
               },
             ),
           ],
@@ -974,13 +991,17 @@ class _BottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     // F11 — resolve once per build; cheaper than `.of(context)` per tab.
     final l = AppLocalizations.of(context);
-    // Bug fix (real-device finding):  the previous Row used
-    // `mainAxisAlignment: MainAxisAlignment.spaceAround` and let each
-    // child take its natural width.  On the Samsung S22 (~360 dp
-    // logical width) the 7-tab layout overflowed by 18 px when long
-    // English labels rendered at standard size.  Wrapping each tab
-    // in Expanded forces equal-width distribution and eliminates the
-    // overflow regardless of label length / locale.
+    // Bug fix v2:  PR #11's `Expanded` fix made labels wrap to two
+    // lines ("Analyt | ics", "Archiv | e") because dividing a 360 dp
+    // S22 width by 7 tabs leaves ~51 dp per tab -- not enough for
+    // longer English labels at standard font size.
+    //
+    // The right call is to drop Settings from the bottom nav (it was
+    // already a Navigator.push, not an IndexedStack swap, so removing
+    // its tab slot doesn't break anything functionally).  Settings now
+    // lives on the gear icon in the Home AppBar.  Six tabs at ~60 dp
+    // each accommodate the longest label ("Analytics" at 9 chars) on
+    // every supported phone width.
     return Container(
       decoration: BoxDecoration(
         color: context.colSurface1,
@@ -1034,13 +1055,6 @@ class _BottomNav extends StatelessWidget {
                     (c) =>
                         Icon(Icons.receipt_long_rounded, size: 22, color: c),
                     l.navCosts),
-              ),
-              Expanded(
-                child: _navItem(
-                    context,
-                    6,
-                    (c) => Icon(Icons.settings_rounded, size: 22, color: c),
-                    l.navSettings),
               ),
             ],
           ),
