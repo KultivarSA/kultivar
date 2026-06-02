@@ -6,12 +6,12 @@
     Sony, some MIUI builds) request `android:roundIcon` separately
     from `android:icon`.  Without this file, those launchers fall
     back to the legacy raster PNGs in mipmap-{m,h,xh,xxh,xxxh}dpi
-    -- which works, but the adaptive cropping is then bypassed and
-    the result looks visibly less polished against neighbouring
-    adaptive icons.
+    (works, but the adaptive cropping is then bypassed and the
+    result looks visibly less polished against neighbouring
+    adaptive icons).
 
-    Contents intentionally mirror `ic_launcher.xml` -- the launcher
-    decides shape; we just provide the same three layers so both
+    Contents intentionally mirror `ic_launcher.xml`; the launcher
+    decides shape, we just provide the same three layers so both
     slots stay visually identical.
 -->
 <adaptive-icon xmlns:android="http://schemas.android.com/apk/res/android">
