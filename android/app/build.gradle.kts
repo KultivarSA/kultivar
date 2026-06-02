@@ -86,7 +86,16 @@ dependencies {
     // etc.) so plugins that ship modern Java code can target older
     // Android runtimes via Android's R8 desugar process.
     //
-    // 2.0.4 is the current stable release; bump in lockstep with
-    // AGP major bumps.
-    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.0.4")
+    // flutter_local_notifications declares a minimum desugar_jdk_libs
+    // floor in its AAR metadata.  When the project pins below that
+    // floor, Gradle fails with:
+    //
+    //   Dependency ':flutter_local_notifications' requires
+    //   desugar_jdk_libs version to be 2.1.4 or above for :app,
+    //   which is currently 2.0.4
+    //
+    // 2.1.4 is the explicit floor demanded by the current version
+    // of the notifications plugin.  Bump together with future
+    // flutter_local_notifications upgrades.
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:2.1.4")
 }
