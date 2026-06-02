@@ -974,6 +974,13 @@ class _BottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     // F11 — resolve once per build; cheaper than `.of(context)` per tab.
     final l = AppLocalizations.of(context);
+    // Bug fix (real-device finding):  the previous Row used
+    // `mainAxisAlignment: MainAxisAlignment.spaceAround` and let each
+    // child take its natural width.  On the Samsung S22 (~360 dp
+    // logical width) the 7-tab layout overflowed by 18 px when long
+    // English labels rendered at standard size.  Wrapping each tab
+    // in Expanded forces equal-width distribution and eliminates the
+    // overflow regardless of label length / locale.
     return Container(
       decoration: BoxDecoration(
         color: context.colSurface1,
@@ -984,42 +991,57 @@ class _BottomNav extends StatelessWidget {
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: AppSpacing.xs),
           child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              _navItem(context, 0,
-                  (c) => Icon(Icons.home_rounded, size: 22, color: c),
-                  l.navHome),
-              _navItem(
-                  context,
-                  1,
-                  (c) => FaIcon(FontAwesomeIcons.chartLine, size: 19, color: c),
-                  l.navAnalytics),
-              _navItem(
-                  context,
-                  2,
-                  (c) => Icon(Icons.archive_rounded, size: 22, color: c),
-                  l.navArchive),
-              _navItem(
-                  context,
-                  3,
-                  (c) =>
-                      FaIcon(FontAwesomeIcons.penToSquare, size: 19, color: c),
-                  l.navNotes),
-              _navItem(
-                  context,
-                  4,
-                  (c) => Icon(Icons.science_rounded, size: 22, color: c),
-                  l.navStrains),
-              _navItem(
-                  context,
-                  5,
-                  (c) => Icon(Icons.receipt_long_rounded, size: 22, color: c),
-                  l.navCosts),
-              _navItem(
-                  context,
-                  6,
-                  (c) => Icon(Icons.settings_rounded, size: 22, color: c),
-                  l.navSettings),
+              Expanded(
+                child: _navItem(context, 0,
+                    (c) => Icon(Icons.home_rounded, size: 22, color: c),
+                    l.navHome),
+              ),
+              Expanded(
+                child: _navItem(
+                    context,
+                    1,
+                    (c) => FaIcon(FontAwesomeIcons.chartLine,
+                        size: 19, color: c),
+                    l.navAnalytics),
+              ),
+              Expanded(
+                child: _navItem(
+                    context,
+                    2,
+                    (c) => Icon(Icons.archive_rounded, size: 22, color: c),
+                    l.navArchive),
+              ),
+              Expanded(
+                child: _navItem(
+                    context,
+                    3,
+                    (c) => FaIcon(FontAwesomeIcons.penToSquare,
+                        size: 19, color: c),
+                    l.navNotes),
+              ),
+              Expanded(
+                child: _navItem(
+                    context,
+                    4,
+                    (c) => Icon(Icons.science_rounded, size: 22, color: c),
+                    l.navStrains),
+              ),
+              Expanded(
+                child: _navItem(
+                    context,
+                    5,
+                    (c) =>
+                        Icon(Icons.receipt_long_rounded, size: 22, color: c),
+                    l.navCosts),
+              ),
+              Expanded(
+                child: _navItem(
+                    context,
+                    6,
+                    (c) => Icon(Icons.settings_rounded, size: 22, color: c),
+                    l.navSettings),
+              ),
             ],
           ),
         ),
