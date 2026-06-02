@@ -88,7 +88,21 @@ while ($retryCount -lt $MaxRetries) {
 
     # Run the build.  Tee output so we can both display it live AND
     # inspect it for the failure pattern.
-    $output = & flutter @buildCmd 2>&1 | Tee-Object -Variable buildLog | Out-String
+    #
+    # Note on $ErrorActionPreference:  PowerShell 5.1 wraps native-command
+    # stderr lines into ErrorRecords when 2>&1 is used.  With Stop mode
+    # set, the FIRST stderr write (typically a benign Java compiler
+    # warning) halts the script before flutter even finishes invoking
+    # Gradle.  We relax the preference for the duration of the native
+    # call and rely on $LASTEXITCODE (set after the process exits) for
+    # success/failure detection.
+    $prevEAP = $ErrorActionPreference
+    $ErrorActionPreference = 'Continue'
+    try {
+        $output = & flutter @buildCmd 2>&1 | Tee-Object -Variable buildLog | Out-String
+    } finally {
+        $ErrorActionPreference = $prevEAP
+    }
 
     if ($LASTEXITCODE -eq 0) {
         Write-Section "BUILD SUCCEEDED on attempt $retryCount"
