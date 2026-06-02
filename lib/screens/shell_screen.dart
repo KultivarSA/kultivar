@@ -351,12 +351,22 @@ class _ShellScreenState extends State<ShellScreen>
                 if (nameCtrl.text.trim().isEmpty) {
                   return;
                 }
-                repo.addGrowSpace(GrowSpace(
+                // Bug fix (real-device finding):  pop the sheet BEFORE
+                // mutating the repo so the parent's
+                // context.watch<GrowRepository>() rebuild can't happen
+                // while this modal context is still on the navigator
+                // stack.  The previous order (add -> pop) crashed with
+                // `_dependents.isEmpty: is not true` on Marco's S22
+                // when notifyListeners fired synchronously inside the
+                // tap handler and triggered a rebuild that
+                // invalidated `ctx` before Navigator.pop could use it.
+                final space = GrowSpace(
                   id: repo.newId(),
                   name: nameCtrl.text.trim(),
                   type: type,
-                ));
+                );
                 Navigator.pop(ctx);
+                repo.addGrowSpace(space);
               },
             ),
           ],
@@ -694,12 +704,18 @@ class _ShellScreenState extends State<ShellScreen>
                 if (nameCtrl.text.trim().isEmpty) {
                   return;
                 }
+                // Bug fix:  pop the sheet BEFORE mutating the repo so
+                // the parent's context.watch<GrowRepository>() rebuild
+                // can't invalidate `ctx` before Navigator.pop runs.
+                // See _showAddSpaceSheet for the full explanation.
                 final plantId = repo.newId();
                 final plantName = nameCtrl.text.trim();
-                repo.addPlant(Plant(
+                final plant = Plant(
                   id: plantId,
                   name: plantName,
-                  strain: strainText.trim().isEmpty ? 'Unknown' : strainText.trim(),
+                  strain: strainText.trim().isEmpty
+                      ? 'Unknown'
+                      : strainText.trim(),
                   startDate: startDate,
                   targetHarvestDate: targetHarvestDate,
                   growSpaceId: spaceId,
@@ -709,7 +725,9 @@ class _ShellScreenState extends State<ShellScreen>
                   lightType: lightType,
                   potSizeLitres: potSizeLitres,
                   motherPlantId: isClone ? motherPlantId : null,
-                ));
+                );
+                Navigator.pop(ctx);
+                repo.addPlant(plant);
                 // Schedule harvest reminders if the user set a target date
                 // and the notification preference is enabled.
                 if (targetHarvestDate != null &&
@@ -720,7 +738,6 @@ class _ShellScreenState extends State<ShellScreen>
                     targetDate: targetHarvestDate!,
                   ));
                 }
-                Navigator.pop(ctx);
               },
             ),
           ],
@@ -781,18 +798,24 @@ class _ShellScreenState extends State<ShellScreen>
                 final rawTemp = double.tryParse(tempCtrl.text);
                 final hum = double.tryParse(humCtrl.text);
                 if (rawTemp == null && hum == null) return;
+                // Bug fix:  pop the sheet BEFORE mutating the repo so
+                // the parent's context.watch<GrowRepository>() rebuild
+                // can't invalidate `ctx` before Navigator.pop runs.
+                final now = DateTime.now();
+                final storageTemp =
+                    rawTemp != null ? toStorageTemp(rawTemp) : null;
+                final ids = selectedIds.toList();
+                Navigator.pop(ctx);
                 // Log only to the spaces the user kept selected.
-                for (final spaceId in selectedIds) {
+                for (final spaceId in ids) {
                   repo.addEnvironmentLog(EnvironmentLog(
                     id: repo.newId(),
                     growSpaceId: spaceId,
-                    recordedAt: DateTime.now(),
-                    temperature:
-                        rawTemp != null ? toStorageTemp(rawTemp) : null,
+                    recordedAt: now,
+                    temperature: storageTemp,
                     humidity: hum,
                   ));
                 }
-                Navigator.pop(ctx);
               },
             ),
           ],
@@ -886,14 +909,18 @@ class _ShellScreenState extends State<ShellScreen>
                   );
                   return;
                 }
-                repo.addNote(PlantNote(
+                // Bug fix:  pop the sheet BEFORE mutating the repo so
+                // the parent's context.watch<GrowRepository>() rebuild
+                // can't invalidate `ctx` before Navigator.pop runs.
+                final note = PlantNote(
                   id: repo.newId(),
                   plantId: plantId!,
                   createdAt: DateTime.now(),
                   content: contentCtrl.text.trim(),
                   category: category,
-                ));
+                );
                 Navigator.pop(ctx);
+                repo.addNote(note);
               },
             ),
           ],
