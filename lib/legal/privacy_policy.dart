@@ -204,9 +204,7 @@ Questions about this policy, or about your data? Reach Kultivar at:
 
 **support@kultivar.io**
 
-Kultivar is operated by **Kultivar (Pty) Ltd**, a private company
+Kultivar is operated by **Kultivar SA (Pty) Ltd**, a private company
 registered in the Republic of South Africa under the Companies Act,
-2008 (Reg: <COMPANY_REG_PLACEHOLDER>). The preflight script
-(`tools/preflight.ps1`) will flag the placeholder above as missing
-until you replace it with the actual CIPC-issued registration number.
+2008 (Registration number 2026/429365/07).
 ''';

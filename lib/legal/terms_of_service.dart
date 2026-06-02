@@ -222,9 +222,9 @@ Questions about these terms? Reach Kultivar at:
 
 **support@kultivar.io**
 
-These terms are entered into with **Kultivar (Pty) Ltd**, registered in
-the Republic of South Africa under the Companies Act, 2008
-(Reg: <COMPANY_REG_PLACEHOLDER>). South African law governs the
+These terms are entered into with **Kultivar SA (Pty) Ltd**, registered
+in the Republic of South Africa under the Companies Act, 2008
+(Registration number 2026/429365/07). South African law governs the
 agreement. Disputes that cannot be resolved by correspondence fall
 within the jurisdiction of the South African courts.
 ''';

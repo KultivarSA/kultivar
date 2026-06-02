@@ -58,7 +58,7 @@ Kultivar has no account system, so there is no "delete account" button per se. T
 PRIVACY POLICY
 
 In-app: Settings → Legal → Privacy Policy.
-Hosted: <PRIVACY_URL_PLACEHOLDER — replace with the live GitHub Pages URL once the repo's Pages setting is enabled, e.g. https://<owner>.github.io/<repo>/privacy.html>
+Hosted: https://kultivar.io/privacy.html
 
 DATA COLLECTION SUMMARY
 
