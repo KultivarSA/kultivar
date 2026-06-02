@@ -96,12 +96,21 @@ while ($retryCount -lt $MaxRetries) {
     # Gradle.  We relax the preference for the duration of the native
     # call and rely on $LASTEXITCODE (set after the process exits) for
     # success/failure detection.
+    # Stream output via a temp log file so the user can see the build
+    # progress in real time AND we have the full text available for
+    # regex pattern matching after the process exits.  Plain
+    # Tee-Object -Variable captures objects but doesn't render them to
+    # the host when the pipeline ends with Out-String; piping through
+    # a file handles both halves cleanly.
+    $tempLog = [System.IO.Path]::GetTempFileName()
     $prevEAP = $ErrorActionPreference
     $ErrorActionPreference = 'Continue'
     try {
-        $output = & flutter @buildCmd 2>&1 | Tee-Object -Variable buildLog | Out-String
+        & flutter @buildCmd 2>&1 | Tee-Object -FilePath $tempLog | Out-Host
+        $output = Get-Content $tempLog -Raw
     } finally {
         $ErrorActionPreference = $prevEAP
+        Remove-Item $tempLog -Force -ErrorAction SilentlyContinue
     }
 
     if ($LASTEXITCODE -eq 0) {
@@ -128,12 +137,18 @@ while ($retryCount -lt $MaxRetries) {
     if (-not $hashMatch.Success) {
         # The build failed for some OTHER reason -- maybe a real
         # compile error, maybe a network failure.  Don't retry
-        # blindly; surface the failure to the user.
+        # blindly; surface the failure to the user.  We re-print the
+        # tail of the captured output so they don't have to scroll
+        # up through Gradle's noise to find the actual error.
         Write-Section "BUILD FAILED -- not a transform-cache issue"
         Write-Host ""
-        Write-Host "  This script only handles the 'Could not move temporary"
-        Write-Host "  workspace' AV race.  The current failure is something"
-        Write-Host "  else.  See the build output above for the actual error."
+        Write-Host "  Tail of build output (last 50 lines):" -ForegroundColor White
+        Write-Host ""
+        $tail = ($output -split "`n") | Select-Object -Last 50
+        $tail | ForEach-Object { Write-Host "  $_" -ForegroundColor Gray }
+        Write-Host ""
+        Write-Host "  Full output was also streamed live above.  If the error" -ForegroundColor White
+        Write-Host "  isn't visible in the 50-line tail, scroll up to find it." -ForegroundColor White
         exit 1
     }
 
