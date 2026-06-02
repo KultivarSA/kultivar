@@ -101,6 +101,27 @@ dependencies:
   url_launcher: ^6.3.0
   uuid: ^4.0.0
 
+# ── dependency_overrides ─────────────────────────────────────────────────────
+#
+# Force-pin transitive dependencies that the resolver picked badly.
+# Use sparingly -- every entry here is technical debt that needs to
+# be revisited when upstream catches up.
+#
+dependency_overrides:
+  # record_linux 0.7.2 does NOT implement the newer
+  # record_platform_interface 1.6.0 API:
+  #
+  #   * missing override of `Future<Stream<Uint8List>> startStream(...)`
+  #   * `hasPermission` signature dropped the `{bool request}` named arg
+  #
+  # Flutter's kernel snapshot compiles all platform variants of every
+  # plugin even when only Android is being targeted, so this trips the
+  # Android build at the kernel_snapshot_program step.  Pinning to
+  # >=1.1.0 picks up the version that implements the new interface
+  # contract.  Remove this override once `record` 6.x is adopted and
+  # the resolver picks a compatible record_linux on its own.
+  record_linux: ^1.1.0
+
 dev_dependencies:
   # Generates platform-specific launcher icons from a single source PNG
   # (Android mipmaps, iOS asset catalog, macOS, web favicon + maskable
