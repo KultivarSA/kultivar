@@ -45,7 +45,13 @@ dependencies:
   flutter_localizations:
     sdk: flutter
   flutter_secure_storage: ^9.2.4
-  font_awesome_flutter: ^10.0.0
+  # font_awesome_flutter 11 was rebuilt for Flutter SDK >= 3.27, which
+  # marked `IconData` as a `final class`.  Versions <= 10.x extend
+  # IconData and now fail to compile against modern Flutter -- CI on
+  # PR #3 confirmed this when the SDK auto-bumped.  11.x replaces
+  # the inheritance with a wrapper, which is a no-op for our callers
+  # (we use FontAwesomeIcons.* constants only).
+  font_awesome_flutter: ^11.0.0
   geolocator: ^14.0.0
   hive: ^2.2.3
   hive_flutter: ^1.1.0
