@@ -488,11 +488,24 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // Label row
+            //
+            // Bug fix v5: each gauge sits in half the available row
+            // width (~150 dp on S22).  At large text-scale, the
+            // "Temperature" + "Optimal" badge combo overflowed
+            // horizontally.  Wrap the label in Flexible+ellipsis so
+            // it gives way before the status badge does.
             Row(children: [
               Icon(icon, color: color, size: 16),
               const SizedBox(width: AppSpacing.xs),
-              Text(label, style: AppTypography.bodySmall(context)),
-              const Spacer(),
+              Flexible(
+                child: Text(
+                  label,
+                  style: AppTypography.bodySmall(context),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+              ),
+              const SizedBox(width: AppSpacing.xs),
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
                 decoration: BoxDecoration(
@@ -508,11 +521,18 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
             ]),
             const SizedBox(height: AppSpacing.sm),
 
-            // Value
-            Text(
-              hasValue ? '${value.toStringAsFixed(1)}$unit' : '—',
-              style:
-                  AppTypography.displayMedium(context).copyWith(color: color),
+            // Value -- FittedBox + scaleDown so a 3-digit °F reading
+            // or large text-scale can't push the displayMedium value
+            // past the gauge's narrow column.
+            FittedBox(
+              fit: BoxFit.scaleDown,
+              alignment: Alignment.centerLeft,
+              child: Text(
+                hasValue ? '${value.toStringAsFixed(1)}$unit' : '—',
+                style: AppTypography.displayMedium(context)
+                    .copyWith(color: color),
+                maxLines: 1,
+              ),
             ),
             const SizedBox(height: AppSpacing.sm),
 
@@ -1117,22 +1137,39 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
                   border: Border.all(
                       color: AppColors.secondary.withValues(alpha: 0.3)),
                 ),
+                // Bug fix v5: the inner Row had icon + title +
+                // subtitle + chevron all competing for the card's
+                // horizontal width.  Subtitle "phase breakdown · VPD
+                // · streaks" tipped it past the edge.  Move title +
+                // subtitle into a Column so they stack vertically;
+                // wrap that column in Expanded so the chevron
+                // always lands flush right.
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
-                    Row(children: [
-                      const Icon(Icons.analytics_rounded,
-                          color: AppColors.secondary, size: 16),
-                      const SizedBox(width: AppSpacing.xs),
-                      Text('View Full Analytics',
-                          style: AppTypography.labelLarge(context)),
-                      const SizedBox(width: AppSpacing.xs),
-                      Text('phase breakdown · VPD · streaks',
-                          style: AppTypography.bodySmall(context)
-                              .copyWith(
-                                  color: context.colTextMuted,
-                                  fontSize: 11)),
-                    ]),
+                    const Icon(Icons.analytics_rounded,
+                        color: AppColors.secondary, size: 16),
+                    const SizedBox(width: AppSpacing.xs),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Text(
+                            'View Full Analytics',
+                            style: AppTypography.labelLarge(context),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                          Text(
+                            'phase breakdown · VPD · streaks',
+                            style: AppTypography.bodySmall(context).copyWith(
+                                color: context.colTextMuted, fontSize: 11),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ],
+                      ),
+                    ),
                     const Icon(Icons.chevron_right,
                         size: 16, color: AppColors.secondary),
                   ],

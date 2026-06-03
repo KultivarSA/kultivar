@@ -16,6 +16,7 @@ import 'services/app_lock_service.dart';
 import 'services/auto_backup_service.dart';
 import 'services/currency_service.dart';
 import 'services/hive_service.dart';
+import 'services/local_crash_log.dart';
 import 'services/notification_service.dart';
 import 'services/onboarding_service.dart';
 import 'services/review_prompt_service.dart';
@@ -31,6 +32,16 @@ import 'utils/photo_path_resolver.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+
+  // Bug fix v5 (real-device crash hunt):  install the local crash
+  // logger BEFORE any other initialisation so a startup-time crash
+  // still leaves a trace on disk.  The logger writes to a 64 KB
+  // rolling file in the app's documents directory and never sends
+  // anything off-device; the user opts in to share it via the
+  // Settings → "Share Diagnostics" tile.  Lives alongside (not
+  // instead of) the Sentry path -- Sentry stays gated on DSN +
+  // consent; this captures every build, regardless of network.
+  await LocalCrashLog.install();
 
   SystemChrome.setSystemUIOverlayStyle(
     const SystemUiOverlayStyle(
