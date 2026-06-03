@@ -134,6 +134,12 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
     GrowRepository repo,
     GrowSpace space,
   ) {
+    // Bug fix v9 -- same pattern as _showEnvLogSheet (the actual
+    // sheet Marco was crashing on).  The edit-space sheet hits the
+    // same _AnimatedState + _MergingListenable race when its sync
+    // repo.updateGrowSpace fires while the modal is mid-pop.  Pop
+    // with the updated space; persist + dispose + toast in a
+    // single Future.delayed(500ms) window.
     final nameCtrl = TextEditingController(text: space.name);
     final notesCtrl = TextEditingController(text: space.notes ?? '');
     final wattageCtrl = TextEditingController(
@@ -146,7 +152,7 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
             : '');
     String selectedType = space.type;
 
-    showModalBottomSheet<void>(
+    showModalBottomSheet<GrowSpace>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -267,30 +273,32 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
                     if (name.isEmpty) return;
                     // Build explicitly so null values actually clear
                     // optional fields (copyWith uses ?? and can't clear).
-                    // Care-schedule fields are preserved unchanged here;
-                    // they are managed by _SpaceCareScheduleCard.
-                    repo.updateGrowSpace(GrowSpace(
-                      id: space.id,
-                      name: name,
-                      type: selectedType,
-                      notes: notesCtrl.text.trim().isEmpty
-                          ? null
-                          : notesCtrl.text.trim(),
-                      tempMin: space.tempMin,
-                      tempMax: space.tempMax,
-                      humidityMin: space.humidityMin,
-                      humidityMax: space.humidityMax,
-                      wattage: double.tryParse(wattageCtrl.text),
-                      areaSqM: double.tryParse(areaCtrl.text),
-                      wateringEnabled: space.wateringEnabled,
-                      wateringIntervalDays: space.wateringIntervalDays,
-                      feedingEnabled: space.feedingEnabled,
-                      feedingIntervalDays: space.feedingIntervalDays,
-                      ipmEnabled: space.ipmEnabled,
-                      ipmIntervalDays: space.ipmIntervalDays,
-                    ));
-                    Navigator.pop(ctx);
-                    AppToast.show(context, 'Space updated');
+                    // Bug fix v9: build the updated GrowSpace and
+                    // pop with it.  Persistence + toast happen in
+                    // the .then() block after the route is gone.
+                    Navigator.pop(
+                      ctx,
+                      GrowSpace(
+                        id: space.id,
+                        name: name,
+                        type: selectedType,
+                        notes: notesCtrl.text.trim().isEmpty
+                            ? null
+                            : notesCtrl.text.trim(),
+                        tempMin: space.tempMin,
+                        tempMax: space.tempMax,
+                        humidityMin: space.humidityMin,
+                        humidityMax: space.humidityMax,
+                        wattage: double.tryParse(wattageCtrl.text),
+                        areaSqM: double.tryParse(areaCtrl.text),
+                        wateringEnabled: space.wateringEnabled,
+                        wateringIntervalDays: space.wateringIntervalDays,
+                        feedingEnabled: space.feedingEnabled,
+                        feedingIntervalDays: space.feedingIntervalDays,
+                        ipmEnabled: space.ipmEnabled,
+                        ipmIntervalDays: space.ipmIntervalDays,
+                      ),
+                    );
                   },
                 ),
               ),
@@ -311,11 +319,18 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
             ],
           ),
         ),
-    ).then((_) {
-      nameCtrl.dispose();
-      notesCtrl.dispose();
-      wattageCtrl.dispose();
-      areaCtrl.dispose();
+    ).then((updated) {
+      // Bug fix v9 -- single delayed batch.  See top of _showEditSpaceSheet.
+      Future.delayed(const Duration(milliseconds: 500), () {
+        nameCtrl.dispose();
+        notesCtrl.dispose();
+        wattageCtrl.dispose();
+        areaCtrl.dispose();
+        if (updated == null) return;
+        repo.updateGrowSpace(updated);
+        if (!context.mounted) return;
+        AppToast.show(context, 'Space updated');
+      });
     });
   }
 
@@ -325,11 +340,17 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
     BuildContext context,
     GrowRepository repo,
   ) {
+    // Bug fix v9 (the sheet Marco actually uses -- per-space env
+    // log opened from Home -> space card -> "Log Environment").
+    // Same _AnimatedState + _MergingListenable race that PR #19
+    // fixed on the Analytics thermostat sheet, and PR #18 fixed on
+    // the FAB hub.  Pop-with-payload + Future.delayed(500ms) for
+    // dispose + persist + toast in a single batched window.
     final tempController = TextEditingController();
     final humidityController = TextEditingController();
     final notesController = TextEditingController();
 
-    showModalBottomSheet<void>(
+    showModalBottomSheet<EnvironmentLog>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -414,7 +435,10 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
                     );
                     return;
                   }
-                  repo.addEnvironmentLog(
+                  // Bug fix v9: build the log + pop with it as the
+                  // result.  See top of this function.
+                  Navigator.pop(
+                    ctx,
                     EnvironmentLog(
                       id: repo.newId(),
                       growSpaceId: widget.space.id,
@@ -428,7 +452,6 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
                           : notesController.text.trim(),
                     ),
                   );
-                  Navigator.pop(ctx);
                 },
               ),
             ),
@@ -448,10 +471,16 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
             ),
         ],
       ),
-    ).then((_) {
-      tempController.dispose();
-      humidityController.dispose();
-      notesController.dispose();
+    ).then((log) {
+      // Bug fix v9 -- single delayed window so neither the dispose
+      // nor the repo write touches anything while the modal route
+      // is still mid-pop-animation.  See top of _showEnvLogSheet.
+      Future.delayed(const Duration(milliseconds: 500), () {
+        tempController.dispose();
+        humidityController.dispose();
+        notesController.dispose();
+        if (log != null) repo.addEnvironmentLog(log);
+      });
     });
   }
 
