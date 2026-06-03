@@ -441,11 +441,13 @@ abstract final class EditPlantSheet {
         ),
       ),
     ).then((updated) {
-      nameCtrl.dispose();
-      strainCtrl.dispose();
-      phenoCtrl.dispose();
+      // Bug fix v6 -- see add_note_sheet.dart for the focus-blur race.
+      Future.delayed(const Duration(milliseconds: 500), () {
+        nameCtrl.dispose();
+        strainCtrl.dispose();
+        phenoCtrl.dispose();
+      });
       if (updated == null) return;
-      // Bug fix v4 (defence in depth) -- see add_note_sheet.dart.
       WidgetsBinding.instance
           .addPostFrameCallback((_) => repo.updatePlant(updated));
     });

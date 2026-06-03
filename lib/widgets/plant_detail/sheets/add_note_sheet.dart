@@ -604,28 +604,36 @@ abstract final class AddNoteSheet {
         ),
       ),
     ).then((result) {
-      contentCtrl.dispose();
-      waterVolCtrl.dispose();
-      phInCtrl.dispose();
-      ecCtrl.dispose();
-      nCtrl.dispose();
-      pCtrl.dispose();
-      kCtrl.dispose();
-      productCtrl.dispose();
-      amendmentsCtrl.dispose();
-      wVolCtrl.dispose();
-      wPhCtrl.dispose();
-      runoffCtrl.dispose();
-      ipmProductCtrl.dispose();
-      pestCtrl.dispose();
-      dilutionCtrl.dispose();
-      heightCtrl.dispose();
-      // Persist AFTER the modal route is fully gone.
+      // Bug fix v6 (true root cause, confirmed by crash log):
+      // disposing TextEditingControllers synchronously inside
+      // .then() races with FocusManager's pending focus-blur
+      // microtask.  When the modal's TextField loses focus during
+      // keyboard takedown, EditableTextState._handleFocusChanged
+      // fires AFTER .then() and tries to clearComposing() on a
+      // controller we just disposed -- the resulting assertion
+      // cascaded into _dependents.isEmpty on the Overlay.
+      //
+      // Defer dispose by 500 ms so the focus blur + keyboard
+      // dismissal + platform-channel acks all complete first.
+      Future.delayed(const Duration(milliseconds: 500), () {
+        contentCtrl.dispose();
+        waterVolCtrl.dispose();
+        phInCtrl.dispose();
+        ecCtrl.dispose();
+        nCtrl.dispose();
+        pCtrl.dispose();
+        kCtrl.dispose();
+        productCtrl.dispose();
+        amendmentsCtrl.dispose();
+        wVolCtrl.dispose();
+        wPhCtrl.dispose();
+        runoffCtrl.dispose();
+        ipmProductCtrl.dispose();
+        pestCtrl.dispose();
+        dilutionCtrl.dispose();
+        heightCtrl.dispose();
+      });
       if (result == null) return;
-      // Bug fix v4 (defence in depth): even .then() can fire while
-      // the modal route's element teardown is still completing on
-      // some Flutter/Android builds.  Defer one more frame so the
-      // mutation provably runs after disposal.
       WidgetsBinding.instance.addPostFrameCallback((_) {
         repo.addNote(result.note);
         if (result.plantPatch != null) {

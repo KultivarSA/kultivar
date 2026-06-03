@@ -374,14 +374,21 @@ class _ShellScreenState extends State<ShellScreen>
         ),
       ),
     ).then((space) {
-      nameCtrl.dispose();
+      // Bug fix v6 (true root cause -- confirmed by crash log):
+      // disposing the TextEditingController synchronously inside
+      // .then() races with FocusManager's pending focus-blur
+      // microtask.  When the modal's TextField loses focus during
+      // keyboard takedown, EditableTextState._handleFocusChanged
+      // fires AFTER .then() and tries to clearComposing() on a
+      // controller we already disposed -- the assertion that
+      // followed cascaded into the _dependents.isEmpty crash on
+      // the Overlay's next deactivation pass.
+      //
+      // Defer dispose by 500 ms so the focus blur + keyboard
+      // dismissal + any platform-channel acks have all completed
+      // before we tear the controller down.
+      Future.delayed(const Duration(milliseconds: 500), nameCtrl.dispose);
       if (space == null) return;
-      // Bug fix v4 (defence in depth): even .then() can fire while the
-      // modal route's element teardown is still in progress on some
-      // Flutter versions / Android builds (Marco kept hitting the
-      // _dependents.isEmpty assertion despite PR #13's pop-with-result
-      // pattern).  Schedule the mutation on the next frame so it
-      // *definitely* runs after the modal's elements are disposed.
       WidgetsBinding.instance
           .addPostFrameCallback((_) => repo.addGrowSpace(space));
     });
@@ -740,9 +747,9 @@ class _ShellScreenState extends State<ShellScreen>
         ),
       ),
     ).then((plant) {
-      nameCtrl.dispose();
+      // Bug fix v6 -- see _showAddSpaceSheet.
+      Future.delayed(const Duration(milliseconds: 500), nameCtrl.dispose);
       if (plant == null) return;
-      // Bug fix v4 (defence in depth) -- see _showAddSpaceSheet.
       WidgetsBinding.instance.addPostFrameCallback((_) {
         repo.addPlant(plant);
         if (plant.targetHarvestDate != null &&
@@ -832,10 +839,12 @@ class _ShellScreenState extends State<ShellScreen>
         ),
       ),
     ).then((logs) {
-      tempCtrl.dispose();
-      humCtrl.dispose();
+      // Bug fix v6 -- see _showAddSpaceSheet.
+      Future.delayed(const Duration(milliseconds: 500), () {
+        tempCtrl.dispose();
+        humCtrl.dispose();
+      });
       if (logs == null) return;
-      // Bug fix v4 (defence in depth) -- see _showAddSpaceSheet.
       WidgetsBinding.instance.addPostFrameCallback((_) {
         for (final log in logs) {
           repo.addEnvironmentLog(log);
@@ -943,9 +952,9 @@ class _ShellScreenState extends State<ShellScreen>
         ),
       ),
     ).then((note) {
-      contentCtrl.dispose();
+      // Bug fix v6 -- see _showAddSpaceSheet.
+      Future.delayed(const Duration(milliseconds: 500), contentCtrl.dispose);
       if (note == null) return;
-      // Bug fix v4 (defence in depth) -- see _showAddSpaceSheet.
       WidgetsBinding.instance
           .addPostFrameCallback((_) => repo.addNote(note));
     });

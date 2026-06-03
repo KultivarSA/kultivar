@@ -137,9 +137,9 @@ abstract final class EditNoteSheet {
         ),
       ),
     ).then((updated) {
-      contentCtrl.dispose();
+      // Bug fix v6 -- see add_note_sheet.dart for the focus-blur race.
+      Future.delayed(const Duration(milliseconds: 500), contentCtrl.dispose);
       if (updated == null) return;
-      // Bug fix v4 (defence in depth) -- see add_note_sheet.dart.
       WidgetsBinding.instance
           .addPostFrameCallback((_) => repo.updateNote(updated));
     });
