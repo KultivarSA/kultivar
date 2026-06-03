@@ -256,5 +256,13 @@
   "analyticsQualityInsights": "Kwaliteitsinsigte",
   "analyticsIssuePatterns": "Probleempatrone",
   "analyticsTrainingAnalytics": "Opleidingsanalise",
-  "analyticsLifetimeStats": "Lewenslange statistiek"
+  "analyticsLifetimeStats": "Lewenslange statistiek",
+
+  "analyticsChartSmooth": "Glad",
+  "analyticsChartBands": "Bande",
+  "analyticsCareSchedule": "7-Dag Versorgingskedule",
+  "analyticsQuickLog": "Vinnige Teken",
+  "analyticsInsightsHeader": "Insigte",
+  "analyticsNoStrongCorrelation": "Nog geen sterk verband gevind tussen genees-/droogtyd en kwaliteit nie — hou aan met proenotas teken.",
+  "strainLibraryTitle": "Variëteit-biblioteek"
 }

@@ -162,8 +162,14 @@ QualityInsight? _correlationInsight(
 /// curingEndDate) since [HarvestLog] only stores the harvest date.
 QualityCorrelationSummary computeQualityCorrelations(
   List<Plant> plants,
-  List<HarvestLog> harvestLogs,
-) {
+  List<HarvestLog> harvestLogs, {
+  // Bug fix v4: localized fallback message for the "no clear
+  // pattern yet" insight.  Callers pass
+  // AppLocalizations.of(ctx).analyticsNoStrongCorrelation; the
+  // utils layer stays widget-free.  A null fallback keeps the
+  // English text for tests / non-UI callers.
+  String? noCorrelationFallback,
+}) {
   final plantById = {for (final p in plants) p.id: p};
 
   // Only use logs that have a quality rating and a matching plant.
@@ -235,9 +241,10 @@ QualityCorrelationSummary computeQualityCorrelations(
 
   // If rated harvests exist but no clear pattern emerged, say so.
   if (insights.isEmpty && rated.length >= 4) {
-    insights.add(const QualityInsight(
-      'No strong correlation found between cure/dry duration and quality '
-      'in your data yet — log more harvests to refine the picture.',
+    insights.add(QualityInsight(
+      noCorrelationFallback ??
+          'No strong correlation found between cure/dry duration and quality '
+              'in your data yet — log more harvests to refine the picture.',
       QualityInsightPolarity.neutral,
     ));
   }

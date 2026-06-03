@@ -214,5 +214,12 @@
   "analyticsQualityInsights": "Quality Insights",
   "analyticsIssuePatterns": "Issue Patterns",
   "analyticsTrainingAnalytics": "Training Analytics",
-  "analyticsLifetimeStats": "Lifetime Stats"
+  "analyticsLifetimeStats": "Lifetime Stats",
+  "analyticsChartSmooth": "Smooth",
+  "analyticsChartBands": "Bands",
+  "analyticsCareSchedule": "7-Day Care Schedule",
+  "analyticsQuickLog": "Quick Log",
+  "analyticsInsightsHeader": "Insights",
+  "analyticsNoStrongCorrelation": "No strong correlation found between cure/dry duration and quality scores yet — keep logging tasting notes.",
+  "strainLibraryTitle": "Strain Library"
 }

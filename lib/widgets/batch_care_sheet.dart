@@ -72,17 +72,20 @@ class BatchCareSheet extends StatefulWidget {
       ),
     ).then((notes) {
       if (notes == null || notes.isEmpty) return;
-      for (final note in notes) {
-        repo.addNote(note);
-      }
-      if (!context.mounted) return;
-      final label = notes.first.category.categoryLabel.toLowerCase();
-      AppToast.show(
-        context,
-        'Logged $label for ${notes.length} '
-            '${notes.length == 1 ? 'plant' : 'plants'}',
-        type: ToastType.success,
-      );
+      // Bug fix v4 (defence in depth) -- see add_note_sheet.dart.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        for (final note in notes) {
+          repo.addNote(note);
+        }
+        if (!context.mounted) return;
+        final label = notes.first.category.categoryLabel.toLowerCase();
+        AppToast.show(
+          context,
+          'Logged $label for ${notes.length} '
+              '${notes.length == 1 ? 'plant' : 'plants'}',
+          type: ToastType.success,
+        );
+      });
     });
   }
 

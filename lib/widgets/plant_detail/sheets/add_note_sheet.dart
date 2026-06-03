@@ -622,10 +622,16 @@ abstract final class AddNoteSheet {
       heightCtrl.dispose();
       // Persist AFTER the modal route is fully gone.
       if (result == null) return;
-      repo.addNote(result.note);
-      if (result.plantPatch != null) {
-        repo.updatePlant(result.plantPatch!);
-      }
+      // Bug fix v4 (defence in depth): even .then() can fire while
+      // the modal route's element teardown is still completing on
+      // some Flutter/Android builds.  Defer one more frame so the
+      // mutation provably runs after disposal.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        repo.addNote(result.note);
+        if (result.plantPatch != null) {
+          repo.updatePlant(result.plantPatch!);
+        }
+      });
     });
   }
 }

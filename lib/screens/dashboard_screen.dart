@@ -1,6 +1,7 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../l10n/app_localizations.dart';
@@ -33,9 +34,11 @@ import '../widgets/dashboard_stat_card.dart';
 import '../widgets/insights_feed.dart';
 import '../widgets/multi_line_chart.dart';
 import '../widgets/time_window_selector.dart';
+import 'calendar_screen.dart';
 import 'cross_grow_comparison_screen.dart';
 import 'environment_log_screen.dart';
 import 'plant_list_screen.dart';
+import 'plant_notes_tab.dart';
 
 class DashboardScreen extends StatefulWidget {
   const DashboardScreen({super.key});
@@ -368,8 +371,12 @@ class _DashboardScreenState extends State<DashboardScreen> {
         computeIssuePatterns(repo.plants, repo.notes);
 
     // ── Quality correlations ──────────────────
-    final qualityCorrelations =
-        computeQualityCorrelations(repo.plants, repo.harvestLogs);
+    final qualityCorrelations = computeQualityCorrelations(
+      repo.plants,
+      repo.harvestLogs,
+      noCorrelationFallback:
+          AppLocalizations.of(context).analyticsNoStrongCorrelation,
+    );
 
     // ── Build yield series ────────────────────
     final rawSeries = buildYieldSeries(repo.plants, repo.growSpaces, _window, repo.harvestLogs);
@@ -420,6 +427,29 @@ class _DashboardScreenState extends State<DashboardScreen> {
             icon: const Icon(Icons.thermostat),
             tooltip: 'Log all spaces',
             onPressed: () => _showBatchEnvDialog(context, repo),
+          ),
+          // Bug fix v4: Calendar + Notes moved here from the Home
+          // AppBar (Marco flagged Home as too crowded; Analytics has
+          // clear room next to the existing Log + More-menu buttons).
+          IconButton(
+            icon: const Icon(Icons.calendar_month_rounded),
+            tooltip: 'Calendar',
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const CalendarScreen(),
+              ),
+            ),
+          ),
+          IconButton(
+            icon: const FaIcon(FontAwesomeIcons.penToSquare, size: 17),
+            tooltip: AppLocalizations.of(context).navNotes,
+            onPressed: () => Navigator.push(
+              context,
+              MaterialPageRoute(
+                builder: (_) => const PlantNotesTab(),
+              ),
+            ),
           ),
           PopupMenuButton<_DashAction>(
             icon: const Icon(Icons.more_vert_rounded),
@@ -611,22 +641,33 @@ class _DashboardScreenState extends State<DashboardScreen> {
             const SizedBox(height: AppSpacing.sectionGap),
 
             // ── Yield Trend header + toggle chips ─
+            // Bug fix v4: in Zulu the chart title becomes long
+            // ("Ithrendi yesisindo esomileyo (g)"), pushing the
+            // Smooth / Bands toggle chips off-screen.  Wrap the
+            // title in Flexible+ellipsis so it gives way before
+            // the chips overflow.
             Row(
               children: [
                 const Icon(Icons.show_chart_rounded,
                     color: AppColors.primary, size: 20),
                 const SizedBox(width: AppSpacing.xs),
-                Text(AppLocalizations.of(context).analyticsDryWeightTrend,
-                    style: AppTypography.headlineSmall(context)),
-                const Spacer(),
+                Flexible(
+                  child: Text(
+                    AppLocalizations.of(context).analyticsDryWeightTrend,
+                    style: AppTypography.headlineSmall(context),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
+                const SizedBox(width: AppSpacing.xs),
                 _ChartToggleChip(
-                  label: 'Smooth',
+                  label: AppLocalizations.of(context).analyticsChartSmooth,
                   active: _smoothingEnabled,
                   onTap: () => setState(() => _smoothingEnabled = !_smoothingEnabled),
                 ),
                 const SizedBox(width: AppSpacing.xs),
                 _ChartToggleChip(
-                  label: 'Bands',
+                  label: AppLocalizations.of(context).analyticsChartBands,
                   active: _showConfidenceBands,
                   onTap: () {
                     setState(
@@ -2242,7 +2283,7 @@ class _SpaceCareStrip extends StatelessWidget {
               const Icon(Icons.event_repeat_rounded,
                   color: AppColors.primary, size: 18),
               const SizedBox(width: AppSpacing.xs),
-              Text('7-Day Care Schedule',
+              Text(AppLocalizations.of(context).analyticsCareSchedule,
                   style: AppTypography.headlineSmall(context)),
             ],
           ),
@@ -2473,7 +2514,7 @@ class _QuickLogCardState extends State<_QuickLogCard> {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Quick Log',
+                      AppLocalizations.of(context).analyticsQuickLog,
                       style: AppTypography.labelLarge(context),
                     ),
                     Text(

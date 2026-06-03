@@ -256,5 +256,13 @@
   "analyticsQualityInsights": "Imibono yekhwalithi",
   "analyticsIssuePatterns": "Amaphethini ezinkinga",
   "analyticsTrainingAnalytics": "Izibalo zokuqeqesha",
-  "analyticsLifetimeStats": "Izibalo zempilo yonke"
+  "analyticsLifetimeStats": "Izibalo zempilo yonke",
+
+  "analyticsChartSmooth": "Bushelelezi",
+  "analyticsChartBands": "Amabhandi",
+  "analyticsCareSchedule": "Uhlelo Lokunakekela Lwezinsuku Eziyi-7",
+  "analyticsQuickLog": "Irekhodi Elisheshayo",
+  "analyticsInsightsHeader": "Imibono",
+  "analyticsNoStrongCorrelation": "Akukabonakali ukuxhumana okuqinile phakathi kwesikhathi sokumisa nokomisa namaphuzu wekhwalithi — qhubeka ubhale amanothi okunambitha.",
+  "strainLibraryTitle": "Umtapo Wohlobo"
 }

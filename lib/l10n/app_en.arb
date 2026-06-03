@@ -405,5 +405,20 @@
   "@analyticsQualityInsights": { "description": "Analytics section header for quality / smoke-report insights." },
   "@analyticsIssuePatterns": { "description": "Analytics section header for plant-issue pattern detection." },
   "@analyticsTrainingAnalytics": { "description": "Analytics section header for training (LST/topping) outcomes." },
-  "@analyticsLifetimeStats": { "description": "Analytics section header for cumulative grow totals." }
+  "@analyticsLifetimeStats": { "description": "Analytics section header for cumulative grow totals." },
+
+  "analyticsChartSmooth": "Smooth",
+  "analyticsChartBands": "Bands",
+  "analyticsCareSchedule": "7-Day Care Schedule",
+  "analyticsQuickLog": "Quick Log",
+  "analyticsInsightsHeader": "Insights",
+  "analyticsNoStrongCorrelation": "No strong correlation found between cure/dry duration and quality scores yet — keep logging tasting notes.",
+  "strainLibraryTitle": "Strain Library",
+  "@analyticsChartSmooth": { "description": "Toggle chip on the analytics trend chart: enable rolling-average smoothing." },
+  "@analyticsChartBands": { "description": "Toggle chip on the analytics trend chart: show confidence bands." },
+  "@analyticsCareSchedule": { "description": "Analytics tile heading: upcoming 7-day care plan." },
+  "@analyticsQuickLog": { "description": "Analytics tile heading: quick water/feed/log entry shortcuts." },
+  "@analyticsInsightsHeader": { "description": "Header for the insights feed (the {window} suffix is appended in code)." },
+  "@analyticsNoStrongCorrelation": { "description": "Quality insights body shown when there's no detectable cure-vs-quality pattern yet." },
+  "@strainLibraryTitle": { "description": "Top-of-screen title on the Strain Library tab." }
 }

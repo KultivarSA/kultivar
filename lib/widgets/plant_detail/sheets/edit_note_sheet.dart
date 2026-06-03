@@ -138,7 +138,10 @@ abstract final class EditNoteSheet {
       ),
     ).then((updated) {
       contentCtrl.dispose();
-      if (updated != null) repo.updateNote(updated);
+      if (updated == null) return;
+      // Bug fix v4 (defence in depth) -- see add_note_sheet.dart.
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => repo.updateNote(updated));
     });
   }
 }

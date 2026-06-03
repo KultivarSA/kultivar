@@ -393,7 +393,7 @@ class _StrainLibraryScreenState extends State<StrainLibraryScreen>
 
     return Scaffold(
       appBar: AppBar(
-        title: Text('🧬 Strain Library',
+        title: Text('🧬 ${AppLocalizations.of(context).strainLibraryTitle}',
             style: AppTypography.headlineLarge(context)
                 .copyWith(color: AppColors.primary)),
         bottom: TabBar(
