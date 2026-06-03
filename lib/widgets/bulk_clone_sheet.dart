@@ -24,12 +24,28 @@ class BulkCloneSheet {
   BulkCloneSheet._();
 
   static Future<void> show(BuildContext context, {required Plant mother}) {
-    return showModalBottomSheet<void>(
+    // Bug fix: pop-with-result pattern -- see add_note_sheet.dart.
+    // Capture repo before showing modal so we avoid context across
+    // the async gap (only the toast uses context, guarded).
+    final repo = context.read<GrowRepository>();
+    return showModalBottomSheet<List<Plant>>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (_) => _BulkCloneSheetBody(mother: mother),
-    );
+    ).then((clones) {
+      if (clones == null || clones.isEmpty) return;
+      for (final clone in clones) {
+        repo.addPlant(clone);
+      }
+      if (!context.mounted) return;
+      AppToast.show(
+        context,
+        '${clones.length} clone${clones.length == 1 ? '' : 's'} '
+            'created from ${mother.name}',
+        type: ToastType.success,
+      );
+    });
   }
 }
 
@@ -333,34 +349,31 @@ class _BulkCloneSheetBodyState extends State<_BulkCloneSheetBody> {
       return;
     }
 
-    for (var i = 0; i < _count; i++) {
-      final idx = _startIndex + i;
-      repo.addPlant(Plant(
-        id: repo.newId(),
-        name: _nameFor(idx),
-        strain: m.strain,
-        strainId: m.strainId,
-        startDate: _startDate,
-        growSpaceId: spaceId,
-        isClone: true,
-        isAutoflower: _copyAttributes ? m.isAutoflower : false,
-        medium: _copyAttributes ? m.medium : null,
-        lightType: _copyAttributes ? m.lightType : null,
-        potSizeLitres: _copyAttributes ? m.potSizeLitres : null,
-        phenotypeTag: m.phenotypeTag,
-        motherPlantId: m.id,
-        // Care reminders default off — the user can enable per-plant
-        // afterwards if they want.  Inheriting them would create N×3
-        // scheduled notifications instantly which is rarely desired.
-      ));
-    }
+    // Bug fix: build the clones, pop with them as result, persist
+    // in show().then() so notifyListeners doesn't fire mid-pop.
+    final clones = [
+      for (var i = 0; i < _count; i++)
+        Plant(
+          id: repo.newId(),
+          name: _nameFor(_startIndex + i),
+          strain: m.strain,
+          strainId: m.strainId,
+          startDate: _startDate,
+          growSpaceId: spaceId,
+          isClone: true,
+          isAutoflower: _copyAttributes ? m.isAutoflower : false,
+          medium: _copyAttributes ? m.medium : null,
+          lightType: _copyAttributes ? m.lightType : null,
+          potSizeLitres: _copyAttributes ? m.potSizeLitres : null,
+          phenotypeTag: m.phenotypeTag,
+          motherPlantId: m.id,
+          // Care reminders default off — the user can enable per-plant
+          // afterwards if they want.  Inheriting them would create N×3
+          // scheduled notifications instantly which is rarely desired.
+        ),
+    ];
 
-    Navigator.pop(context);
-    AppToast.show(
-      context,
-      '$_count clone${_count == 1 ? '' : 's'} created from ${m.name}',
-      type: ToastType.success,
-    );
+    Navigator.pop(context, clones);
   }
 }
 

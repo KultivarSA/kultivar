@@ -40,7 +40,8 @@ abstract final class EditPlantSheet {
     // F10 — stage-aware interval adjustment toggle.
     bool autoAdjustByStage = plant.autoAdjustIntervalsByStage;
 
-    return showModalBottomSheet<void>(
+    // Bug fix: pop-with-result pattern -- see add_note_sheet.dart.
+    return showModalBottomSheet<Plant>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -407,21 +408,22 @@ abstract final class EditPlantSheet {
                       ? plant.strain
                       : strainCtrl.text.trim();
                   final rawPheno = phenoCtrl.text.trim();
-                  repo.updatePlant(plant.copyWith(
-                    name: nameCtrl.text.trim(),
-                    strain: resolvedStrain,
-                    startDate: selectedStartDate,
-                    isAutoflower: selectedIsAutoflower,
-                    medium: selectedMedium,
-                    lightType: selectedLightType,
-                    phenotypeTag: rawPheno.isEmpty ? null : rawPheno,
-                    potSizeLitres: selectedPotSize,
-                    motherPlantId:
-                        plant.isClone ? selectedMotherPlantId : null,
-                    tags: List.from(plantTags),
-                    autoAdjustIntervalsByStage: autoAdjustByStage,
-                  ));
-                  Navigator.pop(ctx);
+                  Navigator.pop(
+                      ctx,
+                      plant.copyWith(
+                        name: nameCtrl.text.trim(),
+                        strain: resolvedStrain,
+                        startDate: selectedStartDate,
+                        isAutoflower: selectedIsAutoflower,
+                        medium: selectedMedium,
+                        lightType: selectedLightType,
+                        phenotypeTag: rawPheno.isEmpty ? null : rawPheno,
+                        potSizeLitres: selectedPotSize,
+                        motherPlantId:
+                            plant.isClone ? selectedMotherPlantId : null,
+                        tags: List.from(plantTags),
+                        autoAdjustIntervalsByStage: autoAdjustByStage,
+                      ));
                 },
               ),
             ),
@@ -438,10 +440,11 @@ abstract final class EditPlantSheet {
           ],
         ),
       ),
-    ).then((_) {
+    ).then((updated) {
       nameCtrl.dispose();
       strainCtrl.dispose();
       phenoCtrl.dispose();
+      if (updated != null) repo.updatePlant(updated);
     });
   }
 }

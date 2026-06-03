@@ -87,7 +87,19 @@ abstract final class AddNoteSheet {
     // Transplant fields
     double? newPotSize;
 
-    return showModalBottomSheet<void>(
+    // Bug fix (v3 follow-up): same _dependents.isEmpty race that
+    // hit the FAB Add Plant / Add Space flows also fires here when
+    // a note has photos attached.  Root cause is identical: the
+    // Save handler used to call `repo.addNote(...)` BEFORE
+    // `Navigator.pop`, so the synchronous notifyListeners triggered
+    // a parent PlantDetailScreen rebuild while the modal route was
+    // still in the element tree.
+    //
+    // Fix: build the entity (and optional transplant plant patch),
+    // pass them through Navigator.pop's result as a record, persist
+    // in the .then() callback -- which fires only AFTER the route
+    // is fully popped from the tree.
+    return showModalBottomSheet<({PlantNote note, Plant? plantPatch})>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -542,7 +554,9 @@ abstract final class AddNoteSheet {
                     );
                   }
 
-                  repo.addNote(PlantNote(
+                  // Bug fix (see top of show()): build entities,
+                  // pop with them as the result, persist in .then().
+                  final note = PlantNote(
                     id: repo.newId(),
                     plantId: plant.id,
                     createdAt: DateTime.now(),
@@ -563,14 +577,15 @@ abstract final class AddNoteSheet {
                         : null,
                     audioUrls: List.from(audioPaths),
                     tags: List.from(tags),
-                  ));
+                  );
                   // Transplant: keep the plant's current pot size in sync.
+                  Plant? plantPatch;
                   if (selectedCat == NoteCategory.transplant &&
                       newPotSize != null) {
-                    repo.updatePlant(
-                        plant.copyWith(potSizeLitres: newPotSize));
+                    plantPatch =
+                        plant.copyWith(potSizeLitres: newPotSize);
                   }
-                  Navigator.pop(ctx);
+                  Navigator.pop(ctx, (note: note, plantPatch: plantPatch));
                 },
                 child: const Text('Save Note'),
               ),
@@ -588,7 +603,7 @@ abstract final class AddNoteSheet {
           ],
         ),
       ),
-    ).then((_) {
+    ).then((result) {
       contentCtrl.dispose();
       waterVolCtrl.dispose();
       phInCtrl.dispose();
@@ -605,6 +620,12 @@ abstract final class AddNoteSheet {
       pestCtrl.dispose();
       dilutionCtrl.dispose();
       heightCtrl.dispose();
+      // Persist AFTER the modal route is fully gone.
+      if (result == null) return;
+      repo.addNote(result.note);
+      if (result.plantPatch != null) {
+        repo.updatePlant(result.plantPatch!);
+      }
     });
   }
 }

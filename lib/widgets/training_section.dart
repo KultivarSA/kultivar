@@ -409,12 +409,20 @@ class _TimelineStrip extends StatelessWidget {
     final d = note.trainingDetails!;
     final info = kTrainingReference[d.technique]!;
 
-    showModalBottomSheet(
+    // Bug fix: pop-with-result pattern -- the delete action used to
+    // call repo.deleteNote synchronously then Navigator.pop, which
+    // could trigger the _dependents.isEmpty race.  Now the sheet
+    // pops with `true` for delete and the deletion happens here.
+    final repo = context.read<GrowRepository>();
+    showModalBottomSheet<bool>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (_) => _EventDetailSheet(note: note, info: info),
-    );
+    ).then((deleted) {
+      if (deleted != true) return;
+      repo.deleteNote(note.id);
+    });
   }
 }
 
@@ -431,7 +439,6 @@ class _EventDetailSheet extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final d = note.trainingDetails!;
-    final repo = context.read<GrowRepository>();
     final daysAgo = DateTime.now().difference(note.createdAt).inDays;
 
     return Container(
@@ -588,10 +595,7 @@ class _EventDetailSheet extends StatelessWidget {
                           borderRadius: BorderRadius.circular(
                               AppSpacing.radiusMd)),
                     ),
-                    onPressed: () {
-                      repo.deleteNote(note.id);
-                      Navigator.pop(context);
-                    },
+                    onPressed: () => Navigator.pop(context, true),
                   ),
                 ),
               ],
