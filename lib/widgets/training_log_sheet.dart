@@ -27,12 +27,17 @@ class TrainingLogSheet extends StatefulWidget {
   const TrainingLogSheet({super.key, required this.plant});
 
   static Future<void> show(BuildContext context, {required Plant plant}) {
-    return showModalBottomSheet(
+    // Bug fix: pop-with-result pattern -- see add_note_sheet.dart.
+    final repo = context.read<GrowRepository>();
+    return showModalBottomSheet<PlantNote>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (_) => TrainingLogSheet(plant: plant),
-    );
+    ).then((note) {
+      if (note == null) return;
+      repo.addNote(note);
+    });
   }
 
   @override
@@ -119,6 +124,8 @@ class _TrainingLogSheetState extends State<TrainingLogSheet> {
   void _save() {
     if (!_canSave) return;
     final repo = context.read<GrowRepository>();
+    // repo is still needed for newId(); persistence now happens
+    // inside show().then() after the modal route is fully popped.
 
     // Build target site string.
     String? site = _targetSite;
@@ -153,8 +160,8 @@ class _TrainingLogSheetState extends State<TrainingLogSheet> {
       trainingDetails: finalDetails,
     );
 
-    repo.addNote(note);
-    Navigator.pop(context);
+    // Bug fix: pop with the note as result; show().then() persists it.
+    Navigator.pop(context, note);
   }
 
   String _buildContent(TrainingDetails d) {

@@ -56,7 +56,12 @@ class BatchCareSheet extends StatefulWidget {
     required List<Plant> plants,
     required List<PlantNote> allNotes,
   }) {
-    return showModalBottomSheet<void>(
+    // Bug fix: pop-with-result pattern -- see add_note_sheet.dart for
+    // the full _dependents.isEmpty race explanation.
+    // Capture repo up-front so we don't touch context across the
+    // async gap (only the toast does, guarded by context.mounted).
+    final repo = context.read<GrowRepository>();
+    return showModalBottomSheet<List<PlantNote>>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -65,7 +70,20 @@ class BatchCareSheet extends StatefulWidget {
         plants: plants,
         allNotes: allNotes,
       ),
-    );
+    ).then((notes) {
+      if (notes == null || notes.isEmpty) return;
+      for (final note in notes) {
+        repo.addNote(note);
+      }
+      if (!context.mounted) return;
+      final label = notes.first.category.categoryLabel.toLowerCase();
+      AppToast.show(
+        context,
+        'Logged $label for ${notes.length} '
+            '${notes.length == 1 ? 'plant' : 'plants'}',
+        type: ToastType.success,
+      );
+    });
   }
 
   @override
@@ -152,26 +170,21 @@ class _BatchCareSheetState extends State<BatchCareSheet> {
         ? _defaultContent(_category)
         : _noteCtrl.text.trim();
 
-    for (final id in _selectedIds) {
-      repo.addNote(PlantNote(
-        id: repo.newId(),
-        plantId: id,
-        createdAt: now,
-        content: content,
-        category: _category,
-      ));
-    }
+    // Bug fix: build notes, pop with them, persist in show().then()
+    // so notifyListeners doesn't fire mid-pop-animation.
+    final notes = [
+      for (final id in _selectedIds)
+        PlantNote(
+          id: repo.newId(),
+          plantId: id,
+          createdAt: now,
+          content: content,
+          category: _category,
+        ),
+    ];
 
     if (!mounted) return;
-    Navigator.pop(context);
-
-    final count = _selectedIds.length;
-    final label = _category.categoryLabel.toLowerCase();
-    AppToast.show(
-      context,
-      'Logged $label for $count ${count == 1 ? 'plant' : 'plants'}',
-      type: ToastType.success,
-    );
+    Navigator.pop(context, notes);
   }
 
   // ── Build ─────────────────────────────────────────────────────────────────

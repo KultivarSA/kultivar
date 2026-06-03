@@ -30,7 +30,9 @@ abstract final class EditNoteSheet {
     // F8 — editable tag list seeded from the note's current tags.
     final editedTags = List<String>.from(note.tags);
 
-    return showModalBottomSheet<void>(
+    // Bug fix: pop-with-result pattern -- see add_note_sheet.dart
+    // for the full _dependents.isEmpty race explanation.
+    return showModalBottomSheet<PlantNote>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -108,12 +110,13 @@ abstract final class EditNoteSheet {
                 onPressed: () {
                   final text = contentCtrl.text.trim();
                   if (text.isEmpty) return;
-                  repo.updateNote(note.copyWith(
-                    content: text,
-                    category: selectedCat,
-                    tags: List.from(editedTags),
-                  ));
-                  Navigator.pop(ctx);
+                  Navigator.pop(
+                      ctx,
+                      note.copyWith(
+                        content: text,
+                        category: selectedCat,
+                        tags: List.from(editedTags),
+                      ));
                 },
                 child: const Text('Save Changes'),
               ),
@@ -133,6 +136,9 @@ abstract final class EditNoteSheet {
           ],
         ),
       ),
-    ).then((_) => contentCtrl.dispose());
+    ).then((updated) {
+      contentCtrl.dispose();
+      if (updated != null) repo.updateNote(updated);
+    });
   }
 }

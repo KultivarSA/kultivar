@@ -845,10 +845,20 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
             ),
 
             // ── Thumbnail strip ──────────────────
+            //
+            // Bug fix (real-device finding on S22): the strip was
+            // 88 px tall -- enough for 60 (image) + 2 + ~14 (date
+            // label at fontSize:9) at the default text scale.  But
+            // Samsung's "Large fonts" accessibility setting (and
+            // many users' default One UI text size > 1.0) scales
+            // the label up, pushing total content past 88 and
+            // triggering a horizontal overflow stripe under the
+            // images.  Bump to 102 to absorb up to a 1.4x text
+            // scale, and cap the date label at one line.
             if (photoNotes.isNotEmpty) ...[
               Divider(height: 1, color: context.colBorder),
               SizedBox(
-                height: 88,
+                height: 102,
                 child: ListView.separated(
                   scrollDirection: Axis.horizontal,
                   padding: const EdgeInsets.symmetric(
@@ -912,8 +922,13 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
           ),
         ),
         const SizedBox(height: 2),
+        // Bug fix: clamp to 1 line + ellipsis so a large textScaler
+        // can't force the date label to wrap onto a second line
+        // (which was a secondary contributor to the strip overflow).
         Text(
           fmtShortDate(date),
+          maxLines: 1,
+          overflow: TextOverflow.ellipsis,
           style: AppTypography.labelSmall(context).copyWith(
             fontSize: 9,
             color: context.colTextMuted,

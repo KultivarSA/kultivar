@@ -25,7 +25,11 @@ class AddExpenseSheet extends StatefulWidget {
     GrowExpense? existing,
     String? initialPlantId,
   }) {
-    return showModalBottomSheet(
+    // Bug fix: pop-with-result pattern -- see add_note_sheet.dart.
+    // Capture repo before showing the modal so we don't have to
+    // touch context across the async gap.
+    final repo = context.read<GrowRepository>();
+    return showModalBottomSheet<GrowExpense>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -33,7 +37,14 @@ class AddExpenseSheet extends StatefulWidget {
         existing: existing,
         initialPlantId: initialPlantId,
       ),
-    );
+    ).then((expense) {
+      if (expense == null) return;
+      if (existing != null) {
+        repo.updateExpense(expense);
+      } else {
+        repo.addExpense(expense);
+      }
+    });
   }
 
   @override
@@ -106,29 +117,31 @@ class _AddExpenseSheetState extends State<AddExpenseSheet> {
 
     // amount is guaranteed non-null past the early-return above.
     final validAmount = amount!;
-    if (widget.existing != null) {
-      repo.updateExpense(widget.existing!.copyWith(
-        category: _category,
-        amount: validAmount,
-        description: descTrimmed,
-        notes: _notesCtrl.text.trim().isEmpty ? null : _notesCtrl.text.trim(),
-        date: _date,
-        plantId: _plantId,
-        growSpaceId: _growSpaceId,
-      ));
-    } else {
-      repo.addExpense(GrowExpense(
-        id: repo.newId(),
-        plantId: _plantId,
-        growSpaceId: _growSpaceId,
-        date: _date,
-        category: _category,
-        description: descTrimmed,
-        amount: validAmount,
-        notes: _notesCtrl.text.trim().isEmpty ? null : _notesCtrl.text.trim(),
-      ));
-    }
-    Navigator.pop(context);
+    // Bug fix: build the entity, pop with it as result, persist
+    // in show().then() after the modal is fully torn down.
+    final expense = widget.existing != null
+        ? widget.existing!.copyWith(
+            category: _category,
+            amount: validAmount,
+            description: descTrimmed,
+            notes:
+                _notesCtrl.text.trim().isEmpty ? null : _notesCtrl.text.trim(),
+            date: _date,
+            plantId: _plantId,
+            growSpaceId: _growSpaceId,
+          )
+        : GrowExpense(
+            id: repo.newId(),
+            plantId: _plantId,
+            growSpaceId: _growSpaceId,
+            date: _date,
+            category: _category,
+            description: descTrimmed,
+            amount: validAmount,
+            notes:
+                _notesCtrl.text.trim().isEmpty ? null : _notesCtrl.text.trim(),
+          );
+    Navigator.pop(context, expense);
   }
 
   @override
