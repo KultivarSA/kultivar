@@ -77,7 +77,7 @@ class _ExpenseTrackerScreenState extends State<ExpenseTrackerScreen>
         title: Text(
           widget.filterPlant != null
               ? '${widget.filterPlant!.name} — Costs'
-              : 'Expense Tracker',
+              : AppLocalizations.of(context).expenseScreenTitle,
           style: AppTypography.headlineMedium(context),
         ),
         actions: [
@@ -188,7 +188,7 @@ class _SummaryHeader extends StatelessWidget {
       child: Row(
         children: [
           _StatPill(
-            label: 'Total Invested',
+            label: AppLocalizations.of(context).expenseStatTotalInvested,
             value: currency.format(totalSpend),
             icon: Icons.account_balance_wallet_rounded,
             color: AppColors.harvested,
@@ -214,7 +214,7 @@ class _SummaryHeader extends StatelessWidget {
             const SizedBox(width: AppSpacing.sm),
           ],
           _StatPill(
-            label: 'Entries',
+            label: AppLocalizations.of(context).expenseStatEntries,
             value: '$expenseCount',
             icon: Icons.receipt_rounded,
             color: AppColors.textMuted,

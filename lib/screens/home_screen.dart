@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../l10n/app_localizations.dart';
@@ -27,6 +28,7 @@ import '../widgets/status_badge.dart';
 import 'calendar_screen.dart';
 import 'nutrient_calculator_screen.dart';
 import 'plant_detail_screen.dart';
+import 'plant_notes_tab.dart';
 import 'search_screen.dart';
 import 'settings_screen.dart';
 import 'space_detail_screen.dart' as space_screen;
@@ -196,6 +198,21 @@ class _HomeScreenState extends State<HomeScreen> {
                   context,
                   MaterialPageRoute(
                     builder: (_) => const CalendarScreen(),
+                  ),
+                ),
+              ),
+              // Bug fix v3: Notes moved off the bottom nav (down to 5
+              // tabs to give "Analytics" enough room).  Add it as an
+              // AppBar action alongside Calendar -- same secondary-
+              // navigation tier as bell / search / settings.
+              IconButton(
+                icon: FaIcon(FontAwesomeIcons.penToSquare,
+                    size: 17, color: context.colTextSecondary),
+                tooltip: AppLocalizations.of(context).navNotes,
+                onPressed: () => Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) => const PlantNotesTab(),
                   ),
                 ),
               ),
@@ -1088,7 +1105,7 @@ class _SpaceCardState extends State<_SpaceCard> {
                 ? Padding(
                     padding: const EdgeInsets.all(AppSpacing.md),
                     child: Text(
-                      'No plants in this space yet.',
+                      AppLocalizations.of(context).homeNoPlantsYet,
                       style: AppTypography.bodyMedium(context)
                           .copyWith(fontStyle: FontStyle.italic),
                     ),

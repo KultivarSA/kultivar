@@ -27,7 +27,6 @@ import 'dashboard_screen.dart';
 import 'expense_tracker_screen.dart';
 import 'harvest_archive_screen.dart';
 import 'home_screen.dart';
-import 'plant_notes_tab.dart';
 import 'strain_library_screen.dart';
 
 class ShellScreen extends StatefulWidget {
@@ -122,10 +121,12 @@ class _ShellScreenState extends State<ShellScreen>
     }
   }
 
-  List<_FabAction> _fabActions(GrowRepository repo) => [
+  List<_FabAction> _fabActions(GrowRepository repo) {
+    final l = AppLocalizations.of(context);
+    return [
         _FabAction(
           icon: Icons.add_business,
-          label: 'Add Space',
+          label: l.fabAddSpace,
           color: AppColors.primary,
           onTap: () {
             _closeFab();
@@ -134,7 +135,7 @@ class _ShellScreenState extends State<ShellScreen>
         ),
         _FabAction(
           icon: Icons.eco,
-          label: 'Add Plant',
+          label: l.fabAddPlant,
           color: AppColors.growing,
           onTap: () {
             _closeFab();
@@ -151,7 +152,7 @@ class _ShellScreenState extends State<ShellScreen>
         ),
         _FabAction(
           icon: Icons.thermostat,
-          label: 'Log Environment',
+          label: l.fabLogEnvironment,
           color: AppColors.drying,
           onTap: () {
             _closeFab();
@@ -160,7 +161,7 @@ class _ShellScreenState extends State<ShellScreen>
         ),
         _FabAction(
           icon: Icons.note_add,
-          label: 'Quick Note',
+          label: l.fabQuickNote,
           color: AppColors.secondary,
           onTap: () {
             _closeFab();
@@ -177,6 +178,7 @@ class _ShellScreenState extends State<ShellScreen>
           },
         ),
       ];
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -193,13 +195,16 @@ class _ShellScreenState extends State<ShellScreen>
                   isDemo ? const DemoBanner() : const SizedBox.shrink(),
             ),
             Expanded(
+              // Bug fix v3: PR #12 dropped Settings (6 -> 6 tabs) but
+              // "Analytics" still wraps to two lines on S22.  Drop
+              // Notes too (down to 5 tabs).  Notes is now reachable
+              // via the pen icon in the Home AppBar.
               child: IndexedStack(
                 index: _index,
                 children: const [
                   HomeScreen(),
                   DashboardScreen(),
                   HarvestArchiveScreen(),
-                  PlantNotesTab(),
                   StrainLibraryScreen(),
                   ExpenseTrackerScreen(),
                 ],
@@ -210,10 +215,13 @@ class _ShellScreenState extends State<ShellScreen>
 
         // ── FAB hub ─────────────────────────
         // Hide the global FAB on tabs that have their own primary
-        // action so the two buttons don't collide.  Costs (5) has its
-        // own "Log Expense" CTA inside the screen; Notes (3) + Strains
-        // (4) intentionally don't need the add-anything hub.
-        floatingActionButton: (_index == 3 || _index == 4 || _index == 5)
+        // action so the two buttons don't collide.  Costs (4) has its
+        // own "Log Expense" CTA inside the screen; Strains (3)
+        // intentionally doesn't need the add-anything hub.
+        //
+        // (Bug fix v3: re-indexed after Notes was dropped from the
+        // bottom nav -- Strains 4->3, Costs 5->4.)
+        floatingActionButton: (_index == 3 || _index == 4)
             ? null
             : Column(
                 mainAxisSize: MainAxisSize.min,
@@ -299,14 +307,26 @@ class _ShellScreenState extends State<ShellScreen>
   void _showAddSpaceSheet(BuildContext context, GrowRepository repo) {
     final nameCtrl = TextEditingController();
     String type = 'Indoor Tent';
-    showModalBottomSheet<void>(
+    // Bug fix v3: PR #12 used Navigator.pop + addPostFrameCallback,
+    // but the callback fires on the *next* frame (~16ms) while the
+    // modal pop animation takes ~250ms (15 frames).  notifyListeners
+    // still fired into the modal's still-live element tree and
+    // triggered the _dependents.isEmpty assertion.
+    //
+    // The canonical Flutter pattern: pass the entity through
+    // Navigator.pop's result, handle the mutation in the modal's
+    // .then() callback.  That callback fires only AFTER the route
+    // is fully popped and removed from the tree -- so there is no
+    // overlap between the modal tear-down and the parent rebuild
+    // caused by notifyListeners.
+    showModalBottomSheet<GrowSpace>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, ss) => AppSheet(
-          title: 'Add Grow Space',
-          subtitle: 'Create a new grow room or tent',
+          title: AppLocalizations.of(ctx).fabSheetAddSpaceTitle,
+          subtitle: AppLocalizations.of(ctx).fabSheetAddSpaceSubtitle,
           icon: Icons.add_home_work_rounded,
           iconColor: AppColors.secondary,
           children: [
@@ -337,37 +357,30 @@ class _ShellScreenState extends State<ShellScreen>
             ),
             const SizedBox(height: AppSpacing.lg),
             _primaryButton(
-              label: 'Create Space',
+              label: AppLocalizations.of(ctx).fabSheetAddSpaceCreate,
               onTap: () {
-                if (nameCtrl.text.trim().isEmpty) {
-                  return;
-                }
-                // Bug fix: defer the repo mutation to the next frame
-                // so notifyListeners doesn't fire during the modal's
-                // pop animation.  PR #11 tried popping before
-                // mutating, but Navigator.pop is async -- the sheet
-                // is still in the tree when the next line ran, the
-                // synchronous notifyListeners triggered a parent
-                // ShellScreen rebuild mid-pop, and Element.deactivate
-                // asserted '_dependents.isEmpty' was not true.
-                final space = GrowSpace(
-                  id: repo.newId(),
-                  name: nameCtrl.text.trim(),
-                  type: type,
+                if (nameCtrl.text.trim().isEmpty) return;
+                Navigator.pop(
+                  ctx,
+                  GrowSpace(
+                    id: repo.newId(),
+                    name: nameCtrl.text.trim(),
+                    type: type,
+                  ),
                 );
-                Navigator.pop(ctx);
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  repo.addGrowSpace(space);
-                });
               },
             ),
           ],
         ),
       ),
-    ).then((_) => nameCtrl.dispose());
+    ).then((space) {
+      nameCtrl.dispose();
+      if (space != null) repo.addGrowSpace(space);
+    });
   }
 
   void _showAddPlantSheet(BuildContext context, GrowRepository repo) {
+    // Bug fix v3: pop-with-result pattern -- see _showAddSpaceSheet.
     final nameCtrl = TextEditingController();
     String spaceId = repo.growSpaces.first.id;
     String strainText = '';
@@ -380,14 +393,14 @@ class _ShellScreenState extends State<ShellScreen>
     double? potSizeLitres;
     String? motherPlantId;
 
-    showModalBottomSheet<void>(
+    showModalBottomSheet<Plant>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, ss) => AppSheet(
-          title: 'Add Plant',
-          subtitle: 'Start tracking a new grow',
+          title: AppLocalizations.of(ctx).fabSheetAddPlantTitle,
+          subtitle: AppLocalizations.of(ctx).fabSheetAddPlantSubtitle,
           icon: Icons.eco_rounded,
           iconColor: AppColors.growing,
           children: [
@@ -691,17 +704,14 @@ class _ShellScreenState extends State<ShellScreen>
             ),
             const SizedBox(height: AppSpacing.lg),
             _primaryButton(
-              label: 'Add Plant',
+              label: AppLocalizations.of(ctx).fabAddPlant,
               onTap: () {
-                if (nameCtrl.text.trim().isEmpty) {
-                  return;
-                }
-                // Bug fix: see _showAddSpaceSheet for the explanation.
-                final plantId = repo.newId();
-                final plantName = nameCtrl.text.trim();
+                if (nameCtrl.text.trim().isEmpty) return;
+                // Bug fix v3: see _showAddSpaceSheet for the canonical
+                // pop-with-result pattern.
                 final plant = Plant(
-                  id: plantId,
-                  name: plantName,
+                  id: repo.newId(),
+                  name: nameCtrl.text.trim(),
                   strain: strainText.trim().isEmpty
                       ? 'Unknown'
                       : strainText.trim(),
@@ -715,26 +725,28 @@ class _ShellScreenState extends State<ShellScreen>
                   potSizeLitres: potSizeLitres,
                   motherPlantId: isClone ? motherPlantId : null,
                 );
-                final scheduleReminder = targetHarvestDate != null &&
-                    KultivarApp.notifTargetHarvestEnabled.value;
-                Navigator.pop(ctx);
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  repo.addPlant(plant);
-                  if (scheduleReminder) {
-                    unawaited(NotificationService()
-                        .scheduleHarvestReminder(
-                      plantId: plantId,
-                      plantName: plantName,
-                      targetDate: targetHarvestDate!,
-                    ));
-                  }
-                });
+                Navigator.pop(ctx, plant);
               },
             ),
           ],
         ),
       ),
-    ).then((_) => nameCtrl.dispose());
+    ).then((plant) {
+      nameCtrl.dispose();
+      if (plant == null) return;
+      repo.addPlant(plant);
+      // Notification scheduling can only happen after the plant lands
+      // in the repo (it indexes by plant.id).  Same .then() block
+      // so we know the modal is gone and the repo write succeeded.
+      if (plant.targetHarvestDate != null &&
+          KultivarApp.notifTargetHarvestEnabled.value) {
+        unawaited(NotificationService().scheduleHarvestReminder(
+          plantId: plant.id,
+          plantName: plant.name,
+          targetDate: plant.targetHarvestDate!,
+        ));
+      }
+    });
   }
 
   void _showBatchEnvSheet(BuildContext context, GrowRepository repo) {
@@ -744,14 +756,14 @@ class _ShellScreenState extends State<ShellScreen>
     final selectedIds =
         Set<String>.from(repo.growSpaces.map((s) => s.id));
 
-    showModalBottomSheet<void>(
+    showModalBottomSheet<List<EnvironmentLog>>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, ss) => AppSheet(
-          title: 'Log Environment',
-          subtitle: 'Select the spaces to update',
+          title: AppLocalizations.of(ctx).fabSheetLogEnvTitle,
+          subtitle: AppLocalizations.of(ctx).fabSheetLogEnvSubtitle,
           icon: Icons.thermostat_rounded,
           iconColor: AppColors.water,
           children: [
@@ -789,31 +801,35 @@ class _ShellScreenState extends State<ShellScreen>
                 final rawTemp = double.tryParse(tempCtrl.text);
                 final hum = double.tryParse(humCtrl.text);
                 if (rawTemp == null && hum == null) return;
-                // Bug fix: see _showAddSpaceSheet for the explanation.
+                // Bug fix v3: see _showAddSpaceSheet.  Build the
+                // entire batch of logs up-front, pass them back as
+                // the pop result, and persist after the modal is
+                // fully gone.
                 final now = DateTime.now();
                 final storageTemp =
                     rawTemp != null ? toStorageTemp(rawTemp) : null;
-                final ids = selectedIds.toList();
-                Navigator.pop(ctx);
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  for (final spaceId in ids) {
-                    repo.addEnvironmentLog(EnvironmentLog(
-                      id: repo.newId(),
-                      growSpaceId: spaceId,
-                      recordedAt: now,
-                      temperature: storageTemp,
-                      humidity: hum,
-                    ));
-                  }
-                });
+                final logs = selectedIds
+                    .map((spaceId) => EnvironmentLog(
+                          id: repo.newId(),
+                          growSpaceId: spaceId,
+                          recordedAt: now,
+                          temperature: storageTemp,
+                          humidity: hum,
+                        ))
+                    .toList();
+                Navigator.pop(ctx, logs);
               },
             ),
           ],
         ),
       ),
-    ).then((_) {
+    ).then((logs) {
       tempCtrl.dispose();
       humCtrl.dispose();
+      if (logs == null) return;
+      for (final log in logs) {
+        repo.addEnvironmentLog(log);
+      }
     });
   }
 
@@ -822,14 +838,14 @@ class _ShellScreenState extends State<ShellScreen>
     String? plantId;
     NoteCategory category = NoteCategory.observation;
 
-    showModalBottomSheet<void>(
+    showModalBottomSheet<PlantNote>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, ss) => AppSheet(
-          title: 'Quick Note',
-          subtitle: 'Jot down an observation',
+          title: AppLocalizations.of(ctx).fabSheetQuickNoteTitle,
+          subtitle: AppLocalizations.of(ctx).fabSheetQuickNoteSubtitle,
           icon: Icons.edit_note_rounded,
           iconColor: AppColors.primary,
           children: [
@@ -880,7 +896,7 @@ class _ShellScreenState extends State<ShellScreen>
             ),
             const SizedBox(height: AppSpacing.lg),
             _primaryButton(
-              label: 'Save Note',
+              label: AppLocalizations.of(ctx).fabSheetSaveNote,
               color: AppColors.secondary,
               onTap: () {
                 if (plantId == null) {
@@ -899,24 +915,26 @@ class _ShellScreenState extends State<ShellScreen>
                   );
                   return;
                 }
-                // Bug fix: see _showAddSpaceSheet for the explanation.
-                final note = PlantNote(
-                  id: repo.newId(),
-                  plantId: plantId!,
-                  createdAt: DateTime.now(),
-                  content: contentCtrl.text.trim(),
-                  category: category,
+                // Bug fix v3: see _showAddSpaceSheet.
+                Navigator.pop(
+                  ctx,
+                  PlantNote(
+                    id: repo.newId(),
+                    plantId: plantId!,
+                    createdAt: DateTime.now(),
+                    content: contentCtrl.text.trim(),
+                    category: category,
+                  ),
                 );
-                Navigator.pop(ctx);
-                WidgetsBinding.instance.addPostFrameCallback((_) {
-                  repo.addNote(note);
-                });
               },
             ),
           ],
         ),
       ),
-    ).then((_) => contentCtrl.dispose());
+    ).then((note) {
+      contentCtrl.dispose();
+      if (note != null) repo.addNote(note);
+    });
   }
 
   // ── Shared helpers ────────────────────────────
@@ -991,17 +1009,15 @@ class _BottomNav extends StatelessWidget {
   Widget build(BuildContext context) {
     // F11 — resolve once per build; cheaper than `.of(context)` per tab.
     final l = AppLocalizations.of(context);
-    // Bug fix v2:  PR #11's `Expanded` fix made labels wrap to two
-    // lines ("Analyt | ics", "Archiv | e") because dividing a 360 dp
-    // S22 width by 7 tabs leaves ~51 dp per tab -- not enough for
-    // longer English labels at standard font size.
+    // Bug fix v3:  PR #12 dropped Settings (7 -> 6 tabs).  At 6 tabs
+    // and ~60 dp per slot, "Analytics" (9 chars) still wraps to
+    // "Analytic | s" on S22 because BottomNav uses padded font sizes.
+    // Drop Notes too (down to 5 tabs at ~72 dp/slot) -- comfortably
+    // accommodates the longest English label.  Notes is now reached
+    // via the pen icon on the Home AppBar.
     //
-    // The right call is to drop Settings from the bottom nav (it was
-    // already a Navigator.push, not an IndexedStack swap, so removing
-    // its tab slot doesn't break anything functionally).  Settings now
-    // lives on the gear icon in the Home AppBar.  Six tabs at ~60 dp
-    // each accommodate the longest label ("Analytics" at 9 chars) on
-    // every supported phone width.
+    // Indices after this change:
+    //   0 Home, 1 Analytics, 2 Archive, 3 Strains, 4 Costs.
     return Container(
       decoration: BoxDecoration(
         color: context.colSurface1,
@@ -1037,21 +1053,13 @@ class _BottomNav extends StatelessWidget {
                 child: _navItem(
                     context,
                     3,
-                    (c) => FaIcon(FontAwesomeIcons.penToSquare,
-                        size: 19, color: c),
-                    l.navNotes),
-              ),
-              Expanded(
-                child: _navItem(
-                    context,
-                    4,
                     (c) => Icon(Icons.science_rounded, size: 22, color: c),
                     l.navStrains),
               ),
               Expanded(
                 child: _navItem(
                     context,
-                    5,
+                    4,
                     (c) =>
                         Icon(Icons.receipt_long_rounded, size: 22, color: c),
                     l.navCosts),

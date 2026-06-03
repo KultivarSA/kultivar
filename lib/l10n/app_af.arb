@@ -214,5 +214,47 @@
   "onboardingProTitle": "Kweek sonder\ngrense",
   "onboardingProBody": "Gradeer op na Kultivar Pro en ontsluit\nalles wat ernstige kwekers nodig het.",
   "onboardingProCta": "Sien planne en pryse",
-  "onboardingProSkip": "Miskien later — begin gratis"
+  "onboardingProSkip": "Miskien later — begin gratis",
+
+  "homeNoPlantsYet": "Nog geen plante in hierdie spasie nie.",
+
+  "strainLibTabMyLibrary": "My Biblioteek",
+  "strainLibTabCatalog": "Katalogus",
+  "strainLibSavedToLibrary": "{strain} gestoor in My Biblioteek",
+  "@strainLibSavedToLibrary": {
+    "placeholders": { "strain": { "type": "String" } }
+  },
+
+  "expenseScreenTitle": "Onkoste-volger",
+  "expenseStatTotalInvested": "Totaal belê",
+  "expenseStatEntries": "Inskrywings",
+
+  "settingsSectionSubscription": "Intekening",
+  "settingsSectionLegal": "Wetlik",
+  "settingsSectionSupport": "Ondersteun Kultivar",
+
+  "fabAddSpace": "Voeg Spasie By",
+  "fabAddPlant": "Voeg Plant By",
+  "fabLogEnvironment": "Teken Omgewing",
+  "fabQuickNote": "Vinnige Nota",
+  "fabSheetAddSpaceTitle": "Voeg Groeispasie By",
+  "fabSheetAddSpaceSubtitle": "Skep 'n nuwe groeikamer of tent",
+  "fabSheetAddSpaceCreate": "Skep Spasie",
+  "fabSheetAddPlantTitle": "Voeg Plant By",
+  "fabSheetAddPlantSubtitle": "Begin 'n nuwe groei volg",
+  "fabSheetLogEnvTitle": "Teken Omgewing",
+  "fabSheetLogEnvSubtitle": "Kies die spasies om by te werk",
+  "fabSheetQuickNoteTitle": "Vinnige Nota",
+  "fabSheetQuickNoteSubtitle": "Skryf 'n waarneming neer",
+  "fabSheetSaveNote": "Stoor Nota",
+
+  "analyticsTitle": "Analise",
+  "analyticsOverview": "Oorsig",
+  "analyticsDryWeightTrend": "Droë gewig tendens (g)",
+  "analyticsNoDataInWindow": "Geen data in hierdie venster nie",
+  "analyticsStrainBreakdown": "Variëteit-verdeling",
+  "analyticsQualityInsights": "Kwaliteitsinsigte",
+  "analyticsIssuePatterns": "Probleempatrone",
+  "analyticsTrainingAnalytics": "Opleidingsanalise",
+  "analyticsLifetimeStats": "Lewenslange statistiek"
 }

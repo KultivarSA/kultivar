@@ -1,8 +1,6 @@
 {
   "@@locale": "de",
-
   "appTitle": "Kultivar",
-
   "navHome": "Start",
   "navAnalytics": "Analyse",
   "navArchive": "Archiv",
@@ -10,7 +8,6 @@
   "navStrains": "Sorten",
   "navCosts": "Kosten",
   "navSettings": "Einstellungen",
-
   "commonSave": "Speichern",
   "commonCancel": "Abbrechen",
   "commonDelete": "Löschen",
@@ -22,12 +19,10 @@
   "commonSearch": "Suchen",
   "commonFilter": "Filter",
   "commonClearFilter": "Filter zurücksetzen",
-
   "homeAppBarTitle": "Kultivar",
   "homeActivePlants": "{count, plural, =0{Keine aktiven Pflanzen} =1{1 aktiv} other{{count} aktiv}}",
   "homeEmptyTitle": "Dein erster Grow\nwartet.",
   "homeEmptySubtitle": "Lege einen Growraum an, um zu starten.\nAlles Weitere baut darauf auf.",
-
   "settingsLanguage": "Sprache",
   "settingsLanguageSubtitle": "{lang} · Kein Neustart nötig",
   "settingsLanguageEnglish": "Englisch",
@@ -40,7 +35,6 @@
   "settingsLanguageAfrikaans": "Afrikaans",
   "settingsLanguageZulu": "Zulu",
   "settingsLanguageSystem": "Systemstandard",
-
   "settingsSectionDataExport": "Datenexport",
   "settingsSectionBackup": "Sicherung & Wiederherstellung",
   "settingsSectionNotifications": "Benachrichtigungen",
@@ -48,13 +42,11 @@
   "settingsSectionPrivacy": "Datenschutz",
   "settingsSectionCommunity": "Community",
   "settingsSectionApp": "App",
-
   "settingsDarkMode": "Dunkler Modus",
   "settingsFahrenheit": "Fahrenheit verwenden",
   "settingsFahrenheitSubtitle": "Temperaturen in °F statt °C anzeigen",
   "settingsCurrency": "Währung",
   "settingsCurrencySubtitle": "Wird für Kosten und Kosten/Gramm verwendet (aktuell {symbol})",
-
   "settingsNotifDrying": "Erinnerung Trocknung",
   "settingsNotifDryingSubtitle": "3 Tage nach der Ernte erinnern",
   "settingsNotifCuring": "Aushärtung abgeschlossen",
@@ -72,7 +64,6 @@
   "settingsNotifTargetHarvest": "Ernte-Erinnerungen",
   "settingsNotifTargetHarvestSubtitle": "7 Tage und 1 Tag vor Ziel-Ernte erinnern",
   "settingsSnoozeDuration": "Schlummerdauer",
-
   "settingsExportAll": "Alle Daten exportieren",
   "settingsExportAllSubtitle": "Pflanzen, Notizen & Logs als ZIP mit CSVs",
   "settingsExportPlants": "Pflanzen exportieren",
@@ -85,7 +76,6 @@
   "settingsExportNotesSubtitle": "Alle Journal-Einträge als CSV",
   "settingsExportExpenses": "Kosten exportieren",
   "settingsExportExpensesSubtitle": "Alle Kosteneinträge als CSV",
-
   "settingsExportBackup": "Sicherung exportieren",
   "settingsImportBackup": "Sicherung importieren",
   "settingsImportBackupSubtitle": "Ersetzt alle aktuellen Daten · ZIP oder JSON",
@@ -94,15 +84,12 @@
   "settingsBackupAbout": "Über die Auto-Sicherung",
   "settingsBackupAboutSubtitle": "So funktionieren Sicherungen & Cloud-Sync",
   "settingsBackupEncrypt": "Sicherungen verschlüsseln",
-
   "settingsAppLock": "App-Sperre",
   "settingsUseBiometrics": "Biometrie verwenden",
   "settingsUseBiometricsSubtitle": "Face ID oder Fingerabdruck statt PIN",
   "settingsChangePin": "PIN ändern",
   "settingsChangePinSubtitle": "Neue 4-stellige PIN festlegen",
-
   "settingsCommunityShare": "Anonyme Grow-Daten teilen",
-
   "settingsExitDemo": "Demo-Modus verlassen",
   "settingsExitDemoSubtitle": "Beispieldaten löschen und eigenes Journal starten",
   "settingsReplayOnboarding": "Onboarding wiederholen",
@@ -111,43 +98,34 @@
   "settingsReclaimStorageSubtitle": "Verwaiste Foto-Dateien löschen",
   "settingsClearAll": "Alle Daten löschen",
   "settingsClearAllSubtitle": "Alles unwiderruflich entfernen",
-
   "settingsDarkModeFollowingSystem": "Folgt der Systemeinstellung ({mode})",
   "settingsDarkModeDarkActive": "Dunkles Theme aktiv",
   "settingsDarkModeLightActive": "Helles Theme aktiv",
   "themeModeDark": "dunkel",
   "themeModeLight": "hell",
-
   "settingsSnoozeDurationSubtitle": "Erinnerungen um {hours}h verschieben beim Tippen auf \"Snooze\"",
-
   "settingsAppLockSubtitleOn": "PIN beim Öffnen erforderlich",
   "settingsAppLockSubtitleOff": "Tippen, um eine PIN einzurichten",
-
   "settingsBackupEncryptSubtitleOn": "AES-256 · Passwort zum Wiederherstellen nötig",
   "settingsBackupEncryptSubtitleOff": "ZIP-Sicherungen mit Passwort schützen",
-
   "settingsCommunityShareSubtitleOn": "Trägt anonym zu Ertragsdaten bei",
   "settingsCommunityShareSubtitleOff": "Nicht aktiv — tippen, um wieder mitzumachen",
   "settingsCommunityShareSubtitlePrompt": "Hilf beim Ertragsvergleich — keine persönlichen Daten",
-
   "settingsBackupSubtitleNever": "Alle Daten + Fotos als ZIP-Archiv",
   "settingsBackupSubtitleAgo": "Letzte Sicherung: {ago}",
   "agoJustNow": "gerade eben",
   "agoMinutes": "vor {minutes}min",
   "agoHours": "vor {hours}h",
   "agoDays": "vor {days}T",
-
   "settingsBackupBannerNoBackup": "Noch keine Sicherung — exportiere eine, um deine Daten zu schützen.",
   "settingsBackupBannerStale": "{days, plural, =1{Sicherung ist 1 Tag alt. Exportiere eine neue.} other{Sicherung ist {days} Tage alt. Exportiere eine neue.}}",
   "settingsBackupBannerAging": "{days, plural, =1{Sicherung ist 1 Tag alt. Bald exportieren.} other{Sicherung ist {days} Tage alt. Bald exportieren.}}",
-
   "statusGrowing": "Wachstum",
   "statusDrying": "Trocknet",
   "statusCuring": "Härtet aus",
   "statusHarvested": "Geerntet",
   "statusCompleted": "Abgeschlossen",
   "statusRemoved": "Entfernt",
-
   "notesTitle": "Pflanzennotizen",
   "notesAddButton": "Notiz hinzufügen",
   "notesEmptyNoPlantsTitle": "Noch keine Pflanzen",
@@ -156,7 +134,6 @@
   "notesEmptyNoNotesPrompt": "Noch keine Notizen — tippe auf eine Pflanze, um eine hinzuzufügen.",
   "notesAddToSheetTitle": "Notiz hinzufügen zu…",
   "notesAddNoPlantToast": "Füge zuerst eine Pflanze im Start-Tab hinzu",
-
   "archiveTitle": "Ernte-Archiv",
   "archiveFilterAll": "Alle",
   "archiveFilterMonth": "Dieser Monat",
@@ -168,30 +145,24 @@
   "archiveEmptyNoMatchAction": "Filter zurücksetzen",
   "archiveSectionHarvested": "Geerntete Pflanzen",
   "archiveSectionRemoved": "Entfernte Pflanzen",
-
   "strainsEmptyTitle": "Noch keine Sorten",
   "strainsEmptyBody": "Tippe auf +, um eigene anzulegen, oder durchsuche den Katalog-Tab.",
   "strainsEmptyAddAction": "Sorte hinzufügen",
   "strainsFilteredEmpty": "Keine passenden Sorten",
   "strainsClearFilters": "Filter zurücksetzen",
-
   "costsEmptyTitle": "Noch keine Kosten erfasst",
   "costsEmptyBody": "Erfasse Samen, Dünger, Strom und mehr.\nSieh deine echten Kosten pro Gramm bei der Ernte.",
   "costsEmptyAddAction": "Erste Kosten erfassen",
-
   "onboardingSkip": "Vorerst überspringen",
   "onboardingProgress": "Schritt {current} von {total} · {label}",
-
   "onboardingWelcomeTagline": "Für ernsthafte Grower gebaut.",
   "onboardingWelcomeCta": "Ersten Growraum einrichten",
   "onboardingWelcomeDemo": "Mit Beispieldaten erkunden",
   "onboardingWelcomeDemoCaption": "Mit 6 abgeschlossenen Grows und Live-Analysen.",
-
   "onboardingSpaceStepLabel": "Lege deinen Growraum an",
   "onboardingSpaceTitle": "Lege deinen\nersten Growraum an",
   "onboardingSpaceBody": "Ein Raum ist jede Umgebung, in der du growst\n— ein Zelt, ein Zimmer oder ein Beet.",
   "onboardingSpaceCta": "Growraum anlegen",
-
   "onboardingPlantStepLabel": "Erste Pflanze hinzufügen",
   "onboardingPlantTitle": "Füge deine\nerste Pflanze hinzu",
   "onboardingPlantBody": "Optional — du kannst Pflanzen\njederzeit vom Startbildschirm hinzufügen.",
@@ -204,13 +175,44 @@
   "onboardingPlantGenetics": "Genetik",
   "onboardingPlantPhotoperiod": "Photoperiode",
   "onboardingPlantAutoflower": "Automatic",
-
   "onboardingCommunityTitle": "Du growst\nnicht allein",
   "onboardingCommunityBody": "Kultivar kann anonyme Erntedaten\nmit der Community teilen.",
   "onboardingCommunityCta": "Weiter einrichten",
-
   "onboardingProTitle": "Grow ohne\nGrenzen",
   "onboardingProBody": "Upgrade auf Kultivar Pro und schalte\nalles frei, was ernsthafte Grower brauchen.",
   "onboardingProCta": "Pläne & Preise ansehen",
-  "onboardingProSkip": "Vielleicht später — kostenlos starten"
+  "onboardingProSkip": "Vielleicht später — kostenlos starten",
+  "homeNoPlantsYet": "No plants in this space yet.",
+  "strainLibTabMyLibrary": "My Library",
+  "strainLibTabCatalog": "Catalog",
+  "strainLibSavedToLibrary": "{strain} saved to My Library",
+  "expenseScreenTitle": "Expense Tracker",
+  "expenseStatTotalInvested": "Total invested",
+  "expenseStatEntries": "Entries",
+  "settingsSectionSubscription": "Subscription",
+  "settingsSectionLegal": "Legal",
+  "settingsSectionSupport": "Support Kultivar",
+  "fabAddSpace": "Add Space",
+  "fabAddPlant": "Add Plant",
+  "fabLogEnvironment": "Log Environment",
+  "fabQuickNote": "Quick Note",
+  "fabSheetAddSpaceTitle": "Add Grow Space",
+  "fabSheetAddSpaceSubtitle": "Create a new grow room or tent",
+  "fabSheetAddSpaceCreate": "Create Space",
+  "fabSheetAddPlantTitle": "Add Plant",
+  "fabSheetAddPlantSubtitle": "Start tracking a new grow",
+  "fabSheetLogEnvTitle": "Log Environment",
+  "fabSheetLogEnvSubtitle": "Select the spaces to update",
+  "fabSheetQuickNoteTitle": "Quick Note",
+  "fabSheetQuickNoteSubtitle": "Jot down an observation",
+  "fabSheetSaveNote": "Save Note",
+  "analyticsTitle": "Analytics",
+  "analyticsOverview": "Overview",
+  "analyticsDryWeightTrend": "Dry Weight Trend (g)",
+  "analyticsNoDataInWindow": "No data in this window",
+  "analyticsStrainBreakdown": "Strain Breakdown",
+  "analyticsQualityInsights": "Quality Insights",
+  "analyticsIssuePatterns": "Issue Patterns",
+  "analyticsTrainingAnalytics": "Training Analytics",
+  "analyticsLifetimeStats": "Lifetime Stats"
 }

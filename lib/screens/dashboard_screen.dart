@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../l10n/app_localizations.dart';
 import '../models/grow_space.dart';
 import '../models/harvest_log.dart';
 import '../models/plant.dart';
@@ -409,7 +410,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
             const Icon(Icons.insights_rounded,
                 color: AppColors.primary, size: 22),
             const SizedBox(width: AppSpacing.xs),
-            Text('Analytics',
+            Text(AppLocalizations.of(context).analyticsTitle,
                 style: AppTypography.headlineLarge(context)
                     .copyWith(color: AppColors.primary)),
           ],
@@ -520,7 +521,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 const Icon(Icons.bar_chart_rounded,
                     color: AppColors.primary, size: 20),
                 const SizedBox(width: AppSpacing.xs),
-                Text('Overview', style: AppTypography.headlineSmall(context)),
+                Text(AppLocalizations.of(context).analyticsOverview,
+                    style: AppTypography.headlineSmall(context)),
               ],
             ),
             const SizedBox(height: AppSpacing.sm),
@@ -614,7 +616,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                 const Icon(Icons.show_chart_rounded,
                     color: AppColors.primary, size: 20),
                 const SizedBox(width: AppSpacing.xs),
-                Text('Dry Weight Trend (g)',
+                Text(AppLocalizations.of(context).analyticsDryWeightTrend,
                     style: AppTypography.headlineSmall(context)),
                 const Spacer(),
                 _ChartToggleChip(
@@ -652,7 +654,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                     Icon(Icons.filter_list_rounded,
                         size: 36, color: context.colTextMuted),
                     const SizedBox(height: AppSpacing.sm),
-                    Text('No data in this window',
+                    Text(AppLocalizations.of(context).analyticsNoDataInWindow,
                         style: AppTypography.headlineSmall(context)),
                     const SizedBox(height: AppSpacing.xs),
                     Text(
@@ -775,7 +777,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   const Icon(Icons.science_rounded,
                       color: AppColors.primary, size: 20),
                   const SizedBox(width: AppSpacing.xs),
-                  Text('Strain Breakdown',
+                  Text(AppLocalizations.of(context).analyticsStrainBreakdown,
                       style: AppTypography.headlineSmall(context)),
                 ],
               ),
@@ -791,7 +793,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   const Icon(Icons.star_rounded,
                       color: AppColors.harvested, size: 20),
                   const SizedBox(width: AppSpacing.xs),
-                  Text('Quality Insights',
+                  Text(AppLocalizations.of(context).analyticsQualityInsights,
                       style: AppTypography.headlineSmall(context)),
                   const Spacer(),
                   Text(
@@ -814,7 +816,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   const Icon(Icons.warning_rounded,
                       color: AppColors.danger, size: 20),
                   const SizedBox(width: AppSpacing.xs),
-                  Text('Issue Patterns',
+                  Text(AppLocalizations.of(context).analyticsIssuePatterns,
                       style: AppTypography.headlineSmall(context)),
                   const Spacer(),
                   Text(
@@ -838,7 +840,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   const Icon(Icons.content_cut_rounded,
                       color: AppColors.training, size: 20),
                   const SizedBox(width: AppSpacing.xs),
-                  Text('Training Analytics',
+                  Text(AppLocalizations.of(context).analyticsTrainingAnalytics,
                       style: AppTypography.headlineSmall(context)),
                   const Spacer(),
                   Text(
@@ -868,7 +870,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   const Icon(Icons.emoji_events_rounded,
                       color: AppColors.harvested, size: 20),
                   const SizedBox(width: AppSpacing.xs),
-                  Text('Lifetime Stats',
+                  Text(AppLocalizations.of(context).analyticsLifetimeStats,
                       style: AppTypography.headlineSmall(context)),
                 ],
               ),
