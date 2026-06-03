@@ -18,6 +18,7 @@ import '../services/auto_backup_service.dart';
 import '../services/backup_encryption_service.dart';
 import '../services/currency_service.dart';
 import '../services/demo_data_service.dart';
+import '../services/local_crash_log.dart';
 import '../services/onboarding_service.dart';
 import '../services/review_prompt_service.dart';
 import '../services/search_state_service.dart';
@@ -795,15 +796,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
           // rather than a transactional ask at the top.
           _sectionHeader(AppLocalizations.of(context).settingsSectionSupport),
           AppCard(
-            child: _actionTile(
-              icon: Icons.star_rounded,
-              iconColor: AppColors.accent,
-              label: 'Rate Kultivar',
-              subtitle: 'Help other growers find the app',
-              onTap: () async {
-                await ReviewPromptService.showManualPrompt();
-              },
-            ),
+            child: Column(children: [
+              _actionTile(
+                icon: Icons.star_rounded,
+                iconColor: AppColors.accent,
+                label: 'Rate Kultivar',
+                subtitle: 'Help other growers find the app',
+                onTap: () async {
+                  await ReviewPromptService.showManualPrompt();
+                },
+              ),
+              // Bug fix v5 (real-device crash hunt): give the user a
+              // one-tap path to share the local crash log.  Stays
+              // on-device until the user explicitly hits Share.
+              _actionTile(
+                icon: Icons.bug_report_rounded,
+                iconColor: AppColors.warning,
+                label: 'Share Diagnostics',
+                subtitle: 'Send the crash log to support',
+                onTap: () => _shareDiagnostics(context),
+              ),
+            ]),
           ),
           const SizedBox(height: AppSpacing.lg),
 
@@ -1607,6 +1620,36 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
         child: Icon(icon, color: color, size: 18),
       );
+
+  Future<void> _shareDiagnostics(BuildContext context) async {
+    // Bug fix v5 (real-device crash hunt): bundle the local crash
+    // log and hand it off to the system share sheet so Marco can
+    // send it to support without USB-tethering.
+    final log = await LocalCrashLog.readLog();
+    if (!context.mounted) return;
+    if (log.isEmpty) {
+      AppToast.show(context, 'No crash log yet — nothing to share.',
+          type: ToastType.info);
+      return;
+    }
+    final file = LocalCrashLog.logFile;
+    try {
+      if (file != null) {
+        await Share.shareXFiles(
+          [XFile(file.path, mimeType: 'text/plain', name: 'kultivar-crash.log')],
+          subject: 'Kultivar crash log',
+          text: 'Crash log from Kultivar — captures Flutter framework + '
+              'uncaught async errors since the last clear.',
+        );
+      } else {
+        // Fallback: file resolution failed during install -- share text.
+        await Share.share(log, subject: 'Kultivar crash log');
+      }
+    } catch (e) {
+      if (!context.mounted) return;
+      AppToast.show(context, 'Share failed: $e', type: ToastType.error);
+    }
+  }
 
   Future<void> _exportBackup(
     BuildContext context,
