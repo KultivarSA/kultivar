@@ -39,8 +39,8 @@ class AddExpenseSheet extends StatefulWidget {
       ),
     ).then((expense) {
       if (expense == null) return;
-      // Bug fix v4 (defence in depth) -- see add_note_sheet.dart.
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Bug fix v7 -- see batch_care_sheet.dart.
+      Future.delayed(const Duration(milliseconds: 500), () {
         if (existing != null) {
           repo.updateExpense(expense);
         } else {

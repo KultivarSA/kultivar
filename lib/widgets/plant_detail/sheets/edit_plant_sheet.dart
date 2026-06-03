@@ -441,15 +441,13 @@ abstract final class EditPlantSheet {
         ),
       ),
     ).then((updated) {
-      // Bug fix v6 -- see add_note_sheet.dart for the focus-blur race.
+      // Bug fix v7 -- see add_note_sheet.dart for the second crash.
       Future.delayed(const Duration(milliseconds: 500), () {
         nameCtrl.dispose();
         strainCtrl.dispose();
         phenoCtrl.dispose();
+        if (updated != null) repo.updatePlant(updated);
       });
-      if (updated == null) return;
-      WidgetsBinding.instance
-          .addPostFrameCallback((_) => repo.updatePlant(updated));
     });
   }
 }

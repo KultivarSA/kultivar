@@ -137,11 +137,11 @@ abstract final class EditNoteSheet {
         ),
       ),
     ).then((updated) {
-      // Bug fix v6 -- see add_note_sheet.dart for the focus-blur race.
-      Future.delayed(const Duration(milliseconds: 500), contentCtrl.dispose);
-      if (updated == null) return;
-      WidgetsBinding.instance
-          .addPostFrameCallback((_) => repo.updateNote(updated));
+      // Bug fix v7 -- see add_note_sheet.dart for the second crash.
+      Future.delayed(const Duration(milliseconds: 500), () {
+        contentCtrl.dispose();
+        if (updated != null) repo.updateNote(updated);
+      });
     });
   }
 }

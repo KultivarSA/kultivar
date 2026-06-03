@@ -604,17 +604,14 @@ abstract final class AddNoteSheet {
         ),
       ),
     ).then((result) {
-      // Bug fix v6 (true root cause, confirmed by crash log):
-      // disposing TextEditingControllers synchronously inside
-      // .then() races with FocusManager's pending focus-blur
-      // microtask.  When the modal's TextField loses focus during
-      // keyboard takedown, EditableTextState._handleFocusChanged
-      // fires AFTER .then() and tries to clearComposing() on a
-      // controller we just disposed -- the resulting assertion
-      // cascaded into _dependents.isEmpty on the Overlay.
-      //
-      // Defer dispose by 500 ms so the focus blur + keyboard
-      // dismissal + platform-channel acks all complete first.
+      // Bug fix v7: batch dispose + repo write into one delayed
+      // closure.  addPostFrameCallback still fired during the modal
+      // pop animation, and the resulting parent rebuild propagated
+      // into the modal subtree where _AnimatedState.didUpdateWidget
+      // tried to re-attach a Listenable.merge that still referenced
+      // a torn-down controller -- different stack from the v6
+      // focus-blur race but same class of bug.  Both operations
+      // now wait for the route to fully unmount.
       Future.delayed(const Duration(milliseconds: 500), () {
         contentCtrl.dispose();
         waterVolCtrl.dispose();
@@ -632,9 +629,7 @@ abstract final class AddNoteSheet {
         pestCtrl.dispose();
         dilutionCtrl.dispose();
         heightCtrl.dispose();
-      });
-      if (result == null) return;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (result == null) return;
         repo.addNote(result.note);
         if (result.plantPatch != null) {
           repo.updatePlant(result.plantPatch!);
