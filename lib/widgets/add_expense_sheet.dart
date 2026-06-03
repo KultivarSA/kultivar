@@ -39,11 +39,14 @@ class AddExpenseSheet extends StatefulWidget {
       ),
     ).then((expense) {
       if (expense == null) return;
-      if (existing != null) {
-        repo.updateExpense(expense);
-      } else {
-        repo.addExpense(expense);
-      }
+      // Bug fix v4 (defence in depth) -- see add_note_sheet.dart.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (existing != null) {
+          repo.updateExpense(expense);
+        } else {
+          repo.addExpense(expense);
+        }
+      });
     });
   }
 

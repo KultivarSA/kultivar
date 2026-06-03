@@ -35,16 +35,19 @@ class BulkCloneSheet {
       builder: (_) => _BulkCloneSheetBody(mother: mother),
     ).then((clones) {
       if (clones == null || clones.isEmpty) return;
-      for (final clone in clones) {
-        repo.addPlant(clone);
-      }
-      if (!context.mounted) return;
-      AppToast.show(
-        context,
-        '${clones.length} clone${clones.length == 1 ? '' : 's'} '
-            'created from ${mother.name}',
-        type: ToastType.success,
-      );
+      // Bug fix v4 (defence in depth) -- see add_note_sheet.dart.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        for (final clone in clones) {
+          repo.addPlant(clone);
+        }
+        if (!context.mounted) return;
+        AppToast.show(
+          context,
+          '${clones.length} clone${clones.length == 1 ? '' : 's'} '
+              'created from ${mother.name}',
+          type: ToastType.success,
+        );
+      });
     });
   }
 }

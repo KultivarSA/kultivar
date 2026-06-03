@@ -421,7 +421,9 @@ class _TimelineStrip extends StatelessWidget {
       builder: (_) => _EventDetailSheet(note: note, info: info),
     ).then((deleted) {
       if (deleted != true) return;
-      repo.deleteNote(note.id);
+      // Bug fix v4 (defence in depth) -- see add_note_sheet.dart.
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => repo.deleteNote(note.id));
     });
   }
 }

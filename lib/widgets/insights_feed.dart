@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../l10n/app_localizations.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_spacing.dart';
 import '../theme/app_typography.dart';
@@ -107,7 +108,9 @@ class _InsightsFeedState extends State<InsightsFeed> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        Text('Insights • ${widget.timeWindowLabel}',
+        Text(
+            '${AppLocalizations.of(context).analyticsInsightsHeader} • '
+                '${widget.timeWindowLabel}',
             style: AppTypography.headlineSmall(context)),
         const SizedBox(height: AppSpacing.sm),
         ...important.map(_buildInsightCard),

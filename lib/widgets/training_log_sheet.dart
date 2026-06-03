@@ -36,7 +36,9 @@ class TrainingLogSheet extends StatefulWidget {
       builder: (_) => TrainingLogSheet(plant: plant),
     ).then((note) {
       if (note == null) return;
-      repo.addNote(note);
+      // Bug fix v4 (defence in depth) -- see add_note_sheet.dart.
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => repo.addNote(note));
     });
   }
 

@@ -375,7 +375,15 @@ class _ShellScreenState extends State<ShellScreen>
       ),
     ).then((space) {
       nameCtrl.dispose();
-      if (space != null) repo.addGrowSpace(space);
+      if (space == null) return;
+      // Bug fix v4 (defence in depth): even .then() can fire while the
+      // modal route's element teardown is still in progress on some
+      // Flutter versions / Android builds (Marco kept hitting the
+      // _dependents.isEmpty assertion despite PR #13's pop-with-result
+      // pattern).  Schedule the mutation on the next frame so it
+      // *definitely* runs after the modal's elements are disposed.
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => repo.addGrowSpace(space));
     });
   }
 
@@ -734,18 +742,18 @@ class _ShellScreenState extends State<ShellScreen>
     ).then((plant) {
       nameCtrl.dispose();
       if (plant == null) return;
-      repo.addPlant(plant);
-      // Notification scheduling can only happen after the plant lands
-      // in the repo (it indexes by plant.id).  Same .then() block
-      // so we know the modal is gone and the repo write succeeded.
-      if (plant.targetHarvestDate != null &&
-          KultivarApp.notifTargetHarvestEnabled.value) {
-        unawaited(NotificationService().scheduleHarvestReminder(
-          plantId: plant.id,
-          plantName: plant.name,
-          targetDate: plant.targetHarvestDate!,
-        ));
-      }
+      // Bug fix v4 (defence in depth) -- see _showAddSpaceSheet.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        repo.addPlant(plant);
+        if (plant.targetHarvestDate != null &&
+            KultivarApp.notifTargetHarvestEnabled.value) {
+          unawaited(NotificationService().scheduleHarvestReminder(
+            plantId: plant.id,
+            plantName: plant.name,
+            targetDate: plant.targetHarvestDate!,
+          ));
+        }
+      });
     });
   }
 
@@ -827,9 +835,12 @@ class _ShellScreenState extends State<ShellScreen>
       tempCtrl.dispose();
       humCtrl.dispose();
       if (logs == null) return;
-      for (final log in logs) {
-        repo.addEnvironmentLog(log);
-      }
+      // Bug fix v4 (defence in depth) -- see _showAddSpaceSheet.
+      WidgetsBinding.instance.addPostFrameCallback((_) {
+        for (final log in logs) {
+          repo.addEnvironmentLog(log);
+        }
+      });
     });
   }
 
@@ -933,7 +944,10 @@ class _ShellScreenState extends State<ShellScreen>
       ),
     ).then((note) {
       contentCtrl.dispose();
-      if (note != null) repo.addNote(note);
+      if (note == null) return;
+      // Bug fix v4 (defence in depth) -- see _showAddSpaceSheet.
+      WidgetsBinding.instance
+          .addPostFrameCallback((_) => repo.addNote(note));
     });
   }
 
