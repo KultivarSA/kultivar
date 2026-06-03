@@ -35,8 +35,8 @@ class BulkCloneSheet {
       builder: (_) => _BulkCloneSheetBody(mother: mother),
     ).then((clones) {
       if (clones == null || clones.isEmpty) return;
-      // Bug fix v4 (defence in depth) -- see add_note_sheet.dart.
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Bug fix v7 -- see batch_care_sheet.dart.
+      Future.delayed(const Duration(milliseconds: 500), () {
         for (final clone in clones) {
           repo.addPlant(clone);
         }

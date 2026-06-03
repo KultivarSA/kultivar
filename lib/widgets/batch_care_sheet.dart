@@ -72,8 +72,10 @@ class BatchCareSheet extends StatefulWidget {
       ),
     ).then((notes) {
       if (notes == null || notes.isEmpty) return;
-      // Bug fix v4 (defence in depth) -- see add_note_sheet.dart.
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Bug fix v7: addPostFrameCallback still fires inside the
+      // modal pop-animation window.  Wait 500 ms so the route is
+      // fully unmounted before we notify the repo.
+      Future.delayed(const Duration(milliseconds: 500), () {
         for (final note in notes) {
           repo.addNote(note);
         }

@@ -374,23 +374,23 @@ class _ShellScreenState extends State<ShellScreen>
         ),
       ),
     ).then((space) {
-      // Bug fix v6 (true root cause -- confirmed by crash log):
-      // disposing the TextEditingController synchronously inside
-      // .then() races with FocusManager's pending focus-blur
-      // microtask.  When the modal's TextField loses focus during
-      // keyboard takedown, EditableTextState._handleFocusChanged
-      // fires AFTER .then() and tries to clearComposing() on a
-      // controller we already disposed -- the assertion that
-      // followed cascaded into the _dependents.isEmpty crash on
-      // the Overlay's next deactivation pass.
+      // Bug fix v7 (second crash log): batching mutation +
+      // dispose into the SAME 500 ms Future.delayed.  Reason:
+      // calling repo.addX during addPostFrameCallback fires
+      // notifyListeners while the modal's overlay entry is
+      // still mid-pop animation.  The resulting rebuild cascades
+      // into the modal's subtree where _AnimatedState.didUpdateWidget
+      // tries to re-attach to a disposed controller via the
+      // Listenable.merge chain -- different stack from v6 but the
+      // same class of "controller touched during teardown" bug.
       //
-      // Defer dispose by 500 ms so the focus blur + keyboard
-      // dismissal + any platform-channel acks have all completed
-      // before we tear the controller down.
-      Future.delayed(const Duration(milliseconds: 500), nameCtrl.dispose);
-      if (space == null) return;
-      WidgetsBinding.instance
-          .addPostFrameCallback((_) => repo.addGrowSpace(space));
+      // The 500 ms window lets the modal route fully unmount from
+      // the Navigator before we either notify the repo or tear
+      // down any owned controllers.
+      Future.delayed(const Duration(milliseconds: 500), () {
+        nameCtrl.dispose();
+        if (space != null) repo.addGrowSpace(space);
+      });
     });
   }
 
@@ -747,10 +747,10 @@ class _ShellScreenState extends State<ShellScreen>
         ),
       ),
     ).then((plant) {
-      // Bug fix v6 -- see _showAddSpaceSheet.
-      Future.delayed(const Duration(milliseconds: 500), nameCtrl.dispose);
-      if (plant == null) return;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+      // Bug fix v7 -- see _showAddSpaceSheet.
+      Future.delayed(const Duration(milliseconds: 500), () {
+        nameCtrl.dispose();
+        if (plant == null) return;
         repo.addPlant(plant);
         if (plant.targetHarvestDate != null &&
             KultivarApp.notifTargetHarvestEnabled.value) {
@@ -839,13 +839,11 @@ class _ShellScreenState extends State<ShellScreen>
         ),
       ),
     ).then((logs) {
-      // Bug fix v6 -- see _showAddSpaceSheet.
+      // Bug fix v7 -- see _showAddSpaceSheet.
       Future.delayed(const Duration(milliseconds: 500), () {
         tempCtrl.dispose();
         humCtrl.dispose();
-      });
-      if (logs == null) return;
-      WidgetsBinding.instance.addPostFrameCallback((_) {
+        if (logs == null) return;
         for (final log in logs) {
           repo.addEnvironmentLog(log);
         }
@@ -952,11 +950,11 @@ class _ShellScreenState extends State<ShellScreen>
         ),
       ),
     ).then((note) {
-      // Bug fix v6 -- see _showAddSpaceSheet.
-      Future.delayed(const Duration(milliseconds: 500), contentCtrl.dispose);
-      if (note == null) return;
-      WidgetsBinding.instance
-          .addPostFrameCallback((_) => repo.addNote(note));
+      // Bug fix v7 -- see _showAddSpaceSheet.
+      Future.delayed(const Duration(milliseconds: 500), () {
+        contentCtrl.dispose();
+        if (note != null) repo.addNote(note);
+      });
     });
   }
 
