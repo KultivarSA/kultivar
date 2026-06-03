@@ -98,7 +98,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final humidityController = TextEditingController();
     final notesController = TextEditingController();
 
-    showModalBottomSheet<void>(
+    // Bug fix v8 (Marco's persistent Log-Env crash): this sheet was the
+    // ONLY entry point still using the original synchronous
+    // repo.addBatchEnvironmentLog + Navigator.pop pattern that every
+    // other FAB sheet was migrated away from in PR #18.  That's why
+    // PR #6/7/13/15/17/18 didn't fix the crash he kept hitting: he
+    // taps the "Log all spaces" thermostat icon on the Analytics
+    // AppBar, not the FAB-hub Log Environment.
+    //
+    // Pop with a payload, persist + dispose in Future.delayed(500ms).
+    showModalBottomSheet<({double? temperature, double? humidity, String? notes})>(
       context: context,
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
@@ -180,22 +189,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
                               double.tryParse(tempController.text);
                           final humidity =
                               double.tryParse(humidityController.text);
-                          repo.addBatchEnvironmentLog(
+                          final trimmedNotes =
+                              notesController.text.trim();
+                          Navigator.pop(ctx, (
                             temperature: rawTemp != null
                                 ? toStorageTemp(rawTemp)
                                 : null,
                             humidity: humidity,
-                            notes: notesController.text.trim().isEmpty
-                                ? null
-                                : notesController.text.trim(),
-                          );
-                          Navigator.pop(ctx);
-                          AppToast.show(
-                            context,
-                            'Logged to ${repo.growSpaces.length} '
-                            '${repo.growSpaces.length == 1 ? 'space' : 'spaces'}',
-                            type: ToastType.success,
-                          );
+                            notes:
+                                trimmedNotes.isEmpty ? null : trimmedNotes,
+                          ));
                         }
                       : null,
                 ),
@@ -219,10 +222,27 @@ class _DashboardScreenState extends State<DashboardScreen> {
           );
         },
       ),
-    ).then((_) {
-      tempController.dispose();
-      humidityController.dispose();
-      notesController.dispose();
+    ).then((payload) {
+      // Bug fix v8 -- single delayed window for dispose + persist +
+      // toast.  See the comment at the top of _showBatchEnvDialog.
+      Future.delayed(const Duration(milliseconds: 500), () {
+        tempController.dispose();
+        humidityController.dispose();
+        notesController.dispose();
+        if (payload == null) return;
+        final spaceCount = repo.growSpaces.length;
+        repo.addBatchEnvironmentLog(
+          temperature: payload.temperature,
+          humidity: payload.humidity,
+          notes: payload.notes,
+        );
+        if (!context.mounted) return;
+        AppToast.show(
+          context,
+          'Logged to $spaceCount ${spaceCount == 1 ? 'space' : 'spaces'}',
+          type: ToastType.success,
+        );
+      });
     });
   }
   // ── Build ───────────────────────────────────
