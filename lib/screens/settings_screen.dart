@@ -708,7 +708,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           // viewer.  Position: after "App" actions, before the
           // version-string footer — same neighbourhood as About
           // information in most apps' settings.
-          _sectionHeader('Legal'),
+          _sectionHeader(AppLocalizations.of(context).settingsSectionLegal),
           AppCard(
             child: Column(children: [
               _actionTile(
@@ -793,7 +793,7 @@ class _SettingsScreenState extends State<SettingsScreen> {
           // Placed AFTER Legal so the section reads as "the
           // boring necessary stuff, then the optional warm thing"
           // rather than a transactional ask at the top.
-          _sectionHeader('Support Kultivar'),
+          _sectionHeader(AppLocalizations.of(context).settingsSectionSupport),
           AppCard(
             child: _actionTile(
               icon: Icons.star_rounded,
@@ -1168,7 +1168,8 @@ class _SettingsScreenState extends State<SettingsScreen> {
         return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _sectionHeader('Subscription'),
+            _sectionHeader(
+                AppLocalizations.of(ctx).settingsSectionSubscription),
             AppCard(
               child: Column(children: [
                 // ── Status / Upgrade tile ──

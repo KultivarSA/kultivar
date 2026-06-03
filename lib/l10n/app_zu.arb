@@ -214,5 +214,47 @@
   "onboardingProTitle": "Khulisa ngaphandle\nkwemingcele",
   "onboardingProBody": "Thuthukisela ku-Kultivar Pro futhi uvule\nkonke abakhuliseli abazimisele abakudingayo.",
   "onboardingProCta": "Buka amapulani namanani",
-  "onboardingProSkip": "Mhlawumbe kamuva — qala mahhala"
+  "onboardingProSkip": "Mhlawumbe kamuva — qala mahhala",
+
+  "homeNoPlantsYet": "Azikho izitshalo kule ndawo okwamanje.",
+
+  "strainLibTabMyLibrary": "Umtapo Wami",
+  "strainLibTabCatalog": "Ikhathalogi",
+  "strainLibSavedToLibrary": "{strain} ilondolozwe Kumtapo Wami",
+  "@strainLibSavedToLibrary": {
+    "placeholders": { "strain": { "type": "String" } }
+  },
+
+  "expenseScreenTitle": "Isilandeli Sezindleko",
+  "expenseStatTotalInvested": "Isamba esitshaliwe",
+  "expenseStatEntries": "Amangeniso",
+
+  "settingsSectionSubscription": "Ukubhalisa",
+  "settingsSectionLegal": "Ezomthetho",
+  "settingsSectionSupport": "Sekela uKultivar",
+
+  "fabAddSpace": "Engeza Indawo",
+  "fabAddPlant": "Engeza Isitshalo",
+  "fabLogEnvironment": "Rekhoda Imvelo",
+  "fabQuickNote": "Inothi Elisheshayo",
+  "fabSheetAddSpaceTitle": "Engeza Indawo Yokukhulisa",
+  "fabSheetAddSpaceSubtitle": "Dala igumbi noma itende elisha lokukhulisa",
+  "fabSheetAddSpaceCreate": "Dala Indawo",
+  "fabSheetAddPlantTitle": "Engeza Isitshalo",
+  "fabSheetAddPlantSubtitle": "Qala ukulandela ukukhula okusha",
+  "fabSheetLogEnvTitle": "Rekhoda Imvelo",
+  "fabSheetLogEnvSubtitle": "Khetha izindawo ozozibuyekeza",
+  "fabSheetQuickNoteTitle": "Inothi Elisheshayo",
+  "fabSheetQuickNoteSubtitle": "Bhala phansi okuqashelwe",
+  "fabSheetSaveNote": "Londoloza Inothi",
+
+  "analyticsTitle": "Izibalo",
+  "analyticsOverview": "Uhlolojikelele",
+  "analyticsDryWeightTrend": "Ithrendi yesisindo esomileyo (g)",
+  "analyticsNoDataInWindow": "Ayikho idatha kule windi",
+  "analyticsStrainBreakdown": "Ukuhlukaniswa kohlobo",
+  "analyticsQualityInsights": "Imibono yekhwalithi",
+  "analyticsIssuePatterns": "Amaphethini ezinkinga",
+  "analyticsTrainingAnalytics": "Izibalo zokuqeqesha",
+  "analyticsLifetimeStats": "Izibalo zempilo yonke"
 }

@@ -213,7 +213,8 @@ class _StrainLibraryScreenState extends State<StrainLibraryScreen>
       cureWeeksMax: built.cureWeeksMax,
       createdAt: DateTime.now(),
     ));
-    AppToast.show(context, '${built.name} saved to My Library');
+    AppToast.show(context,
+        AppLocalizations.of(context).strainLibSavedToLibrary(built.name));
   }
 
   // ── Add custom strain dialog ──────────────────────────────────────────────
@@ -397,9 +398,9 @@ class _StrainLibraryScreenState extends State<StrainLibraryScreen>
                 .copyWith(color: AppColors.primary)),
         bottom: TabBar(
           controller: _tabs,
-          tabs: const [
-            Tab(text: 'My Library'),
-            Tab(text: 'Catalog'),
+          tabs: [
+            Tab(text: AppLocalizations.of(context).strainLibTabMyLibrary),
+            Tab(text: AppLocalizations.of(context).strainLibTabCatalog),
           ],
           labelColor: AppColors.primary,
           unselectedLabelColor: null,

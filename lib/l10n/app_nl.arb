@@ -1,8 +1,6 @@
 {
   "@@locale": "nl",
-
   "appTitle": "Kultivar",
-
   "navHome": "Start",
   "navAnalytics": "Analyse",
   "navArchive": "Archief",
@@ -10,7 +8,6 @@
   "navStrains": "Soorten",
   "navCosts": "Kosten",
   "navSettings": "Instellingen",
-
   "commonSave": "Opslaan",
   "commonCancel": "Annuleren",
   "commonDelete": "Verwijderen",
@@ -22,12 +19,10 @@
   "commonSearch": "Zoeken",
   "commonFilter": "Filter",
   "commonClearFilter": "Filter wissen",
-
   "homeAppBarTitle": "Kultivar",
   "homeActivePlants": "{count, plural, =0{Geen actieve planten} =1{1 actief} other{{count} actief}}",
   "homeEmptyTitle": "Je eerste teelt\nwacht.",
   "homeEmptySubtitle": "Maak een groeiruimte aan om te starten.\nDe rest ontgrendelt vanzelf.",
-
   "settingsLanguage": "Taal",
   "settingsLanguageSubtitle": "{lang} · Herstart niet nodig",
   "settingsLanguageEnglish": "Engels",
@@ -40,7 +35,6 @@
   "settingsLanguageAfrikaans": "Afrikaans",
   "settingsLanguageZulu": "Zoeloe",
   "settingsLanguageSystem": "Systeemstandaard",
-
   "settingsSectionDataExport": "Gegevens exporteren",
   "settingsSectionBackup": "Back-up & herstel",
   "settingsSectionNotifications": "Meldingen",
@@ -48,13 +42,11 @@
   "settingsSectionPrivacy": "Privacy",
   "settingsSectionCommunity": "Community",
   "settingsSectionApp": "App",
-
   "settingsDarkMode": "Donkere modus",
   "settingsFahrenheit": "Gebruik Fahrenheit",
   "settingsFahrenheitSubtitle": "Toon temperaturen in °F in plaats van °C",
   "settingsCurrency": "Valuta",
   "settingsCurrencySubtitle": "Voor uitgaven en kosten/gram (momenteel {symbol})",
-
   "settingsNotifDrying": "Droogherinneringen",
   "settingsNotifDryingSubtitle": "Waarschuw 3 dagen na de oogst",
   "settingsNotifCuring": "Curing klaar",
@@ -72,7 +64,6 @@
   "settingsNotifTargetHarvest": "Oogstherinneringen",
   "settingsNotifTargetHarvestSubtitle": "Waarschuw 7 dagen en 1 dag vóór de geplande oogst",
   "settingsSnoozeDuration": "Sluimerduur",
-
   "settingsExportAll": "Alle gegevens exporteren",
   "settingsExportAllSubtitle": "Planten, notities & logs als ZIP met CSV's",
   "settingsExportPlants": "Planten exporteren",
@@ -85,7 +76,6 @@
   "settingsExportNotesSubtitle": "Alle dagboeknotities als CSV",
   "settingsExportExpenses": "Uitgaven exporteren",
   "settingsExportExpensesSubtitle": "Alle uitgaven als CSV",
-
   "settingsExportBackup": "Back-up exporteren",
   "settingsImportBackup": "Back-up importeren",
   "settingsImportBackupSubtitle": "Vervangt alle huidige gegevens · ZIP of JSON",
@@ -94,15 +84,12 @@
   "settingsBackupAbout": "Over auto-back-up",
   "settingsBackupAboutSubtitle": "Hoe automatische back-ups werken",
   "settingsBackupEncrypt": "Back-ups versleutelen",
-
   "settingsAppLock": "App-vergrendeling",
   "settingsUseBiometrics": "Biometrie gebruiken",
   "settingsUseBiometricsSubtitle": "Face ID of vingerafdruk in plaats van pincode",
   "settingsChangePin": "Pincode wijzigen",
   "settingsChangePinSubtitle": "Stel een nieuwe pincode van 4 cijfers in",
-
   "settingsCommunityShare": "Anonieme grow-data delen",
-
   "settingsExitDemo": "Demo-modus verlaten",
   "settingsExitDemoSubtitle": "Voorbeeldgegevens wissen en je eigen dagboek starten",
   "settingsReplayOnboarding": "Welkom opnieuw bekijken",
@@ -111,43 +98,34 @@
   "settingsReclaimStorageSubtitle": "Verwijder verweesde fotobestanden",
   "settingsClearAll": "Alle gegevens wissen",
   "settingsClearAllSubtitle": "Alles permanent verwijderen",
-
   "settingsDarkModeFollowingSystem": "Volgt systeeminstelling ({mode})",
   "settingsDarkModeDarkActive": "Donker thema actief",
   "settingsDarkModeLightActive": "Licht thema actief",
   "themeModeDark": "donker",
   "themeModeLight": "licht",
-
   "settingsSnoozeDurationSubtitle": "Stel zorgmeldingen met {hours}u uit bij tikken op \"Sluimer\"",
-
   "settingsAppLockSubtitleOn": "Pincode vereist bij openen",
   "settingsAppLockSubtitleOff": "Tik om een pincode in te stellen",
-
   "settingsBackupEncryptSubtitleOn": "AES-256 · wachtzin nodig om te herstellen",
   "settingsBackupEncryptSubtitleOff": "Bescherm back-up-ZIP's met een wachtzin",
-
   "settingsCommunityShareSubtitleOn": "Draagt anoniem bij aan oogstgegevens",
   "settingsCommunityShareSubtitleOff": "Niet delen — tik om opnieuw mee te doen",
   "settingsCommunityShareSubtitlePrompt": "Help opbrengsten vergelijken — geen persoonlijke gegevens",
-
   "settingsBackupSubtitleNever": "Alle gegevens + foto's als ZIP-archief",
   "settingsBackupSubtitleAgo": "Laatste back-up: {ago}",
   "agoJustNow": "net nu",
   "agoMinutes": "{minutes}min geleden",
   "agoHours": "{hours}u geleden",
   "agoDays": "{days}d geleden",
-
   "settingsBackupBannerNoBackup": "Nog geen back-up — exporteer er een om je gegevens te beschermen.",
   "settingsBackupBannerStale": "{days, plural, =1{Back-up is 1 dag oud. Exporteer een nieuwe.} other{Back-up is {days} dagen oud. Exporteer een nieuwe.}}",
   "settingsBackupBannerAging": "{days, plural, =1{Back-up is 1 dag oud. Maak binnenkort een nieuwe.} other{Back-up is {days} dagen oud. Maak binnenkort een nieuwe.}}",
-
   "statusGrowing": "Groeiend",
   "statusDrying": "Drogen",
   "statusCuring": "Curing",
   "statusHarvested": "Geoogst",
   "statusCompleted": "Voltooid",
   "statusRemoved": "Verwijderd",
-
   "notesTitle": "Plantnotities",
   "notesAddButton": "Notitie toevoegen",
   "notesEmptyNoPlantsTitle": "Nog geen planten",
@@ -156,7 +134,6 @@
   "notesEmptyNoNotesPrompt": "Nog geen notities — tik op een plant om er een toe te voegen.",
   "notesAddToSheetTitle": "Notitie toevoegen aan…",
   "notesAddNoPlantToast": "Voeg eerst een plant toe via Start",
-
   "archiveTitle": "Oogstarchief",
   "archiveFilterAll": "Alles",
   "archiveFilterMonth": "Deze maand",
@@ -168,30 +145,24 @@
   "archiveEmptyNoMatchAction": "Filters wissen",
   "archiveSectionHarvested": "Geoogste planten",
   "archiveSectionRemoved": "Verwijderde planten",
-
   "strainsEmptyTitle": "Nog geen soorten",
   "strainsEmptyBody": "Tik op + om er een toe te voegen of bekijk het Catalogus-tabblad.",
   "strainsEmptyAddAction": "Soort toevoegen",
   "strainsFilteredEmpty": "Geen soorten gevonden",
   "strainsClearFilters": "Filters wissen",
-
   "costsEmptyTitle": "Nog geen uitgaven geregistreerd",
   "costsEmptyBody": "Houd zaden, voeding, elektriciteit en meer bij.\nZie je echte kosten per gram bij de oogst.",
   "costsEmptyAddAction": "Eerste uitgave registreren",
-
   "onboardingSkip": "Voorlopig overslaan",
   "onboardingProgress": "Stap {current} van {total} · {label}",
-
   "onboardingWelcomeTagline": "Gemaakt voor serieuze growers.",
   "onboardingWelcomeCta": "Mijn eerste ruimte instellen",
   "onboardingWelcomeDemo": "Verken met voorbeeldgegevens",
   "onboardingWelcomeDemoCaption": "Met 6 voltooide teelten en live analyses.",
-
   "onboardingSpaceStepLabel": "Maak je ruimte aan",
   "onboardingSpaceTitle": "Maak je\neerste ruimte",
   "onboardingSpaceBody": "Een ruimte is elke omgeving waar je teelt\n— een tent, kamer of buitenplek.",
   "onboardingSpaceCta": "Ruimte aanmaken",
-
   "onboardingPlantStepLabel": "Voeg je eerste plant toe",
   "onboardingPlantTitle": "Voeg je\neerste plant toe",
   "onboardingPlantBody": "Optioneel — je kunt planten\nook vanaf het startscherm toevoegen.",
@@ -204,13 +175,44 @@
   "onboardingPlantGenetics": "Genetica",
   "onboardingPlantPhotoperiod": "Fotoperiode",
   "onboardingPlantAutoflower": "Autoflower",
-
   "onboardingCommunityTitle": "Je teelt\nniet alleen",
   "onboardingCommunityBody": "Kultivar kan anonieme oogstgegevens\nmet de community delen.",
   "onboardingCommunityCta": "Doorgaan met instellen",
-
   "onboardingProTitle": "Teel zonder\ngrenzen",
   "onboardingProBody": "Upgrade naar Kultivar Pro en ontgrendel\nalles wat serieuze growers nodig hebben.",
   "onboardingProCta": "Plannen en prijzen bekijken",
-  "onboardingProSkip": "Misschien later — gratis starten"
+  "onboardingProSkip": "Misschien later — gratis starten",
+  "homeNoPlantsYet": "No plants in this space yet.",
+  "strainLibTabMyLibrary": "My Library",
+  "strainLibTabCatalog": "Catalog",
+  "strainLibSavedToLibrary": "{strain} saved to My Library",
+  "expenseScreenTitle": "Expense Tracker",
+  "expenseStatTotalInvested": "Total invested",
+  "expenseStatEntries": "Entries",
+  "settingsSectionSubscription": "Subscription",
+  "settingsSectionLegal": "Legal",
+  "settingsSectionSupport": "Support Kultivar",
+  "fabAddSpace": "Add Space",
+  "fabAddPlant": "Add Plant",
+  "fabLogEnvironment": "Log Environment",
+  "fabQuickNote": "Quick Note",
+  "fabSheetAddSpaceTitle": "Add Grow Space",
+  "fabSheetAddSpaceSubtitle": "Create a new grow room or tent",
+  "fabSheetAddSpaceCreate": "Create Space",
+  "fabSheetAddPlantTitle": "Add Plant",
+  "fabSheetAddPlantSubtitle": "Start tracking a new grow",
+  "fabSheetLogEnvTitle": "Log Environment",
+  "fabSheetLogEnvSubtitle": "Select the spaces to update",
+  "fabSheetQuickNoteTitle": "Quick Note",
+  "fabSheetQuickNoteSubtitle": "Jot down an observation",
+  "fabSheetSaveNote": "Save Note",
+  "analyticsTitle": "Analytics",
+  "analyticsOverview": "Overview",
+  "analyticsDryWeightTrend": "Dry Weight Trend (g)",
+  "analyticsNoDataInWindow": "No data in this window",
+  "analyticsStrainBreakdown": "Strain Breakdown",
+  "analyticsQualityInsights": "Quality Insights",
+  "analyticsIssuePatterns": "Issue Patterns",
+  "analyticsTrainingAnalytics": "Training Analytics",
+  "analyticsLifetimeStats": "Lifetime Stats"
 }
