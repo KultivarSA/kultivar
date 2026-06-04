@@ -80,6 +80,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
       setState(() => _showConfidenceBands = value);
     });
 
+    // Listen for demo-mode flips that happen AFTER initState.
+    // Critical: ShellScreen uses an IndexedStack which eagerly
+    // builds all 5 tabs at app start, so DashboardScreen's
+    // initState runs BEFORE the user taps "Explore with sample
+    // data".  Without this listener, the screenshot-friendly
+    // `all` window default in the field initializer never fires
+    // because `isDemoModeNotifier.value` was still false when
+    // the field was set.
+    KultivarApp.isDemoModeNotifier.addListener(_onDemoModeChanged);
+
     // Only honour the saved time-window preference outside demo mode.
     // In demo mode we always force `all` so the seeded history is
     // visible -- screenshot-friendly and avoids a confusing empty
@@ -92,6 +102,32 @@ class _DashboardScreenState extends State<DashboardScreen> {
     }
 
     _loadHiddenSeries();
+  }
+
+  @override
+  void dispose() {
+    KultivarApp.isDemoModeNotifier.removeListener(_onDemoModeChanged);
+    super.dispose();
+  }
+
+  void _onDemoModeChanged() {
+    if (!mounted) return;
+    if (KultivarApp.isDemoModeNotifier.value &&
+        _window != TimeWindow.all) {
+      // Demo just turned on -- expand the window so the seeded
+      // 140-day run history is visible on the trend chart.
+      setState(() => _window = TimeWindow.all);
+    } else if (!KultivarApp.isDemoModeNotifier.value &&
+        _window == TimeWindow.all) {
+      // Demo just turned off (user tapped Clear & Start Fresh).
+      // Snap back to the saved preference (or last30 if none) so
+      // the real-user view isn't polluted by the demo's wide
+      // window choice.
+      UiPreferencesService.loadTimeWindow().then((value) {
+        if (!mounted) return;
+        setState(() => _window = value);
+      });
+    }
   }
 
   Future<void> _loadHiddenSeries() async {
