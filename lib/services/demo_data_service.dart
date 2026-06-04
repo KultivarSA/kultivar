@@ -101,36 +101,48 @@ class DemoDataService {
     // overall rating.  Real growers fill these in selectively but the
     // demo benefits from showing the full feature surface.
     final completedRuns = <_RunSpec>[
+      // Dry/cure tuning: thresholds in quality_analytics.dart bucket
+      // cure at < short / short-to-long / long+ days.  Five-star runs
+      // get long cures (~50 days); the rushed 3-star sits short
+      // (~15 days).  That produces a visible "longer cure correlates
+      // with higher quality" insight without the data looking
+      // suspiciously linear.
       _RunSpec('Blue Dream #1', sBlueDream, flowerRoom, daysAgo: 140,
           duration: 91, wet: 580, dry: 127, rating: 5,
           smell: 4.5, effect: 5, bagAppeal: 4.5,
           aroma: 'Sweet berry', flavor: 'Blueberry with earthy finish',
-          effectNotes: 'Uplifting, creative'),
+          effectNotes: 'Uplifting, creative',
+          dryDays: 12, cureDays: 49),
       _RunSpec('OG Kush #1', sOgKush, flowerRoom, daysAgo: 115,
           duration: 78, wet: 450, dry: 94, rating: 4,
           smell: 4, effect: 4.5, bagAppeal: 3.5,
           aroma: 'Pine and citrus', flavor: 'Earthy, woody',
-          effectNotes: 'Relaxed, happy'),
+          effectNotes: 'Relaxed, happy',
+          dryDays: 10, cureDays: 28),
       _RunSpec('White Widow #1', sWhiteWidow, flowerRoom, daysAgo: 95,
           duration: 84, wet: 520, dry: 108, rating: 4,
           smell: 3.5, effect: 4, bagAppeal: 4,
           aroma: 'Spicy and floral', flavor: 'Earthy sweetness',
-          effectNotes: 'Balanced, euphoric'),
+          effectNotes: 'Balanced, euphoric',
+          dryDays: 11, cureDays: 35),
       _RunSpec('Gorilla Glue #1', sGorillaGlue, flowerRoom, daysAgo: 72,
           duration: 95, wet: 680, dry: 142, rating: 5,
           smell: 5, effect: 5, bagAppeal: 4.5,
           aroma: 'Pine, diesel', flavor: 'Earthy coffee notes',
-          effectNotes: 'Heavy, full-body relaxation'),
+          effectNotes: 'Heavy, full-body relaxation',
+          dryDays: 13, cureDays: 56),
       _RunSpec('Blue Dream #2', sBlueDream, flowerRoom, daysAgo: 50,
           duration: 88, wet: 555, dry: 119, rating: 4,
           smell: 4, effect: 4, bagAppeal: 4.5,
           aroma: 'Berry and vanilla', flavor: 'Sweet berry, smooth',
-          effectNotes: 'Uplifting, cerebral'),
+          effectNotes: 'Uplifting, cerebral',
+          dryDays: 10, cureDays: 32),
       _RunSpec('OG Kush #2', sOgKush, flowerRoom, daysAgo: 28,
           duration: 82, wet: 420, dry: 87, rating: 3,
           smell: 3.5, effect: 3, bagAppeal: 3,
           aroma: 'Fuel, lemon', flavor: 'Sour, earthy',
-          effectNotes: 'Calming, focused'),
+          effectNotes: 'Calming, focused',
+          dryDays: 7, cureDays: 15),
     ];
 
     for (final run in completedRuns) {
@@ -143,6 +155,12 @@ class DemoDataService {
       // demo reads like a feature gap.
       final flipDate = startDate.add(const Duration(days: 32));
 
+      // Bug fix: seed dryingEndDate + curingEndDate so the Quality
+      // Insights card on Analytics has data to bucket.  See the
+      // dryDays / cureDays comment on _RunSpec.
+      final dryingEnd = harvestDate.add(Duration(days: run.dryDays));
+      final curingEnd = dryingEnd.add(Duration(days: run.cureDays));
+
       final plant = Plant(
         id: _uuid.v4(),
         name: run.name,
@@ -154,6 +172,8 @@ class DemoDataService {
         isArchived: true,
         archivedAt: harvestDate,
         harvestedDate: harvestDate,
+        dryingEndDate: dryingEnd,
+        curingEndDate: curingEnd,
         wetWeight: run.wet.toDouble(),
         dryWeight: run.dry.toDouble(),
         growStage: GrowStage.flush,
@@ -485,6 +505,17 @@ class _RunSpec {
   final String aroma;
   final String flavor;
   final String effectNotes;
+  // Bug fix: days from harvest -> dry-complete, and days from
+  // dry-complete -> cure-complete.  computeQualityCorrelations needs
+  // both Plant.dryingEndDate and Plant.curingEndDate to bucket
+  // harvests for the cure/dry-duration correlation insights.  When
+  // these are absent the Quality Insights card on Analytics renders
+  // empty.  Tuned so that the higher-rated runs sit in the
+  // long-cure bucket and the rushed 3-star sits short, producing
+  // a believable "longer cure correlates with higher quality"
+  // insight for screenshot capture.
+  final int dryDays;
+  final int cureDays;
 
   const _RunSpec(
     this.name,
@@ -501,6 +532,8 @@ class _RunSpec {
     required this.aroma,
     required this.flavor,
     required this.effectNotes,
+    required this.dryDays,
+    required this.cureDays,
   });
 }
 
