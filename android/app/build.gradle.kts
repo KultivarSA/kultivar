@@ -1,8 +1,25 @@
+import java.io.FileInputStream
+import java.util.Properties
+
 plugins {
     id("com.android.application")
     id("kotlin-android")
     // The Flutter Gradle Plugin must be applied after the Android and Kotlin Gradle plugins.
     id("dev.flutter.flutter-gradle-plugin")
+}
+
+// Load the upload-keystore credentials from android/key.properties (gitignored).
+// When the file is missing -- fresh clone, CI runner without secrets -- the
+// release build falls back to debug signing.  That keeps `flutter build apk
+// --debug` and `flutter run` working without any keystore present, while
+// `flutter build appbundle --release` produces a properly signed AAB once a
+// developer has dropped `android/key.properties` in alongside the local
+// keystore.  See LAUNCH_ANDROID.md → "Android signing setup".
+val keystorePropertiesFile = rootProject.file("key.properties")
+val keystoreProperties = Properties()
+val hasKeystore = keystorePropertiesFile.exists()
+if (hasKeystore) {
+    keystoreProperties.load(FileInputStream(keystorePropertiesFile))
 }
 
 android {
@@ -71,11 +88,34 @@ android {
         versionName = flutter.versionName
     }
 
+    signingConfigs {
+        // Production upload keystore.  Only fully configured when
+        // android/key.properties is present alongside the .jks file
+        // it points at.  We register the config unconditionally so
+        // Gradle resolves the symbol on every build; the buildType
+        // below picks debug signing when the keystore isn't wired in.
+        create("release") {
+            if (hasKeystore) {
+                keyAlias = keystoreProperties["keyAlias"] as String?
+                keyPassword = keystoreProperties["keyPassword"] as String?
+                storeFile =
+                    (keystoreProperties["storeFile"] as String?)?.let { file(it) }
+                storePassword = keystoreProperties["storePassword"] as String?
+            }
+        }
+    }
+
     buildTypes {
         release {
-            // TODO: Add your own signing config for the release build.
-            // Signing with the debug keys for now, so `flutter run --release` works.
-            signingConfig = signingConfigs.getByName("debug")
+            // Use the production upload keystore when android/key.properties
+            // is present; fall back to debug signing for development builds
+            // and CI without secrets so `flutter build apk --debug` keeps
+            // working everywhere.
+            signingConfig = if (hasKeystore) {
+                signingConfigs.getByName("release")
+            } else {
+                signingConfigs.getByName("debug")
+            }
         }
     }
 }
