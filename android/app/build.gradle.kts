@@ -6,7 +6,7 @@ plugins {
 }
 
 android {
-    namespace = "com.example.Kultivar"
+    namespace = "io.kultivar.app"
     compileSdk = flutter.compileSdkVersion
     ndkVersion = flutter.ndkVersion
 
@@ -57,8 +57,12 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
-        applicationId = "com.example.Kultivar"
+        // Production package ID -- locked at v1 launch.
+        // Reverse-DNS of kultivar.io with .app suffix so future
+        // siblings (io.kultivar.api, io.kultivar.web) stay clean.
+        // CRITICAL: this ID cannot change after the first Play
+        // Console upload without losing the listing identity.
+        applicationId = "io.kultivar.app"
         // You can update the following values to match your application needs.
         // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion

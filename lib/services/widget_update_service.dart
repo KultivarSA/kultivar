@@ -34,7 +34,7 @@ class WidgetUpdateService {
   /// App Group ID shared between the Runner target and the WidgetKit extension.
   /// Must match the value configured in Xcode → Runner → Signing & Capabilities
   /// → App Groups, AND in the KultivarWidget extension's entitlements.
-  static const _appGroupId = 'group.com.example.Kultivar';
+  static const _appGroupId = 'group.io.kultivar.app';
 
   /// iOS WidgetKit `kind` string declared in `KultivarWidget.swift`.
   static const _iosWidgetName = 'KultivarWidget';
