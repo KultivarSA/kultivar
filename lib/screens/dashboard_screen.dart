@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
 import '../l10n/app_localizations.dart';
+import '../main.dart';
 import '../models/grow_space.dart';
 import '../models/harvest_log.dart';
 import '../models/plant.dart';
@@ -50,7 +51,16 @@ class DashboardScreen extends StatefulWidget {
 class _DashboardScreenState extends State<DashboardScreen> {
   // ── State ───────────────────────────────────
 
-  TimeWindow _window = TimeWindow.last30;
+  // Bug fix: in demo mode the seeded run history spans ~140 days
+  // (6 completed harvests dated 28, 50, 72, 95, 115, 140 days ago).
+  // The previous default of `last30` only contained the most recent
+  // harvest so the dry-weight trend chart looked empty -- a problem
+  // both for first-impressions and for Play Store screenshots.
+  // Open the window to "all" while demo is active; real users on a
+  // fresh install still get the sensible 30-day default below.
+  TimeWindow _window = KultivarApp.isDemoModeNotifier.value
+      ? TimeWindow.all
+      : TimeWindow.last30;
   bool _smoothingEnabled = true;
   bool _showConfidenceBands = true;
 
@@ -70,10 +80,16 @@ class _DashboardScreenState extends State<DashboardScreen> {
       setState(() => _showConfidenceBands = value);
     });
 
-    UiPreferencesService.loadTimeWindow().then((value) {
-      if (!mounted) return;
-      setState(() => _window = value);
-    });
+    // Only honour the saved time-window preference outside demo mode.
+    // In demo mode we always force `all` so the seeded history is
+    // visible -- screenshot-friendly and avoids a confusing empty
+    // chart on first preview.
+    if (!KultivarApp.isDemoModeNotifier.value) {
+      UiPreferencesService.loadTimeWindow().then((value) {
+        if (!mounted) return;
+        setState(() => _window = value);
+      });
+    }
 
     _loadHiddenSeries();
   }
