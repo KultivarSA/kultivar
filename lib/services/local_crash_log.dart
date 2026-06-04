@@ -86,6 +86,16 @@ abstract final class LocalCrashLog {
     }
   }
 
+  /// Write a manual diagnostic note (non-crash) to the same log file.
+  ///
+  /// Used to surface state snapshots that help debug visual bugs which
+  /// don't throw assertions -- e.g. a chart that renders empty despite
+  /// having data.  Marco taps Share Diagnostics, the log carries the
+  /// snapshot to the next debugging round.
+  static void info(String tag, String message) {
+    _captureSync(kind: 'Info ($tag)', message: message);
+  }
+
   /// Wipes the log.  Used by the "Clear log" action.
   static Future<void> clear() async {
     final f = _cachedFile;

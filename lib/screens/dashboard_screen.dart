@@ -15,6 +15,7 @@ import '../repository/grow_repository.dart';
 import '../services/analytics_service.dart';
 import '../services/hive_service.dart';
 import '../services/insight_notification_bridge.dart';
+import '../services/local_crash_log.dart';
 import '../services/ui_preferences_service.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_spacing.dart';
@@ -108,6 +109,33 @@ class _DashboardScreenState extends State<DashboardScreen> {
   void dispose() {
     KultivarApp.isDemoModeNotifier.removeListener(_onDemoModeChanged);
     super.dispose();
+  }
+
+  // Hash key of the last chart inputs we logged.  Avoids appending
+  // a fresh diagnostic dump on every rebuild while the user is still
+  // looking at the same chart configuration.
+  String? _lastLoggedChartKey;
+
+  void _maybeLogChartSnapshot(
+    List<SeriesPoint> raw,
+    List<SeriesPoint> display,
+  ) {
+    final key = '${_window.name}|$_smoothingEnabled|'
+        '$_showConfidenceBands|${_hiddenSeries.toList().join(",")}|'
+        '${raw.length}|${display.length}';
+    if (key == _lastLoggedChartKey) return;
+    _lastLoggedChartKey = key;
+    LocalCrashLog.info(
+      'dashboard.chart',
+      'window=${_window.name} '
+          'smoothing=$_smoothingEnabled bands=$_showConfidenceBands '
+          'hidden=${_hiddenSeries.join(",")} '
+          'demo=${KultivarApp.isDemoModeNotifier.value}\n'
+          'raw.count=${raw.length} '
+          'raw.values=[${raw.take(20).map((p) => '${p.series}:${p.value.toStringAsFixed(1)}@${p.date.toIso8601String().substring(0, 10)}').join(", ")}]\n'
+          'display.count=${display.length} '
+          'display.values=[${display.take(20).map((p) => '${p.series}:${p.value.toStringAsFixed(1)}').join(", ")}]',
+    );
   }
 
   void _onDemoModeChanged() {
@@ -456,6 +484,14 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final smoothedSeries = applyRollingAverage(rawSeries, windowSize: 3);
 
     final displaySeries = _smoothingEnabled ? smoothedSeries : rawSeries;
+
+    // Bug fix v?: dry-weight chart renders as a tiny sliver at x=0
+    // despite the data path looking correct.  Dump the chart inputs
+    // to the local crash log so the next Share Diagnostics tap
+    // surfaces the actual values.  Throttled to one dump per chart
+    // input combination (window/smoothing/bands/hidden) so a normal
+    // browsing session doesn't bloat the log.
+    _maybeLogChartSnapshot(rawSeries, displaySeries);
 
     // ── Per-space forecasts ───────────────────
     // Group display series by space name, then build a forecast for each
