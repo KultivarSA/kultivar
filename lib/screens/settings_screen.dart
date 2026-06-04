@@ -6,6 +6,7 @@ import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:share_plus/share_plus.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../config/subscription_tier_config.dart';
 import '../l10n/app_localizations.dart';
@@ -806,14 +807,27 @@ class _SettingsScreenState extends State<SettingsScreen> {
                   await ReviewPromptService.showManualPrompt();
                 },
               ),
-              // Bug fix v5 (real-device crash hunt): give the user a
-              // one-tap path to share the local crash log.  Stays
-              // on-device until the user explicitly hits Share.
+              // Primary path:  open the user's mail client with the
+              // crash log inlined in the body and support@kultivar.io
+              // pre-filled.  Removes the friction of the generic
+              // share sheet (which would let the user pick anything,
+              // including no-ops like Drive that don't actually
+              // surface the log to us).
               _actionTile(
-                icon: Icons.bug_report_rounded,
-                iconColor: AppColors.warning,
+                icon: Icons.mail_outline_rounded,
+                iconColor: AppColors.primary,
+                label: 'Email Support',
+                subtitle: 'Send the crash log to support@kultivar.io',
+                onTap: () => _emailDiagnostics(context),
+              ),
+              // Secondary path:  the original generic share for users
+              // who prefer WhatsApp / Slack / Drive / etc.  Stays on
+              // disk until they tap.
+              _actionTile(
+                icon: Icons.share_rounded,
+                iconColor: AppColors.textMuted,
                 label: 'Share Diagnostics',
-                subtitle: 'Send the crash log to support',
+                subtitle: 'Hand off to another app',
                 onTap: () => _shareDiagnostics(context),
               ),
             ]),
@@ -1620,6 +1634,72 @@ class _SettingsScreenState extends State<SettingsScreen> {
         ),
         child: Icon(icon, color: color, size: 18),
       );
+
+  /// Support inbox.  When this address changes, swap it here and in
+  /// `lib/legal/privacy_policy.dart` + `terms_of_service.dart`.  A
+  /// follow-up could lift this to `lib/config/support_contact.dart`
+  /// and have the legal markdown templates interpolate, but it's not
+  /// worth the indirection until we add a third surface.
+  static const String _supportEmail = 'support@kultivar.io';
+
+  Future<void> _emailDiagnostics(BuildContext context) async {
+    // Open the user's default mail app with everything pre-filled:
+    // To, Subject (with app version baked in for fast triage), and
+    // the full crash log inline in the body.  Drops user friction
+    // from "share -> pick app -> type address -> attach -> compose"
+    // to a single tap; if their device has no mail handler at all
+    // (rare on Android, possible on cheap tablets) we fall through
+    // to the generic share path so they still have a way out.
+    final log = await LocalCrashLog.readLog();
+    if (!context.mounted) return;
+    if (log.isEmpty) {
+      AppToast.show(context, 'No crash log yet — nothing to send.',
+          type: ToastType.info);
+      return;
+    }
+
+    final info = await PackageInfo.fromPlatform();
+    if (!context.mounted) return;
+    final subject = 'Kultivar crash log — v${info.version}+${info.buildNumber}';
+    final body = 'Hi Kultivar support,\n\n'
+        'Below is the diagnostic log from my device.  '
+        '(Anything personal? Feel free to redact before sending.)\n\n'
+        'App: ${info.appName} ${info.version} (build ${info.buildNumber})\n'
+        '---\n\n'
+        '$log';
+
+    // mailto: encoding: spaces -> %20 (NOT +, which mail clients
+    // interpret literally), CR/LF -> %0D%0A.  Uri.encodeComponent
+    // is the safest standard-library handler.
+    final mailto = Uri(
+      scheme: 'mailto',
+      path: _supportEmail,
+      query: 'subject=${Uri.encodeComponent(subject)}'
+          '&body=${Uri.encodeComponent(body)}',
+    );
+
+    try {
+      final launched = await launchUrl(
+        mailto,
+        mode: LaunchMode.externalApplication,
+      );
+      if (!launched && context.mounted) {
+        // No mail handler registered.  Drop down to the generic share
+        // sheet so the user still has a one-tap path.  They'll have to
+        // type support@kultivar.io themselves into whatever app they
+        // pick, but the friction is better than a dead-end toast.
+        AppToast.show(
+          context,
+          'No mail app found — opening the share sheet instead.',
+          type: ToastType.info,
+        );
+        await _shareDiagnostics(context);
+      }
+    } catch (e) {
+      if (!context.mounted) return;
+      AppToast.show(context, 'Email launch failed: $e', type: ToastType.error);
+    }
+  }
 
   Future<void> _shareDiagnostics(BuildContext context) async {
     // Bug fix v5 (real-device crash hunt): bundle the local crash
