@@ -72,7 +72,7 @@
             url_launcher needs to see installed mail handlers before it
             can resolve a `mailto:` URI on Android 11+ (API 30+).  Without
             this query block, `canLaunchUrl(mailto:...)` returns false
-            even when Gmail / Outlook are installed -- the OS hides
+            even when Gmail / Outlook are installed; the OS hides
             those activities from the package manager unless we declare
             the intent we plan to dispatch.  Used by the Email Support
             tile in Settings (lib/screens/settings_screen.dart).
