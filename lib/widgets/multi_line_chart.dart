@@ -91,7 +91,18 @@ class MultiLineChart extends StatelessWidget {
 
                 onPointTap!(point, band);
               },
+        // Bug fix: CustomPaint without a child or explicit size sizes
+        // itself to constraints.smallest.  The outer SizedBox only
+        // constrained height (180), leaving width unbounded -- so the
+        // CustomPaint painted into a 0-pixel-wide canvas.  Every
+        // point's x mapped to 0, the line drew as a tiny vertical
+        // sliver at the left edge (Marco's chart-empty bug -- the
+        // diagnostic log from PR #24 showed data was reaching the
+        // painter correctly, ruling out the data path).  Force the
+        // SizedBox to expand to the parent's max width so the
+        // CustomPaint inherits a proper canvas size.
         child: SizedBox(
+          width: double.infinity,
           height: 180,
           child: CustomPaint(
             painter: _ChartPainter(
