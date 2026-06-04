@@ -1,4 +1,4 @@
-package com.example.Kultivar
+package io.kultivar.app
 
 import android.app.PendingIntent
 import android.appwidget.AppWidgetManager
@@ -6,7 +6,7 @@ import android.appwidget.AppWidgetProvider
 import android.content.Context
 import android.content.Intent
 import android.widget.RemoteViews
-import com.example.Kultivar.R
+import io.kultivar.app.R
 
 /**
  * Kultivar home-screen glance widget.

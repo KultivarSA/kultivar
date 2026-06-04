@@ -9,7 +9,7 @@
 //     • Include Configuration Intent: OFF
 //     • Language: Swift
 //  3. Add the "App Groups" capability to BOTH the Runner target and the
-//     KultivarWidget target with the group: group.com.example.Kultivar
+//     KultivarWidget target with the group: group.io.kultivar.app
 //     (Signing & Capabilities → + → App Groups → add the group).
 //  4. Replace the generated Swift file with this file.
 //  5. In the KultivarWidget/Info.plist set NSExtension → NSExtensionPrincipalClass
@@ -38,7 +38,7 @@ import SwiftUI
 
 // MARK: - App Group
 
-private let appGroupId = "group.com.example.Kultivar"
+private let appGroupId = "group.io.kultivar.app"
 
 private func widgetDefaults() -> UserDefaults {
     UserDefaults(suiteName: appGroupId) ?? .standard
