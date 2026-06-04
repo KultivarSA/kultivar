@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!--
-  Android 6–11 (API 23–30) full-backup-content rules.
+  Android 6 to 11 (API 23 to 30) full backup content rules.
   Referenced by android:fullBackupContent in AndroidManifest.xml.
 
-  Same inclusion policy as backup_rules.xml — SharedPreferences and
-  internal files, excluding cache and external storage.
+  Includes SharedPreferences (settings, notification tokens) and
+  internal files (Hive databases plus grow photos under the app
+  documents directory).  Cache files and external storage are NOT
+  included; cache is reconstructible, external storage is managed
+  by the user.
+
+  Bug fix (release lintVital):
+    1. domain="cache" is not a valid backup domain.  The valid set
+       is: file, database, sharedpref, external, root, device_file,
+       device_database, device_sharedpref, device_root.  Cache
+       files live under context.cacheDir which is part of the file
+       domain but not at the path we include (the documents
+       directory), so they are excluded by virtue of not being
+       included.
+    2. The exclude for the external domain was redundant: we never
+       include external, so there is nothing to exclude from it.
+    Both stanzas were release build blockers; dropped.
 -->
 <full-backup-content>
     <include domain="sharedpref" path="."/>
     <include domain="file" path="."/>
-    <exclude domain="cache" path="."/>
-    <exclude domain="external" path="."/>
 </full-backup-content>

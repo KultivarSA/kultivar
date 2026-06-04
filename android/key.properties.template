@@ -1,0 +1,15 @@
+# android/key.properties — production signing config
+#
+# This file is gitignored (see .gitignore: `android/key.properties`).
+# Copy it to `android/key.properties` (drop the `.template` suffix) and
+# fill in your keystore password.  Never commit the filled-in version.
+#
+# Used by android/app/build.gradle.kts to sign the release AAB with
+# the production upload keystore.  When this file is absent the build
+# falls back to debug signing -- safe for CI / fresh clones / dev
+# builds, but Play Console will reject debug-signed AABs.
+
+storePassword=REPLACE_WITH_YOUR_KEYSTORE_PASSWORD
+keyPassword=REPLACE_WITH_YOUR_KEYSTORE_PASSWORD
+keyAlias=kultivar-upload
+storeFile=C:\\Users\\marco\\.android\\kultivar-upload.jks
