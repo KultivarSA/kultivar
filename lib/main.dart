@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 
@@ -137,8 +138,21 @@ void main() async {
   //     errors are captured automatically.
   //   • Every existing `ErrorReporter.report(...)` callsite forwards
   //     through to Sentry without any further code changes.
+  // Resolve the release tag from the same PackageInfo source the
+  // Settings footer uses.  Sentry groups issues by `release`, so
+  // passing this lets the dashboard answer "which version started
+  // crashing?" -- the single most useful question when triaging a
+  // regression.  Format matches Sentry's convention:
+  //   io.kultivar.app@1.0.0+1
+  // The package-name prefix avoids collisions between unrelated
+  // apps that happen to share a Sentry org/project.
+  final packageInfo = await PackageInfo.fromPlatform();
+  final sentryRelease =
+      '${packageInfo.packageName}@${packageInfo.version}+${packageInfo.buildNumber}';
+
   await bootstrapSentryAndRun(
     consentGranted: telemetryConsentService.hasGranted,
+    release: sentryRelease,
     appRunner: () => runApp(KultivarApp(
       subscriptionService: subscriptionService,
       currencyService: currencyService,
