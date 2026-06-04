@@ -79,16 +79,33 @@ class _InsightsFeedState extends State<InsightsFeed> {
   @override
   void didUpdateWidget(covariant InsightsFeed oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if (widget.onNotify != null) {
-      final important = _mapInsights(context)
-          .where((i) => i.isImportant)
-          .map((i) => i.insight.message);
+    if (widget.onNotify == null) return;
+    // Bug fix: caller's onNotify typically inserts a toast into the
+    // Overlay (AppToast.show -> OverlayState.insert -> setState).
+    // didUpdateWidget runs DURING the build phase, so calling
+    // setState on the Overlay throws "setState called during build".
+    // That exception cancels the rebuild of the dashboard subtree
+    // mid-flight, which is exactly why Marco's dry-weight chart
+    // rendered as a tiny sliver -- the build phase aborted before
+    // the chart's CustomPaint had a chance to paint.
+    //
+    // Defer the notification past the current frame so onNotify
+    // runs after build completes and the Overlay is free to mutate.
+    final important = _mapInsights(context)
+        .where((i) => i.isImportant)
+        .map((i) => i.insight.message)
+        .where((msg) => !_notifiedMessages.contains(msg))
+        .toList();
+    if (important.isEmpty) return;
+    for (final msg in important) {
+      _notifiedMessages.add(msg);
+    }
+    WidgetsBinding.instance.addPostFrameCallback((_) {
+      if (!mounted) return;
       for (final msg in important) {
-        if (_notifiedMessages.contains(msg)) continue;
-        _notifiedMessages.add(msg);
         widget.onNotify!(msg);
       }
-    }
+    });
   }
 
   @override
