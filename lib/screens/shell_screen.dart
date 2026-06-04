@@ -2,8 +2,10 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
+import '../config/whats_new_content.dart';
 import '../l10n/app_localizations.dart';
 import '../main.dart';
 import '../models/environment_log.dart';
@@ -13,6 +15,7 @@ import '../models/plant_note.dart';
 import '../repository/grow_repository.dart';
 import '../services/notification_service.dart';
 import '../services/telemetry_consent_service.dart';
+import '../services/whats_new_service.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_spacing.dart';
 import '../theme/app_typography.dart';
@@ -23,6 +26,7 @@ import '../widgets/app_toast.dart';
 import '../widgets/demo_banner.dart';
 import '../widgets/strain_autocomplete_field.dart';
 import '../widgets/telemetry_consent_sheet.dart';
+import '../widgets/whats_new_sheet.dart';
 import 'dashboard_screen.dart';
 import 'expense_tracker_screen.dart';
 import 'harvest_archive_screen.dart';
@@ -66,12 +70,46 @@ class _ShellScreenState extends State<ShellScreen>
     // every shell open, but the sheet only fires when the user has
     // never been asked — once they grant or decline (or dismiss), the
     // state persists and this branch becomes a no-op forever after.
-    WidgetsBinding.instance.addPostFrameCallback((_) {
+    WidgetsBinding.instance.addPostFrameCallback((_) async {
       if (!mounted) return;
       final consent = context.read<TelemetryConsentService>();
       if (consent.isInitialised && !consent.hasBeenAsked) {
         TelemetryConsentSheet.show(context);
+        // Don't stack the What's New sheet on top of the consent
+        // sheet -- they're both first-launch-class prompts and
+        // the user can only meaningfully act on one at a time.
+        // The What's New service will fire on the next app start.
+        return;
       }
+
+      // T3 #8 — What's New on first launch after an update.
+      // Service:
+      //   - Returns false on fresh installs (consumed silently --
+      //     onboarding already covers v1 first run; double-onboarding
+      //     would feel like a takeover)
+      //   - Returns true once per upgrade
+      //   - Only presents if the bumped buildNumber has a matching
+      //     WhatsNewEntry in `kWhatsNewByBuild` -- hotfix bumps that
+      //     didn't change anything user-facing silently no-op
+      final info = await PackageInfo.fromPlatform();
+      final buildNumber = int.tryParse(info.buildNumber);
+      if (buildNumber == null) return;
+      final shouldShow = await WhatsNewService.shouldShow(buildNumber);
+      if (!shouldShow || !mounted) return;
+      final entry = kWhatsNewByBuild[buildNumber];
+      if (entry == null) {
+        // Build bumped but no content registered -- mark seen so we
+        // don't keep evaluating this every app start until the user
+        // upgrades again.
+        await WhatsNewService.markSeen(buildNumber);
+        return;
+      }
+      if (!mounted) return;
+      await WhatsNewSheet.show(
+        context,
+        entry: entry,
+        buildNumber: buildNumber,
+      );
     });
   }
 
