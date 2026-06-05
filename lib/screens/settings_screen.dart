@@ -1,6 +1,6 @@
 import 'dart:io';
 
-import 'package:flutter/foundation.dart' show kIsWeb;
+import 'package:flutter/foundation.dart' show kDebugMode, kIsWeb;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:package_info_plus/package_info_plus.dart';
@@ -698,6 +698,30 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     AppLocalizations.of(context).settingsClearAllSubtitle,
                 onTap: () => _confirmClearData(context, repo),
               ),
+              // ── DEV-ONLY tier picker (Path A) ──
+              //
+              // Pre-launch payment-test groundwork while the bank +
+              // merchant profile chain is still verifying.  Lets us
+              // flip our own state to any tier without going through
+              // RevenueCat or Play Billing, then screenshot every
+              // paywall + gated screen at every tier.
+              //
+              // SubscriptionService.debugSetTier asserts kDebugMode
+              // internally; the tile is also gated here so it never
+              // ships in release builds.  No localisation -- dev-only.
+              if (kDebugMode) ...[
+                Divider(color: context.colBorderFaint, height: 1),
+                Consumer<SubscriptionService>(
+                  builder: (ctx, sub, _) => _actionTile(
+                    icon: Icons.science_outlined,
+                    iconColor: AppColors.accent,
+                    label: 'DEV: subscription tier',
+                    subtitle: 'Current: ${sub.tier.name} '
+                        '(tap to change -- debug builds only)',
+                    onTap: () => _showDevTierPicker(context, sub),
+                  ),
+                ),
+              ],
             ]),
           ),
           const SizedBox(height: AppSpacing.lg),
@@ -942,6 +966,125 @@ class _SettingsScreenState extends State<SettingsScreen> {
   /// Bottom sheet with the snooze-duration choices from
   /// [UiPreferencesService.snoozeHourChoices].  Selection is applied
   /// immediately and persists across launches.  See U15.
+  // ── DEV-only tier picker ──
+  //
+  // Bottom sheet wired to SubscriptionService.debugSetTier.  Each row
+  // describes what unlocks at that tier so dev-mode walkthroughs match
+  // the screens the user will see post-purchase.  Selection persists
+  // across hot restarts (handled by SubscriptionService via the
+  // `dev_tier_override` SharedPreferences key).
+  //
+  // No localisation -- this never ships in release; it's a dev tool
+  // for screenshotting the paywall + gated screens at every tier
+  // while we wait for the bank-verified merchant profile.
+  void _showDevTierPicker(BuildContext context, SubscriptionService sub) {
+    const rows = <(SubscriptionTier, String, String)>[
+      (
+        SubscriptionTier.free,
+        'Free',
+        '1 space, 3 plants, 60-day analytics window',
+      ),
+      (
+        SubscriptionTier.lifetimeLocal,
+        'Lifetime Local',
+        'Unlimited local features, no community / cloud',
+      ),
+      (
+        SubscriptionTier.proCloud,
+        'Pro Cloud',
+        'Everything + community benchmarking + future sync',
+      ),
+    ];
+    showModalBottomSheet<void>(
+      context: context,
+      backgroundColor: context.colSurface2,
+      shape: const RoundedRectangleBorder(
+        borderRadius:
+            BorderRadius.vertical(top: Radius.circular(AppSpacing.radiusXl)),
+      ),
+      builder: (ctx) => SafeArea(
+        child: Padding(
+          padding: const EdgeInsets.symmetric(vertical: AppSpacing.md),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.pagePadding,
+                  0,
+                  AppSpacing.pagePadding,
+                  AppSpacing.xs,
+                ),
+                child: Text(
+                  'DEV: subscription tier',
+                  style: AppTypography.headlineMedium(ctx),
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.fromLTRB(
+                  AppSpacing.pagePadding,
+                  0,
+                  AppSpacing.pagePadding,
+                  AppSpacing.sm,
+                ),
+                child: Text(
+                  'Pin the local entitlement without touching Play Billing '
+                  'or RevenueCat. Persists across hot restarts. '
+                  'Debug builds only.',
+                  style: AppTypography.bodySmall(ctx)
+                      .copyWith(color: ctx.colTextMuted),
+                ),
+              ),
+              for (final (tier, label, summary) in rows)
+                ListTile(
+                  leading: Container(
+                    width: 36,
+                    height: 36,
+                    alignment: Alignment.center,
+                    decoration: BoxDecoration(
+                      color: AppColors.accent.withValues(alpha: 0.12),
+                      borderRadius:
+                          BorderRadius.circular(AppSpacing.radiusSm),
+                    ),
+                    child: Icon(
+                      tier == SubscriptionTier.free
+                          ? Icons.lock_outline_rounded
+                          : tier == SubscriptionTier.lifetimeLocal
+                              ? Icons.all_inclusive_rounded
+                              : Icons.workspace_premium_rounded,
+                      size: 20,
+                      color: AppColors.accent,
+                    ),
+                  ),
+                  title: Text(label, style: AppTypography.labelLarge(ctx)),
+                  subtitle: Text(
+                    summary,
+                    style: AppTypography.bodySmall(ctx)
+                        .copyWith(color: ctx.colTextMuted),
+                  ),
+                  trailing: tier == sub.tier
+                      ? const Icon(Icons.check_rounded,
+                          color: AppColors.primary, size: 20)
+                      : null,
+                  onTap: () async {
+                    await sub.debugSetTier(tier);
+                    if (ctx.mounted) Navigator.pop(ctx);
+                    if (!context.mounted) return;
+                    AppToast.show(
+                      context,
+                      'Tier set to ${tier.name}',
+                      type: ToastType.info,
+                    );
+                  },
+                ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
   void _showSnoozeDurationPicker(BuildContext context) {
     showModalBottomSheet<void>(
       context: context,
