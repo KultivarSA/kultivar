@@ -1288,112 +1288,139 @@ class _PlantRow extends StatelessWidget {
             ),
             const SizedBox(width: AppSpacing.sm),
 
-            // Name + strain
+            // Bug #167 — name + strain + metadata strip stacked
+            // vertically so plant names never get vertically squashed
+            // when all four chips (stage / day / care / status) are
+            // present at once.  Earlier single-row layout reduced the
+            // title to ~50 px on a 411 px phone when "! Overdue" fired,
+            // producing the one-letter-per-line crush in the bug report.
+            //
+            // The Wrap below the names lets the chip strip flow to a
+            // second line on extremely narrow widths (small phones in
+            // German / Zulu where label lengths balloon) instead of
+            // shoving the title around again.
             Expanded(
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(plant.name,
-                      style: AppTypography.bodyLarge(context)
-                          .copyWith(fontWeight: FontWeight.w600)),
-                  Text(plant.strain, style: AppTypography.bodySmall(context)),
+                  Text(
+                    plant.name,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTypography.bodyLarge(context)
+                        .copyWith(fontWeight: FontWeight.w600),
+                  ),
+                  Text(
+                    plant.strain,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: AppTypography.bodySmall(context),
+                  ),
+                  const SizedBox(height: AppSpacing.xs),
+                  Wrap(
+                    spacing: AppSpacing.xs,
+                    runSpacing: 4,
+                    crossAxisAlignment: WrapCrossAlignment.center,
+                    children: [
+                      // Grow stage pill — actively growing only
+                      if (plant.status == PlantStatus.growing &&
+                          plant.growStage != null)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: AppColors.growing.withValues(alpha: 0.12),
+                            borderRadius: BorderRadius.circular(
+                                AppSpacing.radiusFull),
+                            border: Border.all(
+                                color: AppColors.growing
+                                    .withValues(alpha: 0.35)),
+                          ),
+                          child: Text(
+                            plant.growStage!.shortLabel,
+                            style: AppTypography.labelSmall(context)
+                                .copyWith(
+                                    color: AppColors.growing, fontSize: 10),
+                          ),
+                        ),
+
+                      // Phase-aware day counter
+                      Text(
+                        plant.statusDaysLabel,
+                        style: AppTypography.bodySmall(context)
+                            .copyWith(color: context.colTextMuted),
+                      ),
+
+                      // Combined care badge -- tap to see per-category
+                      // breakdown.  GestureDetector wraps the chip body.
+                      if (showCareBadge)
+                        GestureDetector(
+                          onTap: () => _showCareSheet(context, plant,
+                              waterStatus, feedStatus, ipmStatus),
+                          child: Container(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 5, vertical: 2),
+                            decoration: BoxDecoration(
+                              color: badgeColor.withValues(alpha: 0.15),
+                              borderRadius: BorderRadius.circular(
+                                  AppSpacing.radiusFull),
+                              border: Border.all(
+                                  color: badgeColor.withValues(alpha: 0.4)),
+                            ),
+                            child: Row(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                Icon(Icons.priority_high_rounded,
+                                    size: 10, color: badgeColor),
+                                const SizedBox(width: 2),
+                                Text(
+                                  anyOverdue ? 'Overdue' : 'Due soon',
+                                  style: AppTypography.labelSmall(context)
+                                      .copyWith(
+                                          color: badgeColor, fontSize: 9),
+                                ),
+                              ],
+                            ),
+                          ),
+                        ),
+
+                      // Burping reminder chip -- curing reminders only
+                      if (needsBurp)
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 6, vertical: 2),
+                          decoration: BoxDecoration(
+                            color: AppColors.curing.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(
+                                AppSpacing.radiusFull),
+                            border: Border.all(
+                                color:
+                                    AppColors.curing.withValues(alpha: 0.4)),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(Icons.air_rounded,
+                                  size: 10, color: AppColors.curing),
+                              const SizedBox(width: 3),
+                              Text(
+                                'Burp',
+                                style: AppTypography.labelSmall(context)
+                                    .copyWith(
+                                        color: AppColors.curing, fontSize: 9),
+                              ),
+                            ],
+                          ),
+                        ),
+
+                      // Lifecycle status (Growing / Drying / Curing / etc.)
+                      StatusBadge.fromStatus(plant.statusLabel, small: true),
+                    ],
+                  ),
                 ],
               ),
             ),
 
-            // Grow stage pill — visible only for actively growing plants
-            if (plant.status == PlantStatus.growing &&
-                plant.growStage != null) ...[
-              Container(
-                margin: const EdgeInsets.only(right: AppSpacing.xs),
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                decoration: BoxDecoration(
-                  color: AppColors.growing.withValues(alpha: 0.12),
-                  borderRadius:
-                      BorderRadius.circular(AppSpacing.radiusFull),
-                  border: Border.all(
-                      color: AppColors.growing.withValues(alpha: 0.35)),
-                ),
-                child: Text(
-                  plant.growStage!.shortLabel,
-                  style: AppTypography.labelSmall(context)
-                      .copyWith(color: AppColors.growing, fontSize: 10),
-                ),
-              ),
-            ],
-
-            // Phase-aware day counter
-            Text(
-              plant.statusDaysLabel,
-              style: AppTypography.bodySmall(context)
-                  .copyWith(color: context.colTextMuted),
-            ),
-            const SizedBox(width: AppSpacing.sm),
-
-            // Combined care badge — tap to see per-category breakdown
-            if (showCareBadge) ...[
-              GestureDetector(
-                onTap: () => _showCareSheet(context, plant, waterStatus,
-                    feedStatus, ipmStatus),
-                child: Container(
-                  padding: const EdgeInsets.symmetric(
-                      horizontal: 5, vertical: 2),
-                  decoration: BoxDecoration(
-                    color: badgeColor.withValues(alpha: 0.15),
-                    borderRadius:
-                        BorderRadius.circular(AppSpacing.radiusFull),
-                    border: Border.all(
-                        color: badgeColor.withValues(alpha: 0.4)),
-                  ),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.min,
-                    children: [
-                      Icon(Icons.priority_high_rounded,
-                          size: 10, color: badgeColor),
-                      const SizedBox(width: 2),
-                      Text(
-                        anyOverdue ? 'Overdue' : 'Due soon',
-                        style: AppTypography.labelSmall(context).copyWith(
-                            color: badgeColor, fontSize: 9),
-                      ),
-                    ],
-                  ),
-                ),
-              ),
-              const SizedBox(width: AppSpacing.xs),
-            ],
-
-            // Burping reminder chip — visible when curing reminders are on
-            if (needsBurp) ...[
-              Container(
-                padding: const EdgeInsets.symmetric(
-                    horizontal: 6, vertical: 2),
-                decoration: BoxDecoration(
-                  color: AppColors.curing.withValues(alpha: 0.15),
-                  borderRadius:
-                      BorderRadius.circular(AppSpacing.radiusFull),
-                  border: Border.all(
-                      color: AppColors.curing.withValues(alpha: 0.4)),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    const Icon(Icons.air_rounded,
-                        size: 10, color: AppColors.curing),
-                    const SizedBox(width: 3),
-                    Text(
-                      'Burp',
-                      style: AppTypography.labelSmall(context)
-                          .copyWith(
-                              color: AppColors.curing, fontSize: 9),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: AppSpacing.xs),
-            ],
-
-            StatusBadge.fromStatus(plant.statusLabel, small: true),
             const SizedBox(width: AppSpacing.xs),
             Icon(Icons.chevron_right,
                 size: 16, color: context.colTextMuted),
