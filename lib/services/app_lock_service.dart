@@ -2,6 +2,8 @@ import 'package:flutter/foundation.dart' show kIsWeb;
 import 'package:local_auth/local_auth.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'error_reporter.dart';
+
 class AppLockService {
   static const _kEnabled       = 'app_lock_enabled';
   static const _kPin           = 'app_lock_pin';
@@ -62,7 +64,15 @@ class AppLockService {
     try {
       final auth = LocalAuthentication();
       return await auth.canCheckBiometrics || await auth.isDeviceSupported();
-    } catch (_) {
+    } catch (e, st) {
+      // Capability checks failing is rarely user-actionable but is
+      // useful diagnostic data -- a missing FragmentActivity host or a
+      // device-policy block both surface here first.
+      ErrorReporter.report(
+        'AppLockService.canUseBiometric',
+        e,
+        st,
+      );
       return false;
     }
   }
@@ -79,7 +89,52 @@ class AppLockService {
         biometricOnly: false,
         persistAcrossBackgrounding: true,
       );
-    } catch (_) {
+    } on LocalAuthException catch (e, st) {
+      // Bug #168 -- swallowing every exception silently hid the
+      // FragmentActivity-required error for the entire pre-launch
+      // window; "biometric failed" looked like a user-side issue but
+      // was actually a missing host-activity superclass.  We now log
+      // structured detail so similar plugin-host mismatches surface
+      // immediately.
+      //
+      // Filter out the codes that correspond to normal user-flow
+      // events (cancellation, lockout retry, no enrolment) so the
+      // error log doesn't get polluted.  Everything else gets a
+      // structured report -- particularly `uiUnavailable`, which is
+      // exactly what was firing when MainActivity extended the wrong
+      // superclass.
+      const userDrivenCodes = <LocalAuthExceptionCode>{
+        LocalAuthExceptionCode.userCanceled,
+        LocalAuthExceptionCode.systemCanceled,
+        LocalAuthExceptionCode.timeout,
+        LocalAuthExceptionCode.userRequestedFallback,
+        LocalAuthExceptionCode.noCredentialsSet,
+        LocalAuthExceptionCode.noBiometricsEnrolled,
+        LocalAuthExceptionCode.temporaryLockout,
+        LocalAuthExceptionCode.biometricLockout,
+      };
+      if (!userDrivenCodes.contains(e.code)) {
+        ErrorReporter.report(
+          'AppLockService.authenticateWithBiometric',
+          e,
+          st,
+          <String, Object?>{
+            'auth_code': e.code.name,
+            'description': e.description,
+            'details': e.details?.toString(),
+          },
+        );
+      }
+      return false;
+    } catch (e, st) {
+      // Non-LocalAuth exceptions (assertion failures, channel teardown)
+      // are always worth reporting -- they shouldn't reach here under
+      // normal operation.
+      ErrorReporter.report(
+        'AppLockService.authenticateWithBiometric',
+        e,
+        st,
+      );
       return false;
     }
   }
