@@ -6,6 +6,7 @@ import '../models/harvest_log.dart';
 import '../models/plant.dart';
 import '../models/plant_note.dart';
 import '../models/strain_community_stats.dart';
+import 'error_reporter.dart';
 
 /// Handles all reads from and writes to the Supabase community layer.
 ///
@@ -34,7 +35,13 @@ class CommunityService {
     if (!SupabaseConfig.isConfigured) return null;
     try {
       return Supabase.instance.client;
-    } catch (_) {
+    } catch (e, stack) {
+      // Reaching this means Supabase.initialize() never ran or failed
+      // at boot.  We don't want to spam Sentry on every call into this
+      // getter (it's a hot path), so callers are still expected to
+      // tolerate null silently; instrumentation here is structural --
+      // if this ever fires in production, we want to see it.
+      ErrorReporter.report('CommunityService._db', e, stack);
       return null;
     }
   }
@@ -58,8 +65,18 @@ class CommunityService {
 
       if (response == null) return null;
       return StrainCommunityStats.fromJson(response);
-    } catch (_) {
-      // Community data is non-critical — never surface network errors to the user.
+    } catch (e, stack) {
+      // Community data is non-critical -- never surface network errors
+      // to the user, but DO report them so we know if the backend went
+      // down or a schema change broke parsing.  The strain name is
+      // included in `extras` so we can tell whether the failure is
+      // universal (all strains) or scoped to one queried record.
+      ErrorReporter.report(
+        'CommunityService.fetchStats',
+        e,
+        stack,
+        <String, Object?>{'strain': strainName},
+      );
       return null;
     }
   }
@@ -80,7 +97,13 @@ class CommunityService {
 
       if (response == null) return null;
       return GrowDiaryStats.fromJson(response);
-    } catch (_) {
+    } catch (e, stack) {
+      ErrorReporter.report(
+        'CommunityService.fetchDiaryStats',
+        e,
+        stack,
+        <String, Object?>{'strain': strainName},
+      );
       return null;
     }
   }
@@ -135,7 +158,20 @@ class CommunityService {
         if (appVersion != null) 'app_version': appVersion,
       });
       return true;
-    } catch (_) {
+    } catch (e, stack) {
+      // Submission failures are silent to the user (the harvest is
+      // saved locally regardless) but worth reporting so we catch a
+      // schema mismatch or RLS rule problem before it affects every
+      // user who opted into community sharing.
+      ErrorReporter.report(
+        'CommunityService.submitBenchmark',
+        e,
+        stack,
+        <String, Object?>{
+          'strain': plant.strain,
+          'has_dry_weight': log.dryWeight != null,
+        },
+      );
       return false;
     }
   }
@@ -184,7 +220,17 @@ class CommunityService {
         if (appVersion != null) 'app_version': appVersion,
       });
       return true;
-    } catch (_) {
+    } catch (e, stack) {
+      ErrorReporter.report(
+        'CommunityService.submitDiaryEntry',
+        e,
+        stack,
+        <String, Object?>{
+          'strain': plant.strain,
+          'has_quality_rating':
+              qualityRating != null || log.qualityRating != null,
+        },
+      );
       return false;
     }
   }
