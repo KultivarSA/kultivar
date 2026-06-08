@@ -298,14 +298,29 @@ class SubscriptionService extends ChangeNotifier {
 
   // ── Refresh ───────────────────────────────────────────────────────────────
 
-  /// Re-validates entitlements (useful after returning from Settings).
+  /// Re-validates entitlements.  Called after the user returns from
+  /// the platform's Manage Subscription page so a freshly-purchased
+  /// upgrade (or cancellation) propagates without an app relaunch.
+  ///
+  /// Failures here are silent to the user -- their tier stays at
+  /// whatever was last successfully resolved, which keeps the UI
+  /// consistent rather than reverting to Free on a transient blip.
+  /// However we MUST route the underlying error to ErrorReporter:
+  /// a paying customer whose tier doesn't update is the most expensive
+  /// possible bug for us (refund disputes + lost trust), and pre-this
+  /// fix the failure was wholly invisible to the developer side.
+  ///
+  /// Matches the catch shape used by [init] and [fetchOfferings]
+  /// elsewhere in this file.
   Future<void> refresh() async {
     try {
       final info = await Purchases.getCustomerInfo();
       _customerInfo = info;
       _setTier(_resolveTier(info));
       notifyListeners();
-    } catch (_) {}
+    } catch (e, stack) {
+      ErrorReporter.report('SubscriptionService.refresh', e, stack);
+    }
   }
 
   // ── Manage subscription (platform-deep-link) ─────────────────────────────
