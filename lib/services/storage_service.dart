@@ -199,7 +199,17 @@ class StorageService {
       return (jsonDecode(raw) as List)
           .map((e) => EnvironmentLog.fromJson(e))
           .toList();
-    } catch (_) {
+    } catch (e, stack) {
+      // Same instrumentation pattern as loadExpenses above.  This is
+      // the one-time migration read from the pre-Hive era; if the
+      // blob is corrupted the user silently loses pre-migration env
+      // logs, so we want to see it in Sentry to know how often it
+      // happens (and whether the migration needs a recovery path).
+      ErrorReporter.report(
+        'StorageService.loadLegacyEnvironmentLogs',
+        e,
+        stack,
+      );
       return [];
     }
   }
