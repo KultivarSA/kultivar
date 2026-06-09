@@ -84,9 +84,23 @@ class AppLockService {
       // local_auth 3.x flattened the options into named params on
       // authenticate() — `stickyAuth` is now `persistAcrossBackgrounding`,
       // and `AuthenticationOptions` is constructed internally.
+      //
+      // Bug #172 — biometricOnly was previously `false`, which let
+      // Android's BiometricPrompt fall back to the device-credential
+      // (system PIN / pattern) dialog when biometrics failed.  But we
+      // already have our own Kultivar PIN screen as the fallback, so
+      // the system dialog ended up competing with ours -- the user
+      // saw two PIN prompts back-to-back and had to enter the device
+      // PIN once, then the Kultivar PIN once more.  Setting this to
+      // `true` means biometric failure cleanly returns false and our
+      // PIN screen becomes the sole fallback.  Single-prompt UX.
+      //
+      // As a bonus this likely also fixes the race condition where
+      // the first PIN attempt after a back-cancelled biometric prompt
+      // was being eaten by the still-dismissing system dialog.
       return await auth.authenticate(
         localizedReason: 'Unlock Kultivar',
-        biometricOnly: false,
+        biometricOnly: true,
         persistAcrossBackgrounding: true,
       );
     } on LocalAuthException catch (e, st) {
