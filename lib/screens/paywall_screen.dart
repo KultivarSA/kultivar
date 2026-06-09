@@ -674,50 +674,61 @@ class _PricingCard extends StatelessWidget {
                 const SizedBox(width: AppSpacing.md),
 
                 // Labels
+                //
+                // Bug #173 — the badge ("BEST VALUE — SAVE 50%") used
+                // to live in the same Row as the headline.  With no
+                // width cap on the badge container, on phones with
+                // narrower content widths (or under in-app localised
+                // labels) the headline got squeezed character-by-
+                // character: "Pro Cloud — Annual" wrapped as
+                // Pro / Cloud / — An / nual.  Same root cause as the
+                // plant tile crush (#167).
+                //
+                // Fix: headline gets full width on its own line, with
+                // maxLines:1 + ellipsis as a defensive cap.  The badge
+                // sits ABOVE the headline as a small chip so the
+                // savings call-out still has top-of-card prominence.
                 Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Row(
-                        children: [
-                          Flexible(
-                            child: Text(
-                              headline,
-                              style: AppTypography.labelLarge(context)
-                                  .copyWith(
-                                fontSize: 14,
-                                color: selected
-                                    ? AppColors.accent
-                                    : context.colTextPrimary,
-                              ),
+                      if (badge != null) ...[
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 7, vertical: 2),
+                          decoration: BoxDecoration(
+                            color:
+                                AppColors.accent.withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(
+                                AppSpacing.radiusFull),
+                          ),
+                          child: Text(
+                            badge!,
+                            style: const TextStyle(
+                              color: AppColors.accent,
+                              fontSize: 9,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
-                          if (badge != null) ...[
-                            const SizedBox(width: AppSpacing.xs),
-                            Container(
-                              padding: const EdgeInsets.symmetric(
-                                  horizontal: 7, vertical: 2),
-                              decoration: BoxDecoration(
-                                color: AppColors.accent
-                                    .withValues(alpha: 0.15),
-                                borderRadius: BorderRadius.circular(
-                                    AppSpacing.radiusFull),
-                              ),
-                              child: Text(
-                                badge!,
-                                style: const TextStyle(
-                                  color: AppColors.accent,
-                                  fontSize: 9,
-                                  fontWeight: FontWeight.w700,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ],
+                        ),
+                        const SizedBox(height: 4),
+                      ],
+                      Text(
+                        headline,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: AppTypography.labelLarge(context).copyWith(
+                          fontSize: 14,
+                          color: selected
+                              ? AppColors.accent
+                              : context.colTextPrimary,
+                        ),
                       ),
                       const SizedBox(height: 2),
                       Text(
                         subline,
+                        maxLines: 2,
+                        overflow: TextOverflow.ellipsis,
                         style: AppTypography.bodySmall(context).copyWith(
                           fontSize: 11,
                           color: context.colTextMuted,

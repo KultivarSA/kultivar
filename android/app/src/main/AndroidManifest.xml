@@ -7,6 +7,34 @@
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <!-- F7 — voice notes (AudioRecorder via `record` package) -->
     <uses-permission android:name="android.permission.RECORD_AUDIO"/>
+    <!--
+        Bug #171 — Notifications were dead on Android 13+ for the entire
+        pre-launch window.  flutter_local_notifications calls
+        requestNotificationsPermission() at boot, but Android 13+ rejects
+        the runtime request silently if the permission isn't declared in
+        the manifest first.  All care reminders (water, feed, IPM, burping,
+        drying, target harvest) plus env-condition alerts depend on this.
+
+        VIBRATE is paired with POST_NOTIFICATIONS because every channel we
+        create requests vibration; without it Android downgrades the
+        notification to silent-only on some OEMs.
+
+        SCHEDULE_EXACT_ALARM / USE_EXACT_ALARM are deliberately NOT
+        declared -- all schedules in NotificationService use
+        AndroidScheduleMode.inexactAllowWhileIdle, which works without
+        the exact-alarm permission and keeps us off Play Console's
+        "needs exact alarm justification" review queue.
+    -->
+    <uses-permission android:name="android.permission.POST_NOTIFICATIONS"/>
+    <uses-permission android:name="android.permission.VIBRATE"/>
+    <!--
+        RECEIVE_BOOT_COMPLETED lets flutter_local_notifications reschedule
+        pending notifications after a device reboot.  Without it, every
+        scheduled reminder is silently dropped when the user restarts
+        their phone -- bad for a grow-tracker app where reminders are the
+        core daily-engagement loop.
+    -->
+    <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <application
         android:label="Kultivar"
         android:name="${applicationName}"
