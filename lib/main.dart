@@ -80,16 +80,33 @@ void main() async {
   // time via --dart-define=SUPABASE_URL / --dart-define=SUPABASE_ANON_KEY.
   // When unconfigured the app runs normally — CommunityService short-
   // circuits to null/false, matching the offline-mode behaviour.
+  // Boot resilience (same lesson as the notification init below): the
+  // community layer is optional BY DESIGN -- "when unconfigured the app
+  // runs normally" -- so a throwing initialize (malformed URL, storage
+  // corruption) must degrade the same way instead of killing startup.
   if (SupabaseConfig.isConfigured) {
-    await Supabase.initialize(
-      url: SupabaseConfig.url,
-      anonKey: SupabaseConfig.anonKey,
-    );
+    try {
+      await Supabase.initialize(
+        url: SupabaseConfig.url,
+        anonKey: SupabaseConfig.anonKey,
+      );
+    } catch (e, stack) {
+      ErrorReporter.report('main.supabaseInit', e, stack);
+    }
   }
 
   // Cache the app documents directory path so PhotoPathResolver.resolve()
-  // can be called synchronously from widgets.
-  if (!kIsWeb) await PhotoPathResolver.init();
+  // can be called synchronously from widgets.  resolve() already falls
+  // back gracefully when init never ran (returns the raw name and lets
+  // the widget's errorBuilder handle it), so a path_provider failure
+  // here should cost photos, not the whole app.
+  if (!kIsWeb) {
+    try {
+      await PhotoPathResolver.init();
+    } catch (e, stack) {
+      ErrorReporter.report('main.photoPathResolverInit', e, stack);
+    }
+  }
 
   // ── RevenueCat (freemium subscriptions) ───────────────────────────────────
   // Initialised early so Pro status is available on the first frame.
@@ -159,9 +176,17 @@ void main() async {
   //   io.kultivar.app@1.0.0+1
   // The package-name prefix avoids collisions between unrelated
   // apps that happen to share a Sentry org/project.
-  final packageInfo = await PackageInfo.fromPlatform();
-  final sentryRelease =
-      '${packageInfo.packageName}@${packageInfo.version}+${packageInfo.buildNumber}';
+  // Guarded with a recognisable fallback: a PackageInfo platform-channel
+  // hiccup should cost us release-tag precision in Sentry, not the boot.
+  String sentryRelease;
+  try {
+    final packageInfo = await PackageInfo.fromPlatform();
+    sentryRelease =
+        '${packageInfo.packageName}@${packageInfo.version}+${packageInfo.buildNumber}';
+  } catch (e, stack) {
+    ErrorReporter.report('main.packageInfo', e, stack);
+    sentryRelease = 'io.kultivar.app@unknown';
+  }
 
   await bootstrapSentryAndRun(
     consentGranted: telemetryConsentService.hasGranted,

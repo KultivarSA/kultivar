@@ -1,0 +1,14 @@
+# Normalise line endings so generated files (plugin registrants etc.)
+# stop showing phantom modifications on Windows checkouts.  The
+# perpetual false-dirty tree was tripping release.ps1's clean-tree
+# gate even when nothing had actually changed.
+* text=auto
+
+# Binaries -- never normalise.
+*.png binary
+*.jpg binary
+*.jks binary
+*.ttf binary
+*.otf binary
+*.aab binary
+*.apk binary
