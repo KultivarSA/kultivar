@@ -1,6 +1,7 @@
 import '../models/plant.dart';
 import '../models/plant_history_event.dart';
 import '../models/plant_note.dart';
+import 'photo_path_resolver.dart';
 
 List<PlantHistoryEvent> buildPlantTimeline({
   required Plant plant,
@@ -95,13 +96,21 @@ List<PlantHistoryEvent> buildPlantTimeline({
   // 📝 Notes — include first photo + category so the timeline can
   // render the right icon/colour and group milestones into the
   // milestone filter.
+  //
+  // Bug #175 — photoUrls stores bare filenames (see PhotoPathResolver
+  // docs); they MUST be resolved to absolute paths before any
+  // File() / Image.file() downstream.  This was the one call site in
+  // the app passing the raw filename through, which made every
+  // timeline thumbnail render the broken-image fallback.
   for (final note in notes) {
     events.add(PlantHistoryEvent(
       timestamp: note.createdAt,
       type: PlantHistoryEventType.note,
       title: note.categoryLabel,
       description: note.content,
-      photoUrl: note.photoUrls.isNotEmpty ? note.photoUrls.first : null,
+      photoUrl: note.photoUrls.isNotEmpty
+          ? PhotoPathResolver.resolve(note.photoUrls.first)
+          : null,
       noteCategory: note.category,
     ));
   }
