@@ -51,6 +51,7 @@ dependencies:
   # PR #3 confirmed this when the SDK auto-bumped.  11.x replaces
   # the inheritance with a wrapper, which is a no-op for our callers
   # (we use FontAwesomeIcons.* constants only).
+  flutter_timezone: ^5.1.0
   font_awesome_flutter: ^11.0.0
   geolocator: ^14.0.0
   hive: ^2.2.3
