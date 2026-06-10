@@ -20,7 +20,7 @@
         notification to silent-only on some OEMs.
 
         SCHEDULE_EXACT_ALARM / USE_EXACT_ALARM are deliberately NOT
-        declared -- all schedules in NotificationService use
+        declared; all schedules in NotificationService use
         AndroidScheduleMode.inexactAllowWhileIdle, which works without
         the exact-alarm permission and keeps us off Play Console's
         "needs exact alarm justification" review queue.
@@ -31,7 +31,7 @@
         RECEIVE_BOOT_COMPLETED lets flutter_local_notifications reschedule
         pending notifications after a device reboot.  Without it, every
         scheduled reminder is silently dropped when the user restarts
-        their phone -- bad for a grow-tracker app where reminders are the
+        their phone; bad for a grow-tracker app where reminders are the
         core daily-engagement loop.
     -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
