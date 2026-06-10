@@ -37,7 +37,8 @@ param(
     [string]$Version,
     [switch]$DryRun,
     [switch]$SkipPreflight,
-    [switch]$SkipGitClean
+    [switch]$SkipGitClean,
+    [switch]$SkipBranchCheck
 )
 
 $ErrorActionPreference = 'Stop'
@@ -58,6 +59,41 @@ function Write-Action($msg) { Write-Host "  -->   $msg" -ForegroundColor Magenta
 
 # --- Step 0: Working tree clean ------------------------------------------
 Write-Section "0/7  Working tree state"
+
+# Branch guard.  This repo's checkout moves between feature branches
+# constantly during development, and a release built from the wrong
+# HEAD ships without merged fixes (this exact trap produced a stale
+# build during the v1.0 hardening pass: the white-square notification
+# icon "regression" was a build cut from a feature branch that
+# predated the fix).  Releases come from up-to-date main, full stop.
+if (-not $SkipBranchCheck) {
+    $branch = (& git rev-parse --abbrev-ref HEAD 2>$null)
+    if ($LASTEXITCODE -ne 0) {
+        Write-Info "Not a git repository -- skipping branch check."
+    } else {
+        if ($branch -ne 'main') {
+            Write-Host "  FAIL  On branch '$branch', not 'main'." -ForegroundColor Red
+            Write-Host "        Releases are cut from main only:" -ForegroundColor Yellow
+            Write-Host "          git checkout main; git pull" -ForegroundColor Gray
+            Write-Host "        Pass -SkipBranchCheck to override (don't)." -ForegroundColor Yellow
+            exit 1
+        }
+        & git fetch origin main --quiet 2>$null
+        if ($LASTEXITCODE -eq 0) {
+            $behind = (& git rev-list --count "HEAD..origin/main" 2>$null)
+            if ($LASTEXITCODE -eq 0 -and [int]$behind -gt 0) {
+                Write-Host "  FAIL  main is $behind commit(s) behind origin/main." -ForegroundColor Red
+                Write-Host "        Run: git pull" -ForegroundColor Gray
+                exit 1
+            }
+            Write-Pass "On main, up to date with origin/main"
+        } else {
+            Write-Info "Could not fetch origin (offline?).  Branch is main; continuing."
+        }
+    }
+} else {
+    Write-Info "-SkipBranchCheck was passed.  Hope you know what you're doing."
+}
 
 if (-not $SkipGitClean) {
     $gitStatus = & git status --porcelain 2>$null
@@ -209,11 +245,28 @@ if ($DryRun) {
 # --- Step 5: Build AAB ---------------------------------------------------
 Write-Section "5/7  Build release AAB"
 
-if ($DryRun) {
-    Write-Info "Dry run -- would run flutter build appbundle --release"
+# env.json carries the compile-time secrets (SENTRY_DSN, RevenueCat
+# keys).  It's gitignored, so a fresh clone or CI runner won't have
+# it -- and an AAB built without it ships with crash reporting and
+# purchases silently disabled.  Hard-fail rather than warn: a
+# secrets-less AAB is never what you want from the release pipeline.
+$envJson = "env.json"
+$buildArgs = @('build', 'appbundle', '--release')
+if (Test-Path $envJson) {
+    $buildArgs += "--dart-define-from-file=$envJson"
+    Write-Pass "env.json found -- DSN + store keys will be compiled in"
 } else {
-    Write-Action "Running flutter build appbundle --release ..."
-    & flutter build appbundle --release
+    Write-Host "  FAIL  env.json not found.  The AAB would ship with" -ForegroundColor Red
+    Write-Host "        Sentry + RevenueCat disabled.  See BUILD.md for" -ForegroundColor Yellow
+    Write-Host "        the env.json template." -ForegroundColor Yellow
+    exit 1
+}
+
+if ($DryRun) {
+    Write-Info "Dry run -- would run flutter $($buildArgs -join ' ')"
+} else {
+    Write-Action "Running flutter $($buildArgs -join ' ') ..."
+    & flutter @buildArgs
     if ($LASTEXITCODE -ne 0) {
         Write-Fail "flutter build appbundle failed.  Check signing config in android/key.properties."
     }
