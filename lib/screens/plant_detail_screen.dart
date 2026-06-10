@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../data/strain_library.dart';
+import '../l10n/app_localizations.dart';
 import '../main.dart';
 import '../models/plant.dart';
 import '../models/plant_note.dart';
@@ -132,7 +133,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
       backgroundColor: Colors.transparent,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, ss) => AppSheet(
-          title: 'Harvest Plant',
+          title: AppLocalizations.of(context).plantDetailHarvestPlant,
           subtitle: plant.name,
           icon: Icons.agriculture_rounded,
           iconColor: AppColors.harvested,
@@ -142,7 +143,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
             // The dialog still accepts a number when supplied, and the
             // validator rejects negative / zero values so an
             // accidental "0" entry doesn't slip through as data.
-                Text('WET WEIGHT  ·  OPTIONAL',
+                Text(AppLocalizations.of(context).plantDetailWetWeightHeader,
                     style: AppTypography.labelSmall(context).copyWith(
                         color: context.colTextMuted, letterSpacing: 0.8)),
                 const SizedBox(height: AppSpacing.xs),
@@ -152,15 +153,15 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
                   style: TextStyle(color: context.colTextPrimary),
-                  decoration: const InputDecoration(
-                    labelText: 'Wet weight (g) — leave blank to skip',
-                    helperText: 'Skip if you only weigh post-dry',
-                    prefixIcon: Icon(Icons.scale_rounded),
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context).plantDetailWetWeightLabel,
+                    helperText: AppLocalizations.of(context).plantDetailWetWeightHelper,
+                    prefixIcon: const Icon(Icons.scale_rounded),
                   ),
                 ),
                 const SizedBox(height: AppSpacing.md),
                 // Harvest date
-                Text('HARVEST DATE',
+                Text(AppLocalizations.of(context).plantDetailHarvestDateHeader,
                     style: AppTypography.labelSmall(context).copyWith(
                         color: context.colTextMuted, letterSpacing: 0.8)),
                 const SizedBox(height: AppSpacing.xs),
@@ -205,7 +206,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                   width: double.infinity,
                   child: ElevatedButton.icon(
                     icon: const Icon(Icons.agriculture_rounded, size: 18),
-                    label: const Text('Harvest Plant'),
+                    label: Text(AppLocalizations.of(context).plantDetailHarvestPlant),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.harvested,
                       foregroundColor: Colors.white,
@@ -249,7 +250,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                   width: double.infinity,
                   child: TextButton(
                     onPressed: () => Navigator.pop(ctx),
-                    child: Text('Cancel',
+                    child: Text(AppLocalizations.of(context).commonCancel,
                         style: AppTypography.labelLarge(context)
                             .copyWith(color: context.colTextSecondary)),
                   ),
@@ -271,13 +272,13 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
       backgroundColor: Colors.transparent,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, ss) => AppSheet(
-          title: 'Start Drying',
+          title: AppLocalizations.of(context).plantDetailStartDrying,
           subtitle: plant.name,
           icon: Icons.air_rounded,
           iconColor: AppColors.drying,
           children: [
             // Estimated end date
-                Text('ESTIMATED DRY DATE',
+                Text(AppLocalizations.of(context).plantDetailEstimatedDryDateHeader,
                     style: AppTypography.labelSmall(context).copyWith(
                         color: context.colTextMuted, letterSpacing: 0.8)),
                 const SizedBox(height: AppSpacing.xs),
@@ -322,7 +323,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                   width: double.infinity,
                   child: ElevatedButton.icon(
                     icon: const Icon(Icons.air_rounded, size: 18),
-                    label: const Text('Start Drying'),
+                    label: Text(AppLocalizations.of(context).plantDetailStartDrying),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.drying,
                       foregroundColor: Colors.white,
@@ -343,7 +344,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                   width: double.infinity,
                   child: TextButton(
                     onPressed: () => Navigator.pop(ctx),
-                    child: Text('Cancel',
+                    child: Text(AppLocalizations.of(context).commonCancel,
                         style: AppTypography.labelLarge(context)
                             .copyWith(color: context.colTextSecondary)),
                   ),
@@ -373,13 +374,13 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
       backgroundColor: Colors.transparent,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, ss) => AppSheet(
-          title: 'Complete Drying',
+          title: AppLocalizations.of(context).plantDetailCompleteDrying,
           subtitle: plant.name,
           icon: Icons.inventory_2_rounded,
           iconColor: AppColors.curing,
           children: [
             // Dry weight
-                Text('DRY WEIGHT',
+                Text(AppLocalizations.of(context).plantDetailDryWeightHeader,
                     style: AppTypography.labelSmall(context).copyWith(
                         color: context.colTextMuted, letterSpacing: 0.8)),
                 const SizedBox(height: AppSpacing.xs),
@@ -389,14 +390,14 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
                   style: TextStyle(color: context.colTextPrimary),
-                  decoration: const InputDecoration(
-                    labelText: 'Dry weight (g)',
-                    prefixIcon: Icon(Icons.scale_rounded),
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context).plantDetailDryWeightLabel,
+                    prefixIcon: const Icon(Icons.scale_rounded),
                   ),
                 ),
                 const SizedBox(height: AppSpacing.md),
                 // Drying end date
-                Text('DRYING END DATE (OPTIONAL)',
+                Text(AppLocalizations.of(context).plantDetailDryingEndDateHeader,
                     style: AppTypography.labelSmall(context).copyWith(
                         color: context.colTextMuted, letterSpacing: 0.8)),
                 const SizedBox(height: AppSpacing.xs),
@@ -433,7 +434,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                                   .toLocal()
                                   .toString()
                                   .split(' ')[0]
-                              : 'Set end date (optional)',
+                              : AppLocalizations.of(context).plantDetailSetEndDateOptional,
                           style: AppTypography.bodyMedium(context).copyWith(
                               color: pickedDryingEnd != null
                                   ? AppColors.curing
@@ -474,7 +475,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                   width: double.infinity,
                   child: ElevatedButton.icon(
                     icon: const Icon(Icons.inventory_2_rounded, size: 18),
-                    label: const Text('Start Curing'),
+                    label: Text(AppLocalizations.of(context).plantDetailStartCuring),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.curing,
                       foregroundColor: Colors.white,
@@ -503,7 +504,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                   width: double.infinity,
                   child: TextButton(
                     onPressed: () => Navigator.pop(ctx),
-                    child: Text('Cancel',
+                    child: Text(AppLocalizations.of(context).commonCancel,
                         style: AppTypography.labelLarge(context)
                             .copyWith(color: context.colTextSecondary)),
                   ),
@@ -827,14 +828,13 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                   Icon(Icons.photo_library_rounded,
                       color: context.colTextSecondary, size: 18),
                   const SizedBox(width: AppSpacing.sm),
-                  Text('Photo Journal',
+                  Text(AppLocalizations.of(context).plantDetailPhotoJournal,
                       style: AppTypography.labelLarge(context)),
                   const Spacer(),
                   Text(
                     photoCount == 0
-                        ? 'No photos yet'
-                        : '$photoCount '
-                            '${photoCount == 1 ? 'photo' : 'photos'}',
+                        ? AppLocalizations.of(context).plantDetailNoPhotosYet
+                        : AppLocalizations.of(context).plantDetailPhotoCount(photoCount),
                     style: AppTypography.bodySmall(context),
                   ),
                   const SizedBox(width: AppSpacing.xs),
@@ -951,8 +951,8 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
       context,
       icon: Icons.edit_note_rounded,
       color: AppColors.warning,
-      title: 'Note Deleted',
-      subtitle: 'The note has been permanently\nremoved from this plant.',
+      title: AppLocalizations.of(context).plantDetailNoteDeletedTitle,
+      subtitle: AppLocalizations.of(context).plantDetailNoteDeletedSubtitle,
       onUndo: () => repo.readdNote(note),
     );
   }
@@ -1024,7 +1024,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
           IconButton(
             icon: Icon(Icons.edit_rounded,
                 color: context.colTextSecondary, size: 20),
-            tooltip: 'Edit Plant',
+            tooltip: AppLocalizations.of(context).plantDetailEditPlantTooltip,
             onPressed: () => EditPlantSheet.show(
               context,
               repo: repo,
@@ -1035,7 +1035,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
           if (!currentPlant.isArchived)
             IconButton(
               icon: const Icon(Icons.note_add, color: AppColors.growing),
-              tooltip: 'Add Note',
+              tooltip: AppLocalizations.of(context).plantDetailAddNoteTooltip,
               onPressed: () => AddNoteSheet.show(
                 context,
                 repo: repo,
@@ -1051,7 +1051,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
             IconButton(
               icon: const Icon(Icons.content_cut_rounded,
                   color: AppColors.training),
-              tooltip: 'Take Clones',
+              tooltip: AppLocalizations.of(context).plantDetailTakeClonesTooltip,
               onPressed: () =>
                   BulkCloneSheet.show(context, mother: currentPlant),
             ),
@@ -1060,7 +1060,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
             IconButton(
               icon: const Icon(Icons.emoji_events_rounded,
                   color: AppColors.harvested),
-              tooltip: 'Grow Report',
+              tooltip: AppLocalizations.of(context).plantDetailGrowReportTooltip,
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -1137,7 +1137,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                                       size: 11, color: AppColors.primary),
                                   const SizedBox(width: AppSpacing.xxs),
                                   Text(
-                                    'Compare strains',
+                                    AppLocalizations.of(context).plantDetailCompareStrains,
                                     style: AppTypography.labelSmall(context)
                                         .copyWith(
                                       color: AppColors.primary,
@@ -1197,8 +1197,8 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                       const SizedBox(height: AppSpacing.xxs),
                       Tooltip(
                         message: currentPlant.isClone
-                            ? 'Propagated from a cutting — shares the mother plant\'s genetics.'
-                            : 'Started from seed — has its own genetic expression.',
+                            ? AppLocalizations.of(context).plantDetailCloneOrigin
+                            : AppLocalizations.of(context).plantDetailSeedOrigin,
                         child: Container(
                           padding: const EdgeInsets.symmetric(
                               horizontal: 8, vertical: 2),
@@ -1293,9 +1293,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                             const SizedBox(height: AppSpacing.xxs),
                             Tooltip(
                               message:
-                                  'This plant is a mother — $cloneCount '
-                                  '${cloneCount == 1 ? 'cutting has' : 'cuttings have'} been taken '
-                                  'and tracked as separate plants.',
+                                  AppLocalizations.of(context).plantDetailMotherSummary(cloneCount),
                               child: Container(
                                 padding: const EdgeInsets.symmetric(
                                     horizontal: 8, vertical: 2),
@@ -1373,7 +1371,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                     Text(
                       currentPlant.daysUntilTargetHarvest! > 0
                           ? '${currentPlant.daysUntilTargetHarvest} days to target harvest'
-                          : 'Target harvest date reached',
+                          : AppLocalizations.of(context).plantDetailTargetHarvestReached,
                       style: AppTypography.bodySmall(context)
                           .copyWith(color: AppColors.harvested),
                     ),
@@ -1386,7 +1384,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
               Padding(
                 padding: const EdgeInsets.only(top: AppSpacing.sm),
                 child: Text(
-                  'This plant was removed.',
+                  AppLocalizations.of(context).plantDetailPlantRemoved,
                   style: AppTypography.bodyMedium(context).copyWith(
                       fontWeight: FontWeight.w600, color: AppColors.danger),
                 ),
@@ -1408,26 +1406,26 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                   children: [
                     if (daysInFlower != null)
                       _statChip(Icons.wb_sunny_rounded,
-                          'Day $daysInFlower of flower', AppColors.drying),
+                          AppLocalizations.of(context).plantDetailDayOfFlower(daysInFlower), AppColors.drying),
                     if (lastWatered != null)
                       _statChip(
                           Icons.water_drop_rounded,
-                          'Watered ${DateTime.now().difference(lastWatered).inDays}d ago',
+                          AppLocalizations.of(context).plantDetailWateredAgo(DateTime.now().difference(lastWatered).inDays),
                           AppColors.water),
                     if (lastFed != null)
                       _statChip(
                           Icons.restaurant_rounded,
-                          'Fed ${DateTime.now().difference(lastFed).inDays}d ago',
+                          AppLocalizations.of(context).plantDetailFedAgo(DateTime.now().difference(lastFed).inDays),
                           AppColors.curing),
                     if (lastTrained != null)
                       _statChip(
                           Icons.content_cut_rounded,
-                          'Trained ${DateTime.now().difference(lastTrained).inDays}d ago',
+                          AppLocalizations.of(context).plantDetailTrainedAgo(DateTime.now().difference(lastTrained).inDays),
                           AppColors.training),
                     if (latestHeightNote != null)
                       _statChip(
                           Icons.straighten_rounded,
-                          '${latestHeightNote.heightCm!.toStringAsFixed(1)} cm tall',
+                          AppLocalizations.of(context).plantDetailHeightTall(latestHeightNote.heightCm!.toStringAsFixed(1)),
                           AppColors.secondary),
                     if (currentPlant.potSizeLitres != null)
                       _statChip(
@@ -1512,15 +1510,15 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
             LazySection(
               icon: Icons.insights_rounded,
               iconColor: AppColors.harvested,
-              title: 'Yield insights',
-              subtitle: 'Projection + dry-weight maths',
+              title: AppLocalizations.of(context).plantDetailYieldInsights,
+              subtitle: AppLocalizations.of(context).plantDetailYieldInsightsSubtitle,
               builder: (_) => PlantYieldInsights(plant: currentPlant),
             ),
             LazySection(
               icon: Icons.people_alt_rounded,
               iconColor: AppColors.secondary,
-              title: 'Community benchmark',
-              subtitle: 'Compare to anonymous community yields',
+              title: AppLocalizations.of(context).plantDetailCommunityBenchmark,
+              subtitle: AppLocalizations.of(context).plantDetailCommunityBenchmarkSubtitle,
               builder: (_) => CommunityBenchmarkCard(
                 plant: currentPlant,
                 harvestLog: repo.harvestLogs
@@ -1532,8 +1530,8 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
             LazySection(
               icon: Icons.health_and_safety_rounded,
               iconColor: AppColors.growing,
-              title: 'Health score',
-              subtitle: 'Issues, environment & care frequency',
+              title: AppLocalizations.of(context).plantDetailHealthScore,
+              subtitle: AppLocalizations.of(context).plantDetailHealthScoreSubtitle,
               builder: (_) => HealthScoreCard(
                 plant: currentPlant,
                 spaceEnvironmentLogs: spaceEnvLogs,
@@ -1543,8 +1541,8 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
             LazySection(
               icon: Icons.thermostat_rounded,
               iconColor: AppColors.drying,
-              title: 'Environment',
-              subtitle: 'Temp / humidity / VPD over time',
+              title: AppLocalizations.of(context).plantDetailEnvironmentSection,
+              subtitle: AppLocalizations.of(context).plantDetailEnvironmentSectionSubtitle,
               builder: (_) => PlantEnvironmentCard(
                 plant: currentPlant,
                 logs: spaceEnvLogs,
@@ -1561,15 +1559,15 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
             LazySection(
               icon: Icons.science_rounded,
               iconColor: AppColors.curing,
-              title: 'Nutrient & pH trends',
-              subtitle: 'EC / pH / N-P-K from feeding logs',
+              title: AppLocalizations.of(context).plantDetailNutrientTrends,
+              subtitle: AppLocalizations.of(context).plantDetailNutrientTrendsSubtitle,
               builder: (_) => PlantNutrientChart(notes: notes),
             ),
             LazySection(
               icon: Icons.straighten_rounded,
               iconColor: AppColors.training,
-              title: 'Height tracker',
-              subtitle: 'Growth curve from measurement notes',
+              title: AppLocalizations.of(context).plantDetailHeightTracker,
+              subtitle: AppLocalizations.of(context).plantDetailHeightTrackerSubtitle,
               builder: (_) => PlantHeightChart(
                 plant: currentPlant,
                 notes: notes,
@@ -1589,13 +1587,13 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
               runSpacing: 10,
               children: [
                 _counter(
-                  label: 'Days\nGrowing',
+                  label: AppLocalizations.of(context).plantDetailDaysGrowing,
                   value: currentPlant.daysGrowing.toString(),
                   color: AppColors.growing,
                 ),
                 if (currentPlant.status == PlantStatus.drying) ...[
                   _counter(
-                    label: 'Days\nDrying',
+                    label: AppLocalizations.of(context).plantDetailDaysDrying,
                     value: currentPlant.daysDrying.toString(),
                     color: AppColors.drying,
                   ),
@@ -1607,19 +1605,19 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                         ? now.difference(end).inDays
                         : currentPlant.dryingDaysRemaining;
                     return _counter(
-                      label: overdue ? 'Overdue' : 'Left',
+                      label: overdue ? AppLocalizations.of(context).plantDetailOverdue : AppLocalizations.of(context).plantDetailLeft,
                       value: overdue ? '${days}d' : '$days',
                       color:
                           overdue ? AppColors.danger : AppColors.harvested,
                       subtitle: end != null
-                          ? '${overdue ? 'since' : 'until'} ${fmtShortDate(end)}'
+                          ? (overdue ? AppLocalizations.of(context).plantDetailSinceDate(fmtShortDate(end)) : AppLocalizations.of(context).plantDetailUntilDate(fmtShortDate(end)))
                           : null,
                     );
                   }),
                 ],
                 if (currentPlant.status == PlantStatus.curing) ...[
                   _counter(
-                    label: 'Days\nCuring',
+                    label: AppLocalizations.of(context).plantDetailDaysCuring,
                     value: currentPlant.daysCuring.toString(),
                     color: AppColors.curing,
                   ),
@@ -1631,11 +1629,11 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                         ? now.difference(end).inDays
                         : currentPlant.curingDaysRemaining;
                     return _counter(
-                      label: overdue ? 'Overdue' : 'Left',
+                      label: overdue ? AppLocalizations.of(context).plantDetailOverdue : AppLocalizations.of(context).plantDetailLeft,
                       value: overdue ? '${days}d' : '$days',
                       color: overdue ? AppColors.danger : AppColors.secondary,
                       subtitle: end != null
-                          ? '${overdue ? 'since' : 'until'} ${fmtShortDate(end)}'
+                          ? (overdue ? AppLocalizations.of(context).plantDetailSinceDate(fmtShortDate(end)) : AppLocalizations.of(context).plantDetailUntilDate(fmtShortDate(end)))
                           : null,
                     );
                   }),
@@ -1664,14 +1662,14 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                 if (currentPlant.status == PlantStatus.growing)
                   ElevatedButton.icon(
                     icon: const Icon(Icons.agriculture, size: 16),
-                    label: const Text('Harvest'),
+                    label: Text(AppLocalizations.of(context).plantDetailHarvestCta),
                     onPressed: () =>
                         _showHarvestDialog(context, currentPlant),
                   ),
                 if (currentPlant.status == PlantStatus.harvested)
                   ElevatedButton.icon(
                     icon: const Icon(Icons.air, size: 16),
-                    label: const Text('Start Drying'),
+                    label: Text(AppLocalizations.of(context).plantDetailStartDrying),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.drying,
                       foregroundColor: Colors.black,
@@ -1682,7 +1680,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                 if (currentPlant.status == PlantStatus.drying)
                   ElevatedButton.icon(
                     icon: const Icon(Icons.storage, size: 16),
-                    label: const Text('Complete Drying'),
+                    label: Text(AppLocalizations.of(context).plantDetailCompleteDrying),
                     style: ElevatedButton.styleFrom(
                         backgroundColor: AppColors.curing),
                     onPressed: () =>
@@ -1692,7 +1690,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                     !currentPlant.isArchived)
                   ElevatedButton.icon(
                     icon: const Icon(Icons.check_circle, size: 16),
-                    label: const Text('Complete Cure'),
+                    label: Text(AppLocalizations.of(context).plantDetailCompleteCure),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.growing,
                       foregroundColor: Colors.black,
@@ -1746,7 +1744,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                         const Icon(Icons.verified,
                             color: AppColors.completed, size: 14),
                         const SizedBox(width: AppSpacing.xs),
-                        Text('Lifecycle Complete',
+                        Text(AppLocalizations.of(context).plantDetailLifecycleComplete,
                             style: AppTypography.labelLarge(context)
                                 .copyWith(color: AppColors.completed)),
                       ],
@@ -1754,7 +1752,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                   ),
                   ElevatedButton.icon(
                     icon: const Icon(Icons.emoji_events_rounded, size: 16),
-                    label: const Text('View Report'),
+                    label: Text(AppLocalizations.of(context).plantDetailViewReport),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.harvested,
                       foregroundColor: Colors.black,
@@ -1771,7 +1769,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                 if (currentPlant.status == PlantStatus.removed)
                   ElevatedButton.icon(
                     icon: const Icon(Icons.emoji_events_rounded, size: 16),
-                    label: const Text('View Report'),
+                    label: Text(AppLocalizations.of(context).plantDetailViewReport),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: context.colSurface2,
                       foregroundColor: context.colTextSecondary,
@@ -1788,7 +1786,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                     currentPlant.status != PlantStatus.removed) ...[
                   ElevatedButton.icon(
                     icon: const Icon(Icons.swap_horiz, size: 16),
-                    label: const Text('Move'),
+                    label: Text(AppLocalizations.of(context).plantDetailMove),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: context.colSurface2,
                       foregroundColor: context.colTextSecondary,
@@ -1798,7 +1796,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                   ),
                   ElevatedButton.icon(
                     icon: const Icon(Icons.warning, size: 16),
-                    label: const Text('Cull'),
+                    label: Text(AppLocalizations.of(context).plantDetailCull),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.danger,
                       foregroundColor: Colors.white,
@@ -1873,7 +1871,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                 Icon(Icons.timeline_rounded,
                     color: context.colTextSecondary, size: 20),
                 const SizedBox(width: AppSpacing.xs),
-                Text('Plant Timeline',
+                Text(AppLocalizations.of(context).plantDetailPlantTimeline,
                     style: AppTypography.headlineSmall(context)),
               ],
             ),
@@ -1896,8 +1894,9 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                     const SizedBox(width: AppSpacing.xs),
                     Text(
                       _noteFilter == null
-                          ? 'Notes (${notes.length})'
-                          : 'Notes (${filteredNotes.length}/${notes.length})',
+                          ? AppLocalizations.of(context).plantDetailNotesCount(notes.length)
+                          : AppLocalizations.of(context).plantDetailNotesFiltered(
+                              filteredNotes.length, notes.length),
                       style: AppTypography.headlineSmall(context),
                     ),
                   ],
@@ -1929,7 +1928,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                     ),
                     icon: Icon(Icons.content_paste,
                         size: 13, color: context.colTextMuted),
-                    label: Text('Templates',
+                    label: Text(AppLocalizations.of(context).plantDetailTemplates,
                         style: AppTypography.labelLarge(context)
                             .copyWith(color: context.colTextMuted)),
                   ),
@@ -1941,7 +1940,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                     ),
                     icon: const Icon(Icons.add,
                         size: 15, color: AppColors.primary),
-                    label: Text('Add',
+                    label: Text(AppLocalizations.of(context).commonAdd,
                         style: AppTypography.labelLarge(context)
                             .copyWith(color: AppColors.primary)),
                   ),
@@ -1972,7 +1971,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                 child: Row(children: [
                   Icon(Icons.note, color: context.colTextMuted),
                   const SizedBox(width: AppSpacing.sm),
-                  Text('No notes — tap Add to start',
+                  Text(AppLocalizations.of(context).plantDetailNoNotes,
                       style: AppTypography.bodyMedium(context)
                           .copyWith(fontStyle: FontStyle.italic)),
                 ]),
@@ -1990,7 +1989,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                       color: context.colTextMuted),
                   const SizedBox(width: AppSpacing.sm),
                   Text(
-                    'No ${_noteFilter?.categoryLabel ?? ''} notes yet',
+                    AppLocalizations.of(context).plantDetailNoCategoryNotes(_noteFilter?.categoryLabel ?? ''),
                     style: AppTypography.bodyMedium(context)
                         .copyWith(fontStyle: FontStyle.italic),
                   ),
@@ -2055,7 +2054,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                               GestureDetector(
                                 onTap: () => repo.resolveNote(note.id),
                                 child: Tooltip(
-                                  message: 'Mark as resolved',
+                                  message: AppLocalizations.of(context).plantDetailMarkResolved,
                                   child: Container(
                                     margin: const EdgeInsets.only(right: AppSpacing.xxs),
                                     padding: const EdgeInsets.symmetric(
@@ -2075,7 +2074,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                                         const Icon(Icons.check,
                                             color: AppColors.growing, size: 11),
                                         const SizedBox(width: 3),
-                                        Text('Resolve',
+                                        Text(AppLocalizations.of(context).plantDetailResolve,
                                             style: AppTypography.labelSmall(
                                                     context)
                                                 .copyWith(
@@ -2104,7 +2103,7 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                                     Icon(Icons.check_circle,
                                         color: context.colTextMuted, size: 11),
                                     const SizedBox(width: 3),
-                                    Text('Resolved',
+                                    Text(AppLocalizations.of(context).plantDetailResolved,
                                         style: AppTypography.labelSmall(context)
                                             .copyWith(fontSize: 10)),
                                   ],
@@ -2138,9 +2137,9 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                       if (note.feedingDetails != null) ...[
                         const SizedBox(height: AppSpacing.xs),
                         _noteDetailRow(
-                            'Product', note.feedingDetails!.productName),
+                            AppLocalizations.of(context).plantDetailNoteProduct, note.feedingDetails!.productName),
                         _noteDetailRow(
-                            'Volume',
+                            AppLocalizations.of(context).plantDetailNoteVolume,
                             note.feedingDetails!.waterVolumeLitres != null
                                 ? '${note.feedingDetails!.waterVolumeLitres}L'
                                 : null),
@@ -2158,28 +2157,28 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                             note.feedingDetails!.phosphorus != null ||
                             note.feedingDetails!.potassium != null)
                           _noteDetailRow(
-                              'NPK',
+                              AppLocalizations.of(context).plantDetailNoteNpk,
                               'N${note.feedingDetails!.nitrogen ?? 0} '
                                   'P${note.feedingDetails!.phosphorus ?? 0} '
                                   'K${note.feedingDetails!.potassium ?? 0}'),
                         _noteDetailRow(
-                            'Amendments', note.feedingDetails!.amendments),
+                            AppLocalizations.of(context).plantDetailNoteAmendments, note.feedingDetails!.amendments),
                       ],
 
                       if (note.wateringDetails != null) ...[
                         const SizedBox(height: AppSpacing.xs),
                         _noteDetailRow(
-                            'Volume',
+                            AppLocalizations.of(context).plantDetailNoteVolume,
                             note.wateringDetails!.volumeLitres != null
                                 ? '${note.wateringDetails!.volumeLitres}L'
                                 : null),
                         _noteDetailRow(
-                            'pH In',
+                            AppLocalizations.of(context).plantDetailNotePhIn,
                             note.wateringDetails!.phIn != null
                                 ? '${note.wateringDetails!.phIn}'
                                 : null),
                         _noteDetailRow(
-                            'Runoff pH',
+                            AppLocalizations.of(context).plantDetailNoteRunoffPh,
                             note.wateringDetails!.runoffPh != null
                                 ? '${note.wateringDetails!.runoffPh}'
                                 : null),
@@ -2187,11 +2186,11 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
 
                       if (note.ipmDetails != null) ...[
                         const SizedBox(height: AppSpacing.xs),
-                        _noteDetailRow('Product', note.ipmDetails!.product),
-                        _noteDetailRow('Target', note.ipmDetails!.targetPest),
-                        _noteDetailRow('Method', note.ipmDetails!.method),
+                        _noteDetailRow(AppLocalizations.of(context).plantDetailNoteProduct, note.ipmDetails!.product),
+                        _noteDetailRow(AppLocalizations.of(context).plantDetailNoteTarget, note.ipmDetails!.targetPest),
+                        _noteDetailRow(AppLocalizations.of(context).plantDetailNoteMethod, note.ipmDetails!.method),
                         _noteDetailRow(
-                            'Dilution',
+                            AppLocalizations.of(context).plantDetailNoteDilution,
                             note.ipmDetails!.dilutionRatio != null
                                 ? '${note.ipmDetails!.dilutionRatio}x'
                                 : null),
