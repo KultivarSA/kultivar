@@ -964,6 +964,53 @@ class NotificationService {
     );
   }
 
+  /// Task #180 — queues a test notification ~1 minute out through the
+  /// SAME path scheduled reminders use (zonedSchedule + tz.local +
+  /// inexactAllowWhileIdle).  The immediate [showTestNotification]
+  /// only proves the delivery chain; this one proves the *scheduler*,
+  /// which is what burping / watering / feeding reminders depend on.
+  ///
+  /// Expectation-setting matters here: inexact alarms are batched by
+  /// Android (aggressively on Samsung One UI), so "1 minute" can
+  /// legally arrive several minutes late.  That latitude is fine for
+  /// daily care reminders and keeps us off Play Console's exact-alarm
+  /// justification queue -- but it makes short-window manual tests
+  /// look broken when they aren't.  The Settings tile's toast spells
+  /// this out.
+  Future<void> showScheduledTestNotification() async {
+    if (kIsWeb || stubAllCalls) return;
+    await _notificationsPlugin.zonedSchedule(
+      id: 999998,
+      title: '🌿 Kultivar scheduled test',
+      body: 'Queued one minute ago via the reminder scheduler — '
+          'scheduling works.',
+      scheduledDate:
+          tz.TZDateTime.now(tz.local).add(const Duration(minutes: 1)),
+      notificationDetails: const NotificationDetails(
+        android: AndroidNotificationDetails(
+          'test_channel',
+          'Test Notifications',
+          channelDescription:
+              'One-off notifications fired from Settings to verify delivery',
+          importance: Importance.high,
+          priority: Priority.high,
+        ),
+        iOS: DarwinNotificationDetails(),
+      ),
+      androidScheduleMode: AndroidScheduleMode.inexactAllowWhileIdle,
+    );
+  }
+
+  /// Number of notifications currently queued with the OS scheduler.
+  /// Lets the Settings test tile show "queued" proof instantly instead
+  /// of leaving the user staring at an empty shade wondering whether
+  /// the schedule call worked at all.
+  Future<int> pendingNotificationCount() async {
+    if (kIsWeb || stubAllCalls) return 0;
+    final pending = await _notificationsPlugin.pendingNotificationRequests();
+    return pending.length;
+  }
+
   Future<void> cancelNotification(int notificationId) async {
     if (kIsWeb || stubAllCalls) return;
     await _notificationsPlugin.cancel(id: notificationId);
