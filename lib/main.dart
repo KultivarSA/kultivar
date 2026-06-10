@@ -16,6 +16,7 @@ import 'services/analytics_service.dart';
 import 'services/app_lock_service.dart';
 import 'services/auto_backup_service.dart';
 import 'services/currency_service.dart';
+import 'services/error_reporter.dart';
 import 'services/hive_service.dart';
 import 'services/local_crash_log.dart';
 import 'services/notification_service.dart';
@@ -103,10 +104,22 @@ void main() async {
   await currencyService.init();
 
   if (!kIsWeb) {
-    await NotificationService().initialize();
-    // Request Android 13+ POST_NOTIFICATIONS runtime permission.
-    // No-op on iOS (handled via DarwinInitializationSettings) and Android < 13.
-    await NotificationService().requestAndroidPermission();
+    // Boot resilience: a notification-subsystem failure must degrade to
+    // "reminders unavailable", never to "app won't start".  This guard
+    // exists because a real incident proved the risk: R8 resource
+    // shrinking stripped the status-bar icon drawable from a release
+    // build, initialize() threw PlatformException(invalid_icon), and
+    // the unhandled error killed the app at the splash screen on every
+    // launch.  The underlying cause is fixed (res/raw/keep.xml), but
+    // nothing about plugin init should ever be trusted to brick boot.
+    try {
+      await NotificationService().initialize();
+      // Request Android 13+ POST_NOTIFICATIONS runtime permission.
+      // No-op on iOS (handled via DarwinInitializationSettings) and Android < 13.
+      await NotificationService().requestAndroidPermission();
+    } catch (e, stack) {
+      ErrorReporter.report('main.notificationInit', e, stack);
+    }
   }
 
   // ── SR6 — Telemetry consent ───────────────────────────────────────────────
