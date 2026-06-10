@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../l10n/app_localizations.dart';
 import '../models/environment_log.dart';
 import '../models/grow_space.dart';
 import '../models/plant.dart';
@@ -72,11 +73,11 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
   }
 
   String _dliLabel(double dli) {
-    if (dli < 12) return 'Too Low';
-    if (dli < 20) return 'Seedling';
-    if (dli < 40) return 'Vegetative';
-    if (dli <= 65) return 'Flowering';
-    return 'Too High';
+    if (dli < 12) return AppLocalizations.of(context).spaceDetailDliTooLow;
+    if (dli < 20) return AppLocalizations.of(context).spaceDetailStageSeedling;
+    if (dli < 40) return AppLocalizations.of(context).spaceDetailStageVegetative;
+    if (dli <= 65) return AppLocalizations.of(context).spaceDetailStageFlowering;
+    return AppLocalizations.of(context).spaceDetailDliTooHigh;
   }
 
   Widget _dliRef(String stage, String range) {
@@ -158,8 +159,8 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
       backgroundColor: Colors.transparent,
       builder: (ctx) => StatefulBuilder(
         builder: (ctx, ss) => AppSheet(
-          title: 'Edit Space',
-          subtitle: 'Update name, type & hardware',
+          title: AppLocalizations.of(context).spaceDetailEditSpace,
+          subtitle: AppLocalizations.of(context).spaceDetailEditSpaceSubtitle,
           icon: Icons.edit_rounded,
           iconColor: AppColors.secondary,
           children: [
@@ -167,15 +168,15 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
               TextField(
                 controller: nameCtrl,
                 style: TextStyle(color: ctx.colTextPrimary),
-                decoration: const InputDecoration(
-                  labelText: 'Space Name *',
-                  prefixIcon: Icon(Icons.label_rounded, size: 18),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context).spaceDetailSpaceNameLabel,
+                  prefixIcon: const Icon(Icons.label_rounded, size: 18),
                 ),
               ),
               const SizedBox(height: AppSpacing.md),
 
               // ── Type chips ───────────────────
-              Text('Type',
+              Text(AppLocalizations.of(context).spaceDetailTypeLabel,
                   style: AppTypography.bodySmall(ctx)
                       .copyWith(color: ctx.colTextMuted)),
               const SizedBox(height: AppSpacing.xs),
@@ -203,15 +204,15 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
                 controller: notesCtrl,
                 maxLines: 2,
                 style: TextStyle(color: ctx.colTextPrimary),
-                decoration: const InputDecoration(
-                  labelText: 'Notes (optional)',
-                  prefixIcon: Icon(Icons.notes_rounded, size: 18),
+                decoration: InputDecoration(
+                  labelText: AppLocalizations.of(context).spaceDetailNotesOptionalLabel,
+                  prefixIcon: const Icon(Icons.notes_rounded, size: 18),
                 ),
               ),
               const SizedBox(height: AppSpacing.md),
 
               // ── Hardware ─────────────────────
-              Text('Hardware (optional)',
+              Text(AppLocalizations.of(context).spaceDetailHardwareOptional,
                   style: AppTypography.bodySmall(ctx)
                       .copyWith(color: ctx.colTextMuted)),
               const SizedBox(height: AppSpacing.xs),
@@ -222,10 +223,10 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
                     keyboardType: const TextInputType.numberWithOptions(
                         decimal: true),
                     style: TextStyle(color: ctx.colTextPrimary),
-                    decoration: const InputDecoration(
-                      labelText: 'Wattage',
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).spaceDetailWattageLabel,
                       suffixText: 'W',
-                      prefixIcon: Icon(Icons.wb_incandescent_rounded,
+                      prefixIcon: const Icon(Icons.wb_incandescent_rounded,
                           size: 18),
                     ),
                   ),
@@ -237,11 +238,11 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
                     keyboardType: const TextInputType.numberWithOptions(
                         decimal: true),
                     style: TextStyle(color: ctx.colTextPrimary),
-                    decoration: const InputDecoration(
-                      labelText: 'Area',
+                    decoration: InputDecoration(
+                      labelText: AppLocalizations.of(context).spaceDetailAreaLabel,
                       suffixText: 'm²',
                       prefixIcon:
-                          Icon(Icons.square_foot_rounded, size: 18),
+                          const Icon(Icons.square_foot_rounded, size: 18),
                     ),
                   ),
                 ),
@@ -253,7 +254,7 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
                 width: double.infinity,
                 child: ElevatedButton.icon(
                   icon: const Icon(Icons.check_rounded, size: 18),
-                  label: const Text('Save Changes'),
+                  label: Text(AppLocalizations.of(context).spaceDetailSaveChanges),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.secondary,
                     foregroundColor: Colors.black,
@@ -309,7 +310,7 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
                   onPressed: () => Navigator.pop(ctx),
                   style: TextButton.styleFrom(
                       padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm)),
-                  child: Text('Cancel',
+                  child: Text(AppLocalizations.of(context).commonCancel,
                       style: AppTypography.labelLarge(ctx).copyWith(
                         color: ctx.colTextSecondary,
                         fontSize: 15,
@@ -329,7 +330,7 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
         if (updated == null) return;
         repo.updateGrowSpace(updated);
         if (!context.mounted) return;
-        AppToast.show(context, 'Space updated');
+        AppToast.show(context, AppLocalizations.of(context).spaceDetailSpaceUpdatedToast);
       });
     });
   }
@@ -355,7 +356,7 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
       isScrollControlled: true,
       backgroundColor: Colors.transparent,
       builder: (ctx) => AppSheet(
-        title: 'Log Environment',
+        title: AppLocalizations.of(context).fabLogEnvironment,
         subtitle: widget.space.name,
         icon: Icons.thermostat_rounded,
         iconColor: AppColors.water,
@@ -382,11 +383,11 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
               keyboardType:
                   const TextInputType.numberWithOptions(decimal: true),
               style: TextStyle(color: ctx.colTextPrimary),
-              decoration: const InputDecoration(
-                labelText: 'Humidity (%)',
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context).spaceDetailHumidityPctLabel,
                 hintText: '55.0',
                 suffixText: '%',
-                prefixIcon: Icon(Icons.water_drop_rounded, size: 18),
+                prefixIcon: const Icon(Icons.water_drop_rounded, size: 18),
               ),
             ),
             const SizedBox(height: AppSpacing.sm),
@@ -396,9 +397,9 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
               controller: notesController,
               maxLines: 2,
               style: TextStyle(color: ctx.colTextPrimary),
-              decoration: const InputDecoration(
-                labelText: 'Notes (optional)',
-                prefixIcon: Icon(Icons.notes_rounded, size: 18),
+              decoration: InputDecoration(
+                labelText: AppLocalizations.of(context).spaceDetailNotesOptionalLabel,
+                prefixIcon: const Icon(Icons.notes_rounded, size: 18),
               ),
             ),
             const SizedBox(height: AppSpacing.xl),
@@ -408,7 +409,7 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
               width: double.infinity,
               child: ElevatedButton.icon(
                 icon: const Icon(Icons.save_rounded, size: 18),
-                label: const Text('Save Reading'),
+                label: Text(AppLocalizations.of(context).spaceDetailSaveReading),
                 style: ElevatedButton.styleFrom(
                   backgroundColor: AppColors.water,
                   foregroundColor: Colors.black,
@@ -430,7 +431,7 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
                   if (rawTemp == null && humidity == null) {
                     AppToast.show(
                       ctx,
-                      'Enter at least a temperature or humidity value',
+                      AppLocalizations.of(context).spaceDetailEnterTempOrHumidity,
                       type: ToastType.info,
                     );
                     return;
@@ -462,7 +463,7 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
                 onPressed: () => Navigator.pop(ctx),
                 style: TextButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: AppSpacing.sm)),
-                child: Text('Cancel',
+                child: Text(AppLocalizations.of(context).commonCancel,
                     style: AppTypography.labelLarge(ctx).copyWith(
                       color: ctx.colTextSecondary,
                       fontSize: 15,
@@ -542,7 +543,9 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
                   borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
                 ),
                 child: Text(
-                  hasValue ? (isOptimal ? 'Optimal' : 'Check') : 'No data',
+                  hasValue
+                      ? (isOptimal ? AppLocalizations.of(context).spaceDetailOptimal : AppLocalizations.of(context).spaceDetailCheck)
+                      : AppLocalizations.of(context).spaceDetailNoData,
                   style: AppTypography.labelSmall(context)
                       .copyWith(color: statusColor),
                 ),
@@ -583,8 +586,9 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
               children: [
                 Text('$min$unit', style: AppTypography.bodySmall(context)),
                 Text(
-                  'Ideal ${optimalMin.toStringAsFixed(0)}–'
-                  '${optimalMax.toStringAsFixed(0)}$unit',
+                  AppLocalizations.of(context).spaceDetailIdealRange(
+                      '${optimalMin.toStringAsFixed(0)}–'
+                      '${optimalMax.toStringAsFixed(0)}$unit'),
                   style: AppTypography.bodySmall(context),
                 ),
                 Text('$max$unit', style: AppTypography.bodySmall(context)),
@@ -628,7 +632,7 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
                   borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
                 ),
                 child: Text(
-                  isOptimal ? 'Optimal' : 'Check',
+                  isOptimal ? AppLocalizations.of(context).spaceDetailOptimal : AppLocalizations.of(context).spaceDetailCheck,
                   style: AppTypography.labelSmall(context)
                       .copyWith(color: statusColor),
                 ),
@@ -676,8 +680,8 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
       context,
       icon: Icons.delete_rounded,
       iconColor: AppColors.danger,
-      title: 'Delete "${space.name}"?',
-      body: 'This action cannot be undone.',
+      title: AppLocalizations.of(context).spaceDetailDeleteSpaceTitle(space.name),
+      body: AppLocalizations.of(context).spaceDetailCannotBeUndone,
       extraContent: activePlantCount > 0
           ? Container(
               padding: const EdgeInsets.all(AppSpacing.sm),
@@ -693,9 +697,7 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
                 const SizedBox(width: AppSpacing.xs),
                 Expanded(
                   child: Text(
-                    '$activePlantCount active '
-                    '${activePlantCount == 1 ? 'plant' : 'plants'} '
-                    'will be archived as removed.',
+                    AppLocalizations.of(context).spaceDetailPlantsWillBeArchived(activePlantCount),
                     style: AppTypography.bodySmall(context)
                         .copyWith(color: AppColors.danger),
                   ),
@@ -703,7 +705,7 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
               ]),
             )
           : null,
-      confirmLabel: 'Delete Space',
+      confirmLabel: AppLocalizations.of(context).spaceDetailDeleteSpace,
     );
 
     if (confirmed && context.mounted) {
@@ -737,9 +739,8 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
       final archived = repo.removeGrowSpace(space.id);
       Navigator.pop(context); // pop SpaceDetailScreen
       final msg = archived > 0
-          ? '"${space.name}" deleted · $archived '
-              '${archived == 1 ? 'plant' : 'plants'} archived'
-          : '"${space.name}" deleted';
+          ? AppLocalizations.of(context).spaceDetailDeletedWithArchived(archived, space.name)
+          : AppLocalizations.of(context).spaceDetailDeleted(space.name);
       AppToast.show(context, msg, type: ToastType.error);
     }
   }
@@ -896,7 +897,7 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
           if (plantsInSpace.isNotEmpty)
             IconButton(
               icon: const Icon(Icons.timeline_rounded),
-              tooltip: 'View plant timeline',
+              tooltip: AppLocalizations.of(context).spaceDetailViewPlantTimelineTooltip,
               onPressed: () => Navigator.push(
                 context,
                 MaterialPageRoute(
@@ -910,7 +911,7 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
           // Nutrient calculator shortcut
           IconButton(
             icon: const Icon(Icons.science_rounded),
-            tooltip: 'Nutrient Calculator',
+            tooltip: AppLocalizations.of(context).spaceDetailNutrientCalculatorTooltip,
             onPressed: () => Navigator.push(
               context,
               MaterialPageRoute(
@@ -945,7 +946,7 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
           if (plantsInSpace.isNotEmpty)
             IconButton(
               icon: const Icon(Icons.water_drop_outlined),
-              tooltip: 'Log care for all plants',
+              tooltip: AppLocalizations.of(context).spaceDetailLogCareAllTooltip,
               onPressed: () => BatchCareSheet.show(
                 context,
                 space: currentSpace,
@@ -967,22 +968,23 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
               }
             },
             itemBuilder: (_) => [
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: _SpaceAction.edit,
                 child: Row(children: [
-                  Icon(Icons.edit_rounded,
+                  const Icon(Icons.edit_rounded,
                       color: AppColors.secondary, size: 20),
-                  SizedBox(width: AppSpacing.xs),
-                  Text('Edit Space'),
+                  const SizedBox(width: AppSpacing.xs),
+                  Text(AppLocalizations.of(context).spaceDetailEditSpace),
                 ]),
               ),
-              const PopupMenuItem(
+              PopupMenuItem(
                 value: _SpaceAction.delete,
                 child: Row(children: [
-                  Icon(Icons.delete_outline, color: AppColors.danger, size: 20),
-                  SizedBox(width: AppSpacing.xs),
-                  Text('Delete Space',
-                      style: TextStyle(color: AppColors.danger)),
+                  const Icon(Icons.delete_outline,
+                      color: AppColors.danger, size: 20),
+                  const SizedBox(width: AppSpacing.xs),
+                  Text(AppLocalizations.of(context).spaceDetailDeleteSpace,
+                      style: const TextStyle(color: AppColors.danger)),
                 ]),
               ),
             ],
@@ -996,7 +998,7 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
         foregroundColor: Colors.black,
         elevation: 0,
         icon: const Icon(Icons.add),
-        label: Text('Log Environment',
+        label: Text(AppLocalizations.of(context).fabLogEnvironment,
             style: AppTypography.labelLarge(context)
                 .copyWith(color: Colors.black)),
       ),
@@ -1011,13 +1013,14 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             // ── Current conditions ──────────────
-            Text('Current Conditions',
+            Text(AppLocalizations.of(context).spaceDetailCurrentConditions,
                 style: AppTypography.headlineSmall(context)),
             const SizedBox(height: AppSpacing.xxs),
             Text(
               latest != null
-                  ? 'Last reading: ${fmtShortDateTime(latest.recordedAt)}'
-                  : 'No readings logged yet',
+                  ? AppLocalizations.of(context).spaceDetailLastReading(
+                      fmtShortDateTime(latest.recordedAt))
+                  : AppLocalizations.of(context).spaceDetailNoReadingsYet,
               style: AppTypography.bodySmall(context),
             ),
             const SizedBox(height: AppSpacing.md),
@@ -1027,7 +1030,7 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
               children: [
                 Row(children: [
                   _gauge(
-                    label: 'Temperature',
+                    label: AppLocalizations.of(context).spaceDetailTemperature,
                     // Convert stored °C to the user's display unit so the
                     // value, unit suffix, scale and optimal range all match.
                     value: latest?.temperature != null
@@ -1043,7 +1046,7 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
                   ),
                   const SizedBox(width: AppSpacing.sm),
                   _gauge(
-                    label: 'Humidity',
+                    label: AppLocalizations.of(context).spaceDetailHumidity,
                     value: latest?.humidity,
                     unit: '%',
                     min: 0,
@@ -1184,13 +1187,13 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            'View Full Analytics',
+                            AppLocalizations.of(context).spaceDetailViewFullAnalytics,
                             style: AppTypography.labelLarge(context),
                             maxLines: 1,
                             overflow: TextOverflow.ellipsis,
                           ),
                           Text(
-                            'phase breakdown · VPD · streaks',
+                            AppLocalizations.of(context).spaceDetailAnalyticsSubtitle,
                             style: AppTypography.bodySmall(context).copyWith(
                                 color: context.colTextMuted, fontSize: 11),
                             maxLines: 1,
@@ -1221,7 +1224,7 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
               space: currentSpace,
               onSaved: (updated) {
                 repo.updateGrowSpace(updated);
-                AppToast.show(context, 'Thresholds saved');
+                AppToast.show(context, AppLocalizations.of(context).spaceDetailThresholdsSaved);
               },
             ),
 
@@ -1241,13 +1244,13 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
                 const Icon(Icons.wb_incandescent_rounded,
                     color: AppColors.drying, size: 20),
                 const SizedBox(width: AppSpacing.xs),
-                Text('Light Calculator',
+                Text(AppLocalizations.of(context).spaceDetailLightCalculator,
                     style: AppTypography.headlineSmall(context)),
               ],
             ),
             const SizedBox(height: AppSpacing.xxs),
             Text(
-              'Calculate Daily Light Integral from PPFD and photoperiod.',
+              AppLocalizations.of(context).spaceDetailLightCalcSubtitle,
               style: AppTypography.bodySmall(context),
             ),
             const SizedBox(height: AppSpacing.sm),
@@ -1258,8 +1261,8 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
                   style: TextStyle(color: context.colTextPrimary),
-                  decoration: const InputDecoration(
-                    labelText: 'PPFD',
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context).spaceDetailPpfd,
                     suffixText: 'µmol/m²/s',
                   ),
                   onChanged: (_) => _computeDli(),
@@ -1272,8 +1275,8 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
                   keyboardType:
                       const TextInputType.numberWithOptions(decimal: true),
                   style: TextStyle(color: context.colTextPrimary),
-                  decoration: const InputDecoration(
-                    labelText: 'Photoperiod',
+                  decoration: InputDecoration(
+                    labelText: AppLocalizations.of(context).spaceDetailPhotoperiod,
                     suffixText: 'h/day',
                   ),
                   onChanged: (_) => _computeDli(),
@@ -1341,29 +1344,29 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
                     Row(
                       children: [
                         Expanded(
-                          child: Text('Stage',
+                          child: Text(AppLocalizations.of(context).spaceDetailStage,
                               style: AppTypography.labelSmall(context)
                                   .copyWith(color: context.colTextMuted)),
                         ),
                         Expanded(
-                          child: Text('PPFD',
+                          child: Text(AppLocalizations.of(context).spaceDetailPpfd,
                               style: AppTypography.labelSmall(context)
                                   .copyWith(color: context.colTextMuted)),
                         ),
-                        Text('Hours',
+                        Text(AppLocalizations.of(context).spaceDetailHours,
                             style: AppTypography.labelSmall(context)
                                 .copyWith(color: context.colTextMuted)),
                       ],
                     ),
                     Divider(height: 8, color: context.colBorder),
-                    _ppfdRow(context, 'Seedling', '100–300', '18 h/day'),
-                    _ppfdRow(context, 'Vegetative', '300–600', '18 h/day'),
-                    _ppfdRow(context, 'Flowering', '600–900', '12 h/day'),
-                    _ppfdRow(context, 'Late Flower', '800–1000', '12 h/day'),
+                    _ppfdRow(context, AppLocalizations.of(context).spaceDetailStageSeedling, '100–300', '18 h/day'),
+                    _ppfdRow(context, AppLocalizations.of(context).spaceDetailStageVegetative, '300–600', '18 h/day'),
+                    _ppfdRow(context, AppLocalizations.of(context).spaceDetailStageFlowering, '600–900', '12 h/day'),
+                    _ppfdRow(context, AppLocalizations.of(context).spaceDetailStageLateFlower, '800–1000', '12 h/day'),
                     Divider(height: 8, color: context.colBorder),
-                    _dliRef('Seedling DLI', '12–20'),
-                    _dliRef('Vegetative DLI', '20–40'),
-                    _dliRef('Flowering DLI', '40–65'),
+                    _dliRef(AppLocalizations.of(context).spaceDetailSeedlingDli, '12–20'),
+                    _dliRef(AppLocalizations.of(context).spaceDetailVegetativeDli, '20–40'),
+                    _dliRef(AppLocalizations.of(context).spaceDetailFloweringDli, '40–65'),
                   ],
                 ),
               ),
@@ -1374,7 +1377,7 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
                 Text(
-                  'History (${logs.length})',
+                  AppLocalizations.of(context).spaceDetailHistoryCount(logs.length),
                   style: AppTypography.headlineSmall(context),
                 ),
               ],
@@ -1394,8 +1397,7 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
                       color: context.colTextMuted, size: 28),
                   const SizedBox(width: AppSpacing.md),
                   Text(
-                    'No readings yet\n'
-                    'Tap Log Environment to start',
+                    AppLocalizations.of(context).spaceDetailNoReadingsEmpty,
                     style: AppTypography.bodyMedium(context)
                         .copyWith(fontStyle: FontStyle.italic),
                   ),
@@ -1427,8 +1429,8 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
                         context,
                         icon: Icons.bar_chart_rounded,
                         color: AppColors.water,
-                        title: 'Log Entry Deleted',
-                        subtitle: 'The environment log entry\nhas been removed.',
+                        title: AppLocalizations.of(context).spaceDetailLogEntryDeleted,
+                        subtitle: AppLocalizations.of(context).spaceDetailLogEntryDeletedSubtitle,
                         onUndo: () => repo.readdEnvironmentLog(l),
                       );
                     },
@@ -1453,8 +1455,8 @@ class _SpaceDetailScreenState extends State<SpaceDetailScreen> {
                       ),
                       child: Text(
                         _showAllLogs
-                            ? 'Show less'
-                            : 'Show all ${logs.length} readings',
+                            ? AppLocalizations.of(context).spaceDetailShowLess
+                            : AppLocalizations.of(context).spaceDetailShowAllReadings(logs.length),
                         textAlign: TextAlign.center,
                         style: AppTypography.labelLarge(context)
                             .copyWith(color: AppColors.primary),
@@ -1556,7 +1558,7 @@ class _SpaceCareScheduleCardState extends State<_SpaceCareScheduleCard> {
       await notif.cancelSpaceIpmReminder(widget.space.id);
     }
     if (mounted) {
-      AppToast.show(context, 'Care schedule saved');
+      AppToast.show(context, AppLocalizations.of(context).spaceDetailCareScheduleSaved);
     }
   }
 
@@ -1595,7 +1597,7 @@ class _SpaceCareScheduleCardState extends State<_SpaceCareScheduleCard> {
                   Text(label, style: AppTypography.labelLarge(context)),
                   if (enabled)
                     Text(
-                      'Every $interval ${interval == 1 ? 'day' : 'days'}',
+                      AppLocalizations.of(context).spaceDetailEveryNDays(interval),
                       style: AppTypography.bodySmall(context)
                           .copyWith(color: context.colTextMuted, fontSize: 11),
                     ),
@@ -1671,11 +1673,11 @@ class _SpaceCareScheduleCardState extends State<_SpaceCareScheduleCard> {
               const Icon(Icons.event_repeat_rounded,
                   color: AppColors.primary, size: 18),
               const SizedBox(width: AppSpacing.xs),
-              Text('Care Schedule',
+              Text(AppLocalizations.of(context).spaceDetailCareSchedule,
                   style: AppTypography.headlineSmall(context)),
               const Spacer(),
               Text(
-                'Space-wide',
+                AppLocalizations.of(context).spaceDetailSpaceWide,
                 style: AppTypography.bodySmall(context)
                     .copyWith(color: context.colTextMuted, fontSize: 11),
               ),
@@ -1683,7 +1685,7 @@ class _SpaceCareScheduleCardState extends State<_SpaceCareScheduleCard> {
           ),
           const SizedBox(height: AppSpacing.xxs),
           Text(
-            'One schedule for all plants in this space.',
+            AppLocalizations.of(context).spaceDetailOneScheduleAll,
             style: AppTypography.bodySmall(context)
                 .copyWith(color: context.colTextMuted),
           ),
@@ -1691,7 +1693,7 @@ class _SpaceCareScheduleCardState extends State<_SpaceCareScheduleCard> {
 
           // Watering
           _careRow(
-            label: 'Watering',
+            label: AppLocalizations.of(context).spaceDetailWatering,
             unit: 'd',
             icon: Icons.water_drop_rounded,
             color: AppColors.water,
@@ -1708,7 +1710,7 @@ class _SpaceCareScheduleCardState extends State<_SpaceCareScheduleCard> {
 
           // Feeding
           _careRow(
-            label: 'Feeding',
+            label: AppLocalizations.of(context).spaceDetailFeeding,
             unit: 'd',
             icon: Icons.eco_rounded,
             color: AppColors.secondary,
@@ -1725,7 +1727,7 @@ class _SpaceCareScheduleCardState extends State<_SpaceCareScheduleCard> {
 
           // IPM
           _careRow(
-            label: 'IPM / Pest Inspection',
+            label: AppLocalizations.of(context).spaceDetailIpmInspection,
             unit: 'd',
             icon: Icons.bug_report_rounded,
             color: AppColors.ipmColor,
@@ -1744,7 +1746,7 @@ class _SpaceCareScheduleCardState extends State<_SpaceCareScheduleCard> {
             width: double.infinity,
             child: ElevatedButton.icon(
               icon: const Icon(Icons.check_rounded, size: 16),
-              label: const Text('Save Schedule'),
+              label: Text(AppLocalizations.of(context).spaceDetailSaveSchedule),
               style: ElevatedButton.styleFrom(
                 backgroundColor: AppColors.primary,
                 foregroundColor: Colors.black,
@@ -1815,7 +1817,7 @@ class _SpaceAggregateSummary extends StatelessWidget {
         children: [
           Row(children: [
             Text(
-              'Plants (${plants.length})',
+              AppLocalizations.of(context).spaceDetailPlantsCount(plants.length),
               style: AppTypography.headlineSmall(context),
             ),
           ]),
