@@ -20,10 +20,12 @@ import '../services/backup_encryption_service.dart';
 import '../services/currency_service.dart';
 import '../services/demo_data_service.dart';
 import '../services/local_crash_log.dart';
+import '../services/notification_service.dart';
 import '../services/onboarding_service.dart';
 import '../services/review_prompt_service.dart';
 import '../services/search_state_service.dart';
 import '../services/subscription_service.dart';
+import '../services/system_settings_service.dart';
 import '../services/telemetry_consent_service.dart';
 import '../services/ui_preferences_service.dart';
 import '../theme/app_colors.dart';
@@ -45,7 +47,8 @@ class SettingsScreen extends StatefulWidget {
   State<SettingsScreen> createState() => _SettingsScreenState();
 }
 
-class _SettingsScreenState extends State<SettingsScreen> {
+class _SettingsScreenState extends State<SettingsScreen>
+    with WidgetsBindingObserver {
   /// UX1 — Localised subtitle for the Dark Mode tile.  Three cases:
   ///   * Theme mode == system → "Following system setting ({dark|light})"
   ///   * Theme mode == dark    → "Dark theme active"
@@ -107,9 +110,16 @@ class _SettingsScreenState extends State<SettingsScreen> {
   String _version = '';
   DateTime? _lastBackupTime;
 
+  // Task #178 — notification-reliability state.  Both default to the
+  // "everything fine" value so the banner / prompt never flash during
+  // the initial async load.
+  bool _osNotificationsEnabled = true;
+  bool _batteryExempt = true;
+
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
     _useFahrenheit = KultivarApp.useFahrenheitNotifier.value;
     _loadNotifPrefs();
     _loadLockPrefs();
@@ -118,6 +128,36 @@ class _SettingsScreenState extends State<SettingsScreen> {
     _loadLastBackupTime();
     _loadBackupEncryption();
     _loadSnoozeHours();
+    _loadNotifSystemState();
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  // Re-check OS-level notification state whenever the app resumes --
+  // the user has likely just come back from the system settings page
+  // our banner / battery tile deep-linked them to, and the banner
+  // should clear immediately if they fixed it.
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      _loadNotifSystemState();
+    }
+  }
+
+  Future<void> _loadNotifSystemState() async {
+    final results = await Future.wait([
+      NotificationService().areNotificationsEnabled(),
+      SystemSettingsService.isIgnoringBatteryOptimizations(),
+    ]);
+    if (!mounted) return;
+    setState(() {
+      _osNotificationsEnabled = results[0];
+      _batteryExempt = results[1];
+    });
   }
 
   Future<void> _loadSnoozeHours() async {
@@ -265,6 +305,21 @@ class _SettingsScreenState extends State<SettingsScreen> {
 
           // ── Notifications ───────────────────
           _sectionHeader(AppLocalizations.of(context).settingsSectionNotifications),
+          // Task #178 — recovery path for users who denied the
+          // POST_NOTIFICATIONS prompt.  Android never re-asks after a
+          // denial, so without this banner the only way back is
+          // spelunking through system settings.  Tapping deep-links to
+          // the per-app notification settings page; the lifecycle
+          // observer re-checks on resume so the banner clears the
+          // moment they return with it fixed.
+          if (!_osNotificationsEnabled)
+            const _BackupBanner(
+              icon: Icons.notifications_off_rounded,
+              color: AppColors.danger,
+              message: 'Notifications are off — reminders won\'t fire. '
+                  'Tap to enable them in system settings.',
+              onTap: SystemSettingsService.openNotificationSettings,
+            ),
           AppCard(
             child: Column(children: [
               _switchTile(
@@ -380,6 +435,52 @@ class _SettingsScreenState extends State<SettingsScreen> {
                     .settingsSnoozeDurationSubtitle(_snoozeHours),
                 onTap: () => _showSnoozeDurationPicker(context),
               ),
+              // Task #178 — battery-optimization exemption.  Samsung
+              // One UI (and other OEM skins) kill background-scheduled
+              // notifications aggressively; exempting the app is the
+              // documented fix.  Only shown while NOT yet exempt —
+              // once the user flips the toggle the tile disappears on
+              // next resume rather than nagging.
+              //
+              // English-only for now: folds into i18n round 3 (#176)
+              // along with the rest of the new notification strings.
+              if (!kIsWeb && !_batteryExempt) ...[
+                Divider(color: context.colBorderFaint, height: 1),
+                _actionTile(
+                  icon: Icons.battery_saver_rounded,
+                  iconColor: AppColors.warning,
+                  label: 'Reliable reminders',
+                  subtitle: 'Exempt Kultivar from battery optimization so '
+                      'reminders aren\'t silently killed',
+                  onTap: SystemSettingsService.openBatteryOptimizationSettings,
+                ),
+              ],
+              // Task #178 — one-tap delivery check.  Verifies the whole
+              // chain (permission -> channel -> OEM policy) instantly;
+              // if this lands, scheduled reminders will too.
+              if (!kIsWeb) ...[
+                Divider(color: context.colBorderFaint, height: 1),
+                _actionTile(
+                  icon: Icons.notifications_active_rounded,
+                  iconColor: AppColors.primary,
+                  label: 'Send test notification',
+                  subtitle: 'Check that reminders reach this device',
+                  onTap: () async {
+                    await NotificationService().showTestNotification();
+                    if (!context.mounted) return;
+                    AppToast.show(
+                      context,
+                      _osNotificationsEnabled
+                          ? 'Test sent — check your notification shade.'
+                          : 'Test sent, but notifications are off in '
+                              'system settings — nothing will appear.',
+                      type: _osNotificationsEnabled
+                          ? ToastType.success
+                          : ToastType.info,
+                    );
+                  },
+                ),
+              ],
             ]),
           ),
           const SizedBox(height: AppSpacing.lg),

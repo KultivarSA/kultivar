@@ -889,6 +889,49 @@ class NotificationService {
         ?.requestNotificationsPermission();
   }
 
+  /// True when the OS will actually deliver our notifications.
+  ///
+  /// Returns false when the user denied POST_NOTIFICATIONS (or toggled
+  /// the app's notifications off in system settings).  Drives the
+  /// "Reminders are disabled" banner in Settings -- Android never
+  /// re-prompts after a denial, so an in-app recovery path is the only
+  /// way users find their way back.  Defaults to true on platforms
+  /// without the concept (web / iOS pre-prompt) so the banner hides.
+  Future<bool> areNotificationsEnabled() async {
+    if (kIsWeb || stubAllCalls) return true;
+    final android = _notificationsPlugin
+        .resolvePlatformSpecificImplementation<
+            AndroidFlutterLocalNotificationsPlugin>();
+    if (android == null) return true;
+    return await android.areNotificationsEnabled() ?? true;
+  }
+
+  /// Task #178 — fires an immediate test notification so users (and
+  /// support) can verify the whole delivery chain in one tap:
+  /// permission granted -> channel registered -> OEM battery policy
+  /// not blocking.  If this lands, scheduled reminders will too.
+  Future<void> showTestNotification() async {
+    if (kIsWeb || stubAllCalls) return;
+    await _notificationsPlugin.show(
+      // Fixed ID well clear of the plant/space hash ranges so repeat
+      // taps overwrite the previous test instead of stacking.
+      id: 999999,
+      title: '🌿 Kultivar test notification',
+      body: 'Reminders are working. You can dismiss this.',
+      notificationDetails: const NotificationDetails(
+        android: AndroidNotificationDetails(
+          'test_channel',
+          'Test Notifications',
+          channelDescription:
+              'One-off notifications fired from Settings to verify delivery',
+          importance: Importance.high,
+          priority: Priority.high,
+        ),
+        iOS: DarwinNotificationDetails(),
+      ),
+    );
+  }
+
   Future<void> cancelNotification(int notificationId) async {
     if (kIsWeb || stubAllCalls) return;
     await _notificationsPlugin.cancel(id: notificationId);

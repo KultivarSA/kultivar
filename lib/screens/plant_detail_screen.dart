@@ -1462,8 +1462,6 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                 ),
               ],
               const SizedBox(height: AppSpacing.sm),
-              _photoJournalTile(context, currentPlant, notes, photoCount),
-              const SizedBox(height: AppSpacing.md),
               GrowStageStepper(
                 plant: currentPlant,
                 onStageChanged: (stage) => _onGrowStageChanged(
@@ -1483,6 +1481,19 @@ class _PlantDetailScreenState extends State<PlantDetailScreen> {
                 allNotes: notes,
               ),
             ],
+
+            // ── Photo journal ─────────────────────────────────────────
+            //
+            // Task #177 — deliberately OUTSIDE the growing-only block
+            // above.  The journal used to vanish the moment a plant was
+            // harvested, which is exactly when reviewing the grow's
+            // photo history becomes most valuable (compare runs, decide
+            // what to repeat).  Rendering unconditionally keeps it
+            // available through drying / curing / completed / removed,
+            // and -- because the Harvest Archive opens this same screen
+            // for archived plants -- in the archive too.
+            const SizedBox(height: AppSpacing.sm),
+            _photoJournalTile(context, currentPlant, notes, photoCount),
             const SizedBox(height: AppSpacing.md),
 
             // ── F12 — deferred heavy sections ────────────────────────
