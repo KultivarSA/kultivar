@@ -456,8 +456,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                 ),
               ],
               // Task #178 — one-tap delivery check.  Verifies the whole
-              // chain (permission -> channel -> OEM policy) instantly;
-              // if this lands, scheduled reminders will too.
+              // chain (permission -> channel -> OEM policy) instantly.
               if (!kIsWeb) ...[
                 Divider(color: context.colBorderFaint, height: 1),
                 _actionTile(
@@ -477,6 +476,33 @@ class _SettingsScreenState extends State<SettingsScreen>
                       type: _osNotificationsEnabled
                           ? ToastType.success
                           : ToastType.info,
+                    );
+                  },
+                ),
+                // Task #180 — scheduler check.  The immediate test above
+                // bypasses the scheduler entirely (show() posts straight
+                // to the shade), so it can pass while every burping /
+                // watering reminder is broken.  This tile queues through
+                // the exact same zonedSchedule path reminders use and
+                // reports the OS pending-queue count as instant proof.
+                Divider(color: context.colBorderFaint, height: 1),
+                _actionTile(
+                  icon: Icons.schedule_send_rounded,
+                  iconColor: AppColors.secondary,
+                  label: 'Send scheduled test (~1 min)',
+                  subtitle: 'Tests the reminder scheduler — Android may '
+                      'delay delivery a few minutes',
+                  onTap: () async {
+                    final ns = NotificationService();
+                    await ns.showScheduledTestNotification();
+                    final pending = await ns.pendingNotificationCount();
+                    if (!context.mounted) return;
+                    AppToast.show(
+                      context,
+                      'Queued ($pending pending with the OS). Lock the '
+                          'screen and wait — inexact scheduling can take '
+                          'a few minutes, especially on Samsung.',
+                      type: ToastType.success,
                     );
                   },
                 ),
