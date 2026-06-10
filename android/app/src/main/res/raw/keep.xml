@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+    Task #179 follow-up: release builds run R8 resource shrinking, and
+    resources referenced only from Dart string literals (like the
+    notification small icon passed to AndroidInitializationSettings)
+    are invisible to the shrinker's reference scan.  Without this keep
+    rule the drawable is stripped from release APKs/AABs and Android
+    falls back to a featureless white square in the status bar.
+    This is the documented fix from the flutter_local_notifications
+    README.
+-->
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@drawable/ic_stat_kultivar" />
