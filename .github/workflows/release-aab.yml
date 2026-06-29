@@ -1,0 +1,115 @@
+name: release-aab
+
+# Builds the signed Play Store AAB on a clean cloud runner.
+#
+# Why this exists: the primary dev machine runs an admin-locked EDR
+# (OpenText/Webroot) that corrupts Gradle's cache files mid-build, so a
+# reliable signed build can't be produced locally.  GitHub's Ubuntu
+# runners have no such agent, so this is the canonical release path.
+#
+# Trigger it two ways:
+#   * push a version tag  ->  git tag v1.0.0 && git push origin v1.0.0
+#   * manually            ->  Actions tab -> "release-aab" -> Run workflow
+#
+# Required repo secrets (Settings -> Secrets and variables -> Actions):
+#   ANDROID_KEYSTORE_BASE64    base64 of kultivar-upload.jks
+#   ANDROID_KEYSTORE_PASSWORD  the store password
+#   ANDROID_KEY_PASSWORD       the key password (same as store, per setup)
+#   ANDROID_KEY_ALIAS          kultivar-upload
+#   ENV_JSON                   full contents of env.json (compile-time keys)
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+jobs:
+  build-aab:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - name: Check out code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: "17"
+
+      # Pinned to the dev-machine SDK version.  Do NOT switch to bare
+      # "stable": a newer Flutter pulls AGP 9 + the newDsl break this
+      # project isn't migrated to yet.
+      - name: Set up Flutter 3.41.6
+        uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: "3.41.6"
+          cache: true
+
+      - name: Fail fast if required secrets are missing
+        env:
+          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          STORE_PW: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          ENV_JSON: ${{ secrets.ENV_JSON }}
+        run: |
+          missing=0
+          [ -z "$KEYSTORE_B64" ] && { echo "::error::ANDROID_KEYSTORE_BASE64 is not set"; missing=1; }
+          [ -z "$STORE_PW" ]     && { echo "::error::ANDROID_KEYSTORE_PASSWORD is not set"; missing=1; }
+          [ -z "$ENV_JSON" ]     && { echo "::error::ENV_JSON is not set"; missing=1; }
+          exit $missing
+
+      - name: Decode upload keystore
+        env:
+          KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+        run: |
+          echo "$KEYSTORE_B64" | base64 -d > "$GITHUB_WORKSPACE/android/app/upload-keystore.jks"
+
+      - name: Write android/key.properties
+        env:
+          STORE_PW: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_PW: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+        run: |
+          cat > "$GITHUB_WORKSPACE/android/key.properties" <<EOF
+          storePassword=${STORE_PW}
+          keyPassword=${KEY_PW}
+          keyAlias=${KEY_ALIAS:-kultivar-upload}
+          storeFile=${GITHUB_WORKSPACE}/android/app/upload-keystore.jks
+          EOF
+
+      - name: Write env.json (compile-time secrets)
+        env:
+          ENV_JSON: ${{ secrets.ENV_JSON }}
+        run: |
+          printf '%s' "$ENV_JSON" > "$GITHUB_WORKSPACE/env.json"
+
+      - name: Install dependencies
+        run: flutter pub get
+
+      - name: Build signed release AAB
+        run: flutter build appbundle --release --dart-define-from-file=env.json
+
+      - name: Verify the AAB is signed with the upload key (not debug)
+        run: |
+          AAB=build/app/outputs/bundle/release/app-release.aab
+          ls -lh "$AAB"
+          echo "--- signer certificate ---"
+          jarsigner -verify -verbose -certs "$AAB" | grep -iE "CN=|jar verified" | head -20
+
+      - name: Upload AAB artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: app-release-aab
+          path: build/app/outputs/bundle/release/app-release.aab
+          if-no-files-found: error
+          retention-days: 14
+
+      # Defence in depth: never leave decoded secrets in the workspace,
+      # even though runners are ephemeral.
+      - name: Scrub secrets from workspace
+        if: always()
+        run: |
+          rm -f "$GITHUB_WORKSPACE/android/app/upload-keystore.jks" \
+                "$GITHUB_WORKSPACE/android/key.properties" \
+                "$GITHUB_WORKSPACE/env.json" || true
