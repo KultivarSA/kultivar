@@ -9,6 +9,10 @@ See `BUILD.md` for the release process, version-bump rules, and git tag scheme.
 
 ## [Unreleased]
 
+## [1.0.0] — 2026-06-30
+
+Initial public release.
+
 ### Fixed
 - **Adaptive launcher icon — Android 13+ themed icons + round-icon
   launchers.**  Three gaps closed:
@@ -216,10 +220,6 @@ See `BUILD.md` for the release process, version-bump rules, and git tag scheme.
   inside cards whose labels already cover them) so TalkBack doesn't
   inject redundant "image" nodes before announcing the real content.
 
-## [1.0.0] — TBD
-
-Initial public release.
-
 ### Added
 - **Lifecycle tracking** — plants step through Growing → Harvested → Drying
   → Curing → Completed, with stage-aware reminder presets.
@@ -260,5 +260,5 @@ Initial public release.
 - App Lock with biometrics (Face ID / Touch ID / Android BiometricPrompt)
   + PIN fallback.
 
-[Unreleased]: https://github.com/<owner>/kultivar/compare/v1.0.0...HEAD
-[1.0.0]: https://github.com/<owner>/kultivar/releases/tag/v1.0.0
+[Unreleased]: https://github.com/KultivarSA/kultivar/compare/v1.0.0...HEAD
+[1.0.0]: https://github.com/KultivarSA/kultivar/releases/tag/v1.0.0
