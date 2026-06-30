@@ -16,7 +16,7 @@ name: release-aab
 #   ANDROID_KEYSTORE_PASSWORD  the store password
 #   ANDROID_KEY_PASSWORD       the key password (same as store, per setup)
 #   ANDROID_KEY_ALIAS          kultivar-upload
-#   ENV_JSON                   full contents of env.json (compile-time keys)
+#   ENV_JSON                   base64 of env.json (compile-time keys)
 
 on:
   push:
@@ -63,7 +63,9 @@ jobs:
         env:
           KEYSTORE_B64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
         run: |
-          echo "$KEYSTORE_B64" | base64 -d > "$GITHUB_WORKSPACE/android/app/upload-keystore.jks"
+          # tr strips any CR/LF/space the secret may carry (e.g. if it was
+          # set from a Windows shell that appended CRLF) before decoding.
+          printf '%s' "$KEYSTORE_B64" | tr -d '\r\n ' | base64 -d > "$GITHUB_WORKSPACE/android/app/upload-keystore.jks"
 
       - name: Write android/key.properties
         env:
@@ -80,9 +82,13 @@ jobs:
 
       - name: Write env.json (compile-time secrets)
         env:
+          # ENV_JSON holds the base64 of env.json -- avoids every text
+          # encoding pitfall (the file has a comment containing
+          # "--dart-define-from-file" that breaks raw arg passing, plus
+          # CRLF/BOM risks from Windows shells).
           ENV_JSON: ${{ secrets.ENV_JSON }}
         run: |
-          printf '%s' "$ENV_JSON" > "$GITHUB_WORKSPACE/env.json"
+          printf '%s' "$ENV_JSON" | tr -d '\r\n ' | base64 -d > "$GITHUB_WORKSPACE/env.json"
 
       - name: Install dependencies
         run: flutter pub get
