@@ -9,6 +9,21 @@ See `BUILD.md` for the release process, version-bump rules, and git tag scheme.
 
 ## [Unreleased]
 
+### Changed
+- **Settings screen decluttered with collapsible groups.** A new
+  reusable `_CollapsibleGroup` widget folds long clusters of rows behind
+  a single tappable header (animated expand, rotating chevron, proper
+  expanded/collapsed screen-reader semantics). Applied to four sections:
+  Notifications now folds its eight care-reminder toggles behind a
+  "Care reminders" row carrying a live "N/8 on" pill, and tucks the
+  battery + delivery-test tiles into "Troubleshooting"; Data export folds
+  the five per-type exports behind "Export by type"; Backup folds cloud
+  share / encryption / details behind "More backup options"; the App
+  section folds storage cleanup + replay-intro behind "Maintenance"
+  while keeping the destructive "Clear all data" visible. Five new
+  localized group labels added across all 9 locales (Afrikaans + isiZulu
+  join the existing pending native-speaker review).
+
 ## [1.0.0] — 2026-06-30
 
 Initial public release.

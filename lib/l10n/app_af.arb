@@ -5,6 +5,12 @@
 
   "appTitle": "Kultivar",
 
+  "settingsGroupCareReminders": "Versorgingsherinnerings",
+  "settingsGroupTroubleshooting": "Probleemoplossing",
+  "settingsGroupExportByType": "Voer uit volgens tipe",
+  "settingsGroupBackupOptions": "Meer rugsteun-opsies",
+  "settingsGroupMaintenance": "Onderhoud",
+
   "navHome": "Tuis",
   "navAnalytics": "Analise",
   "navArchive": "Argief",
