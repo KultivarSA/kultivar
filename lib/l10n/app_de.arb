@@ -1,6 +1,13 @@
 {
   "@@locale": "de",
   "appTitle": "Kultivar",
+
+  "settingsGroupCareReminders": "Pflege-Erinnerungen",
+  "settingsGroupTroubleshooting": "Fehlerbehebung",
+  "settingsGroupExportByType": "Nach Typ exportieren",
+  "settingsGroupBackupOptions": "Weitere Backup-Optionen",
+  "settingsGroupMaintenance": "Wartung",
+
   "navHome": "Start",
   "navAnalytics": "Analyse",
   "navArchive": "Archiv",

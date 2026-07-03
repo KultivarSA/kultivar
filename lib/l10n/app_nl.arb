@@ -1,6 +1,13 @@
 {
   "@@locale": "nl",
   "appTitle": "Kultivar",
+
+  "settingsGroupCareReminders": "Zorgherinneringen",
+  "settingsGroupTroubleshooting": "Probleemoplossing",
+  "settingsGroupExportByType": "Exporteren per type",
+  "settingsGroupBackupOptions": "Meer back-upopties",
+  "settingsGroupMaintenance": "Onderhoud",
+
   "navHome": "Start",
   "navAnalytics": "Analyse",
   "navArchive": "Archief",

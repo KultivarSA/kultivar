@@ -232,6 +232,21 @@ class _SettingsScreenState extends State<SettingsScreen>
   Widget build(BuildContext context) {
     final repo = context.watch<GrowRepository>();
 
+    // Live count of enabled care reminders for the collapsed-group pill.
+    // Recomputed on every rebuild, so flipping any toggle updates the
+    // "N/8" badge on the Care reminders header immediately.
+    const careReminderTotal = 8;
+    final careRemindersOn = [
+      _dryingRemindersEnabled,
+      _curingCompleteEnabled,
+      _burpingEnabled,
+      _envAlertsEnabled,
+      _wateringEnabled,
+      _feedingEnabled,
+      _ipmEnabled,
+      _targetHarvestEnabled,
+    ].where((e) => e).length;
+
     return Scaffold(
       appBar: AppBar(
         title: Text('Settings', style: AppTypography.headlineMedium(context)),
@@ -322,6 +337,19 @@ class _SettingsScreenState extends State<SettingsScreen>
             ),
           AppCard(
             child: Column(children: [
+              // ── Care reminders (collapsed) ──
+              // Eight stage/care toggles folded behind one row with a live
+              // "N/8 on" pill so the state is visible without expanding.
+              _CollapsibleGroup(
+                icon: Icons.notifications_active_rounded,
+                iconColor: AppColors.primary,
+                label:
+                    AppLocalizations.of(context).settingsGroupCareReminders,
+                summary: '$careRemindersOn/$careReminderTotal',
+                summaryColor: careRemindersOn == 0
+                    ? AppColors.warning
+                    : AppColors.primary,
+                children: [
               _switchTile(
                 icon: Icons.air,
                 iconColor: AppColors.drying,
@@ -426,6 +454,8 @@ class _SettingsScreenState extends State<SettingsScreen>
                   KultivarApp.notifTargetHarvestEnabled.value = v;
                 },
               ),
+                ],
+              ),
               Divider(color: context.colBorderFaint, height: 1),
               _actionTile(
                 icon: Icons.snooze_rounded,
@@ -435,76 +465,84 @@ class _SettingsScreenState extends State<SettingsScreen>
                     .settingsSnoozeDurationSubtitle(_snoozeHours),
                 onTap: () => _showSnoozeDurationPicker(context),
               ),
-              // Task #178 — battery-optimization exemption.  Samsung
-              // One UI (and other OEM skins) kill background-scheduled
-              // notifications aggressively; exempting the app is the
-              // documented fix.  Only shown while NOT yet exempt —
-              // once the user flips the toggle the tile disappears on
-              // next resume rather than nagging.
-              //
-              // English-only for now: folds into i18n round 3 (#176)
-              // along with the rest of the new notification strings.
-              if (!kIsWeb && !_batteryExempt) ...[
-                Divider(color: context.colBorderFaint, height: 1),
-                _actionTile(
-                  icon: Icons.battery_saver_rounded,
-                  iconColor: AppColors.warning,
-                  label: 'Reliable reminders',
-                  subtitle: 'Exempt Kultivar from battery optimization so '
-                      'reminders aren\'t silently killed',
-                  onTap: SystemSettingsService.openBatteryOptimizationSettings,
-                ),
-              ],
-              // Task #178 — one-tap delivery check.  Verifies the whole
-              // chain (permission -> channel -> OEM policy) instantly.
+              // ── Troubleshooting (collapsed) ──
+              // Battery-exemption + the two delivery-test tiles are
+              // diagnostics most users never touch, so they fold behind a
+              // single row instead of padding out the main list.
               if (!kIsWeb) ...[
                 Divider(color: context.colBorderFaint, height: 1),
-                _actionTile(
-                  icon: Icons.notifications_active_rounded,
-                  iconColor: AppColors.primary,
-                  label: 'Send test notification',
-                  subtitle: 'Check that reminders reach this device',
-                  onTap: () async {
-                    await NotificationService().showTestNotification();
-                    if (!context.mounted) return;
-                    AppToast.show(
-                      context,
-                      _osNotificationsEnabled
-                          ? 'Test sent — check your notification shade.'
-                          : 'Test sent, but notifications are off in '
-                              'system settings — nothing will appear.',
-                      type: _osNotificationsEnabled
-                          ? ToastType.success
-                          : ToastType.info,
-                    );
-                  },
-                ),
-                // Task #180 — scheduler check.  The immediate test above
-                // bypasses the scheduler entirely (show() posts straight
-                // to the shade), so it can pass while every burping /
-                // watering reminder is broken.  This tile queues through
-                // the exact same zonedSchedule path reminders use and
-                // reports the OS pending-queue count as instant proof.
-                Divider(color: context.colBorderFaint, height: 1),
-                _actionTile(
-                  icon: Icons.schedule_send_rounded,
-                  iconColor: AppColors.secondary,
-                  label: 'Send scheduled test (~1 min)',
-                  subtitle: 'Tests the reminder scheduler — Android may '
-                      'delay delivery a few minutes',
-                  onTap: () async {
-                    final ns = NotificationService();
-                    await ns.showScheduledTestNotification();
-                    final pending = await ns.pendingNotificationCount();
-                    if (!context.mounted) return;
-                    AppToast.show(
-                      context,
-                      'Queued ($pending pending with the OS). Lock the '
-                          'screen and wait — inexact scheduling can take '
-                          'a few minutes, especially on Samsung.',
-                      type: ToastType.success,
-                    );
-                  },
+                _CollapsibleGroup(
+                  icon: Icons.troubleshoot,
+                  iconColor: AppColors.warning,
+                  label: AppLocalizations.of(context)
+                      .settingsGroupTroubleshooting,
+                  children: [
+                    // Task #178 — battery-optimization exemption.  Samsung
+                    // One UI (and other OEM skins) kill background-scheduled
+                    // notifications aggressively; exempting the app is the
+                    // documented fix.  Only shown while NOT yet exempt.
+                    if (!_batteryExempt) ...[
+                      _actionTile(
+                        icon: Icons.battery_saver_rounded,
+                        iconColor: AppColors.warning,
+                        label: 'Reliable reminders',
+                        subtitle: 'Exempt Kultivar from battery optimization '
+                            'so reminders aren\'t silently killed',
+                        onTap: SystemSettingsService
+                            .openBatteryOptimizationSettings,
+                      ),
+                      Divider(color: context.colBorderFaint, height: 1),
+                    ],
+                    // Task #178 — one-tap delivery check.  Verifies the
+                    // whole chain (permission -> channel -> OEM policy).
+                    _actionTile(
+                      icon: Icons.notifications_active_rounded,
+                      iconColor: AppColors.primary,
+                      label: 'Send test notification',
+                      subtitle: 'Check that reminders reach this device',
+                      onTap: () async {
+                        await NotificationService().showTestNotification();
+                        if (!context.mounted) return;
+                        AppToast.show(
+                          context,
+                          _osNotificationsEnabled
+                              ? 'Test sent — check your notification shade.'
+                              : 'Test sent, but notifications are off in '
+                                  'system settings — nothing will appear.',
+                          type: _osNotificationsEnabled
+                              ? ToastType.success
+                              : ToastType.info,
+                        );
+                      },
+                    ),
+                    // Task #180 — scheduler check.  The immediate test
+                    // above bypasses the scheduler entirely (show() posts
+                    // straight to the shade), so it can pass while every
+                    // burping / watering reminder is broken.  This tile
+                    // queues through the exact same zonedSchedule path
+                    // reminders use and reports the OS pending-queue count.
+                    Divider(color: context.colBorderFaint, height: 1),
+                    _actionTile(
+                      icon: Icons.schedule_send_rounded,
+                      iconColor: AppColors.secondary,
+                      label: 'Send scheduled test (~1 min)',
+                      subtitle: 'Tests the reminder scheduler — Android may '
+                          'delay delivery a few minutes',
+                      onTap: () async {
+                        final ns = NotificationService();
+                        await ns.showScheduledTestNotification();
+                        final pending = await ns.pendingNotificationCount();
+                        if (!context.mounted) return;
+                        AppToast.show(
+                          context,
+                          'Queued ($pending pending with the OS). Lock the '
+                              'screen and wait — inexact scheduling can take '
+                              'a few minutes, especially on Samsung.',
+                          type: ToastType.success,
+                        );
+                      },
+                    ),
+                  ],
                 ),
               ],
             ]),
@@ -532,6 +570,15 @@ class _SettingsScreenState extends State<SettingsScreen>
                 },
               ),
               Divider(color: context.colBorderFaint, height: 1),
+              // ── Export by type (collapsed) ──
+              // "Export all" above covers the common case; the five
+              // per-entity exports fold behind one row.
+              _CollapsibleGroup(
+                icon: Icons.category_rounded,
+                iconColor: AppColors.secondary,
+                label:
+                    AppLocalizations.of(context).settingsGroupExportByType,
+                children: [
               _actionTile(
                 icon: Icons.eco_rounded,
                 iconColor: AppColors.growing,
@@ -602,6 +649,8 @@ class _SettingsScreenState extends State<SettingsScreen>
                   );
                 },
               ),
+                ],
+              ),
             ]),
           ),
           const SizedBox(height: AppSpacing.lg),
@@ -631,6 +680,15 @@ class _SettingsScreenState extends State<SettingsScreen>
               ),
               if (!kIsWeb) ...[
                 Divider(color: context.colBorderFaint, height: 1),
+                // ── More backup options (collapsed) ──
+                // Export / Import above are the everyday actions; cloud
+                // share, the how-to, and encryption fold behind one row.
+                _CollapsibleGroup(
+                  icon: Icons.tune_rounded,
+                  iconColor: AppColors.secondary,
+                  label: AppLocalizations.of(context)
+                      .settingsGroupBackupOptions,
+                  children: [
                 _actionTile(
                   icon: Icons.cloud_upload_rounded,
                   iconColor: AppColors.secondary,
@@ -662,6 +720,8 @@ class _SettingsScreenState extends State<SettingsScreen>
                   onChanged: (v) => v
                       ? _setupBackupPassphrase(context)
                       : _forgetBackupPassphrase(context),
+                ),
+                  ],
                 ),
               ],
             ]),
@@ -796,25 +856,38 @@ class _SettingsScreenState extends State<SettingsScreen>
                       )
                     : const SizedBox.shrink(),
               ),
-              if (!kIsWeb) ...[
-                Divider(color: context.colBorderFaint, height: 1),
-                _actionTile(
-                  icon: Icons.cleaning_services_rounded,
-                  iconColor: AppColors.accent,
-                  label: AppLocalizations.of(context).settingsReclaimStorage,
-                  subtitle: AppLocalizations.of(context)
-                      .settingsReclaimStorageSubtitle,
-                  onTap: () => _reclaimStorage(context, repo),
-                ),
-              ],
-              Divider(color: context.colBorderFaint, height: 1),
-              _actionTile(
-                icon: Icons.school_rounded,
-                iconColor: AppColors.secondary,
-                label: AppLocalizations.of(context).settingsReplayOnboarding,
-                subtitle: AppLocalizations.of(context)
-                    .settingsReplayOnboardingSubtitle,
-                onTap: () => _replayOnboarding(context),
+              // ── Maintenance (collapsed) ──
+              // Storage cleanup + replaying the intro are occasional
+              // housekeeping, folded behind one row.  Clear-all stays
+              // visible below so the destructive action is never hidden.
+              _CollapsibleGroup(
+                icon: Icons.handyman_rounded,
+                iconColor: AppColors.accent,
+                label:
+                    AppLocalizations.of(context).settingsGroupMaintenance,
+                children: [
+                  if (!kIsWeb) ...[
+                    _actionTile(
+                      icon: Icons.cleaning_services_rounded,
+                      iconColor: AppColors.accent,
+                      label:
+                          AppLocalizations.of(context).settingsReclaimStorage,
+                      subtitle: AppLocalizations.of(context)
+                          .settingsReclaimStorageSubtitle,
+                      onTap: () => _reclaimStorage(context, repo),
+                    ),
+                    Divider(color: context.colBorderFaint, height: 1),
+                  ],
+                  _actionTile(
+                    icon: Icons.school_rounded,
+                    iconColor: AppColors.secondary,
+                    label:
+                        AppLocalizations.of(context).settingsReplayOnboarding,
+                    subtitle: AppLocalizations.of(context)
+                        .settingsReplayOnboardingSubtitle,
+                    onTap: () => _replayOnboarding(context),
+                  ),
+                ],
               ),
               Divider(color: context.colBorderFaint, height: 1),
               _actionTile(
@@ -2250,6 +2323,113 @@ class _SettingsScreenState extends State<SettingsScreen>
         context.read<SearchStateService>().reset();
         AppToast.show(context, 'All data cleared', type: ToastType.error);
       },
+    );
+  }
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Collapsible settings group — a tappable header row that expands to reveal a
+// cluster of related rows.  Keeps long sections (care reminders, exports,
+// backup options) scannable by folding rarely-touched rows behind a single
+// summary row.  Visually matches _actionTile: same icon box, typography, and
+// trailing chevron — the chevron just rotates to point down when open.
+// ─────────────────────────────────────────────────────────────────────────────
+
+class _CollapsibleGroup extends StatefulWidget {
+  final IconData icon;
+  final Color iconColor;
+  final String label;
+
+  /// Optional short, locale-neutral status shown as a pill on the header
+  /// (e.g. "8/8" for how many reminders are on).  Null hides the pill.
+  final String? summary;
+  final Color summaryColor;
+
+  /// Body rows, already interleaved with Dividers by the caller so the
+  /// expanded group is indistinguishable from the surrounding card.
+  final List<Widget> children;
+
+  const _CollapsibleGroup({
+    required this.icon,
+    required this.iconColor,
+    required this.label,
+    required this.children,
+    this.summary,
+    this.summaryColor = AppColors.primary,
+  });
+
+  @override
+  State<_CollapsibleGroup> createState() => _CollapsibleGroupState();
+}
+
+class _CollapsibleGroupState extends State<_CollapsibleGroup> {
+  bool _expanded = false;
+
+  void _toggle() => setState(() => _expanded = !_expanded);
+
+  @override
+  Widget build(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        // `expanded` in the semantics node lets TalkBack / VoiceOver
+        // announce "collapsed" / "expanded" so screen-reader users know
+        // the row is a disclosure, not a navigation target.
+        Semantics(
+          button: true,
+          expanded: _expanded,
+          label: widget.label,
+          child: ListTile(
+            leading: Container(
+              width: 36,
+              height: 36,
+              decoration: BoxDecoration(
+                color: widget.iconColor.withValues(alpha: 0.12),
+                borderRadius: BorderRadius.circular(AppSpacing.radiusSm),
+              ),
+              child: Icon(widget.icon, color: widget.iconColor, size: 18),
+            ),
+            title: Text(widget.label, style: AppTypography.labelLarge(context)),
+            trailing: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                if (widget.summary != null) ...[
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: AppSpacing.xs, vertical: 2),
+                    decoration: BoxDecoration(
+                      color: widget.summaryColor.withValues(alpha: 0.12),
+                      borderRadius:
+                          BorderRadius.circular(AppSpacing.radiusFull),
+                    ),
+                    child: Text(
+                      widget.summary!,
+                      style: AppTypography.bodySmall(context)
+                          .copyWith(color: widget.summaryColor),
+                    ),
+                  ),
+                  const SizedBox(width: AppSpacing.xs),
+                ],
+                AnimatedRotation(
+                  turns: _expanded ? 0.25 : 0.0,
+                  duration: const Duration(milliseconds: 200),
+                  child: Icon(Icons.chevron_right,
+                      color: context.colTextMuted, size: 18),
+                ),
+              ],
+            ),
+            onTap: _toggle,
+          ),
+        ),
+        AnimatedCrossFade(
+          firstChild: const SizedBox(height: 0, width: double.infinity),
+          secondChild: Column(children: widget.children),
+          crossFadeState:
+              _expanded ? CrossFadeState.showSecond : CrossFadeState.showFirst,
+          duration: const Duration(milliseconds: 200),
+          sizeCurve: Curves.easeInOut,
+        ),
+      ],
     );
   }
 }

@@ -5,6 +5,12 @@
 
   "appTitle": "Kultivar",
 
+  "settingsGroupCareReminders": "Izikhumbuzo zokunakekela",
+  "settingsGroupTroubleshooting": "Ukuxazulula izinkinga",
+  "settingsGroupExportByType": "Khipha ngohlobo",
+  "settingsGroupBackupOptions": "Ezinye izinketho ze-backup",
+  "settingsGroupMaintenance": "Ukugcinwa",
+
   "navHome": "Ikhaya",
   "navAnalytics": "Ukuhlaziya",
   "navArchive": "Ingobo-mlando",

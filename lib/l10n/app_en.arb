@@ -3,6 +3,13 @@
   "@@x-author": "Kultivar",
 
   "appTitle": "Kultivar",
+
+  "settingsGroupCareReminders": "Care reminders",
+  "settingsGroupTroubleshooting": "Troubleshooting",
+  "settingsGroupExportByType": "Export by type",
+  "settingsGroupBackupOptions": "More backup options",
+  "settingsGroupMaintenance": "Maintenance",
+
   "@appTitle": {
     "description": "App display name shown in the app bar."
   },
