@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/foundation.dart';
 import 'package:purchases_flutter/purchases_flutter.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -202,22 +204,47 @@ class SubscriptionService extends ChangeNotifier {
 
       final config = PurchasesConfiguration(apiKey);
       await Purchases.configure(config);
+    } catch (e, stack) {
+      // StoreKit / Billing unavailable — fail silently, user stays Free.
+      ErrorReporter.report('SubscriptionService.init', e, stack);
+      _isInitialising = false;
+      notifyListeners();
+      return;
+    }
 
-      // Prefetch both customer info and offerings in parallel.
+    _isInitialising = false;
+    notifyListeners();
+
+    // Boot-time fix (15 s splash hang): the customer-info + offerings
+    // prefetch is NETWORK-bound — RevenueCat API plus a Google Play
+    // Billing connection.  When Billing is slow (or the Play products
+    // aren't configured yet) the pair can block for 10-15 s, and main()
+    // used to await it before the first frame.  configure() above is
+    // local and already exposes RevenueCat's on-device entitlement
+    // cache, so the fresh fetch now runs unawaited in the background
+    // and notifies when the tier resolves.  Until then the user is
+    // treated as Free — the same state every gate already handles.
+    unawaited(_refreshEntitlementsAndOfferings());
+  }
+
+  /// Background refresh of customer info + offerings.  Never awaited on
+  /// the boot path; must swallow its own errors (an uncaught async error
+  /// from an unawaited future would surface as a zone error).
+  Future<void> _refreshEntitlementsAndOfferings() async {
+    try {
       final results = await Future.wait([
         Purchases.getCustomerInfo(),
         Purchases.getOfferings(),
       ]);
-
       _customerInfo = results[0] as CustomerInfo;
       _offerings = results[1] as Offerings;
       _setTier(_resolveTier(_customerInfo));
     } catch (e, stack) {
-      // Network / StoreKit unavailable — fail silently, user stays Free.
-      ErrorReporter.report('SubscriptionService.init', e, stack);
+      // Network unavailable — fail silently, user stays on the cached /
+      // Free tier until the next refresh opportunity.
+      ErrorReporter.report(
+          'SubscriptionService.refreshEntitlements', e, stack);
     }
-
-    _isInitialising = false;
     notifyListeners();
   }
 

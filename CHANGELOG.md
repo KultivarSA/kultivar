@@ -9,6 +9,22 @@ See `BUILD.md` for the release process, version-bump rules, and git tag scheme.
 
 ## [Unreleased]
 
+### Performance
+- **Cold start no longer blocks on RevenueCat's network fetch (~15 s
+  splash hang fixed).**  `main()` awaited `SubscriptionService.init()`,
+  which chained `Purchases.getCustomerInfo()` + `Purchases.getOfferings()`
+  — two network round-trips through Google Play Billing — before the
+  first frame could paint.  With Billing slow (or the Play products not
+  yet configured), boot stalled 10-15 s on the splash.  init() now only
+  awaits the local `Purchases.configure()` (which already surfaces the
+  on-device entitlement cache); the fresh fetch runs unawaited in the
+  background and notifies when the tier resolves.  Until then the user
+  is treated as Free — the same state every feature gate already
+  handles.  Also moved the Android 13+ POST_NOTIFICATIONS permission
+  request out of `main()` into a post-first-frame callback: on a fresh
+  install the system dialog used to render over the splash and block
+  time-to-first-frame until answered.
+
 ### Changed
 - **Settings screen decluttered with collapsible groups.** A new
   reusable `_CollapsibleGroup` widget folds long clusters of rows behind

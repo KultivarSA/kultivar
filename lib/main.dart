@@ -109,8 +109,12 @@ void main() async {
   }
 
   // ── RevenueCat (freemium subscriptions) ───────────────────────────────────
-  // Initialised early so Pro status is available on the first frame.
-  // Fails silently when API keys are still placeholders or when offline.
+  // init() only awaits the LOCAL Purchases.configure() — fast, and it
+  // surfaces RevenueCat's on-device entitlement cache.  The network
+  // refresh (customer info + offerings) runs unawaited inside init()
+  // and notifies listeners when the tier resolves; awaiting it here
+  // used to hold the splash screen for 10-15 s when Play Billing was
+  // slow.  Fails silently when API keys are placeholders or offline.
   final subscriptionService = SubscriptionService();
   await subscriptionService.init();
 
@@ -131,9 +135,11 @@ void main() async {
     // nothing about plugin init should ever be trusted to brick boot.
     try {
       await NotificationService().initialize();
-      // Request Android 13+ POST_NOTIFICATIONS runtime permission.
-      // No-op on iOS (handled via DarwinInitializationSettings) and Android < 13.
-      await NotificationService().requestAndroidPermission();
+      // NOTE: the Android 13+ POST_NOTIFICATIONS permission request
+      // deliberately does NOT happen here.  On a fresh install the
+      // system dialog would render over the splash screen and block
+      // time-to-first-frame until the user answers.  _AppEntryState
+      // requests it in a post-first-frame callback instead.
     } catch (e, stack) {
       ErrorReporter.report('main.notificationInit', e, stack);
     }
@@ -331,6 +337,20 @@ class _AppEntryState extends State<_AppEntry> with WidgetsBindingObserver {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
     _check();
+    // Android 13+ POST_NOTIFICATIONS runtime permission.  Requested
+    // after the first frame (moved out of main()) so a fresh install
+    // paints the UI before the system dialog appears instead of
+    // blocking on the splash screen.  No-op on iOS (handled via
+    // DarwinInitializationSettings) and Android < 13.
+    if (!kIsWeb) {
+      WidgetsBinding.instance.addPostFrameCallback((_) async {
+        try {
+          await NotificationService().requestAndroidPermission();
+        } catch (e, stack) {
+          ErrorReporter.report('appEntry.notifPermission', e, stack);
+        }
+      });
+    }
   }
 
   @override
