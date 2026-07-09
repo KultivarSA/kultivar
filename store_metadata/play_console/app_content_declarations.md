@@ -17,16 +17,32 @@ should track them.
 - **Privacy policy URL:** `https://kultivar.io/privacy.html`
 - **Terms of service URL:** `https://kultivar.io/terms.html`
 
-## App access
+## App access (Sign in details)
 
-**Question:** Is all functionality in your app available without any
-special access (e.g. login credentials, membership)?
+**Question (2026 wording):** Is any part of your app restricted?
+Google's expanded definition counts *payments (one-time products,
+subscriptions, access tiers)* and *biometric authentication* as
+restrictions — both apply to Kultivar.
 
-- **Answer:** **All functionality is available without restrictions.**
-- **Rationale:** Kultivar has no account system. Every feature is
-  reachable from a fresh install. The Pro tiers are paid IAPs but
-  they unlock additional capacity (unlimited plants etc.) — the
-  *core functionality* remains available in the Free tier.
+- **Answer:** **Yes** — because of (1) the paid tiers (Lifetime
+  Local one-time product + Pro Cloud subscription gate capacity,
+  full analytics history, widget, community benchmarks) and (2) the
+  optional biometric App Lock.  Kultivar has **no sign-in / no
+  accounts** of any kind.
+- **Instruction name:** "Paid tiers + optional App Lock (no sign-in
+  exists)".  Username/password: not applicable.
+- **Instructions text (paste):** no sign-in exists; core journaling
+  is fully free; paid tiers purchase through standard Google Play
+  Billing via Settings → Subscription → Upgrade; App Lock
+  (biometric/PIN) is OFF by default and user-enabled only — a fresh
+  install is never locked; tap "Explore with sample data" on the
+  welcome screen to load the full feature surface in <30 s with no
+  registration or payment.
+- **History:** the original draft answered "All functionality is
+  available without restrictions" against Google's older wording.
+  The 2026 form explicitly lists payments/access tiers and biometric
+  auth as "Yes" triggers, so answering No would be a declaration
+  mismatch against a visible paywall + three Play Billing products.
 
 ## Ads
 
