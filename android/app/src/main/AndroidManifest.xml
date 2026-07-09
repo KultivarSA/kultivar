@@ -1,6 +1,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
-    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES"/>
+    <!--
+        READ_EXTERNAL_STORAGE / READ_MEDIA_IMAGES are deliberately NOT
+        declared.  Photo attachment uses image_picker's system photo
+        picker (permission-free on every Android version) and every
+        photo/voice-note/backup lives in app-private storage.  Google
+        Play policy rejects READ_MEDIA_IMAGES declarations from apps
+        with one-off picker access — do not re-add these without a
+        feature that genuinely needs broad media-library access.
+    -->
     <uses-permission android:name="android.permission.USE_BIOMETRIC"/>
     <uses-permission android:name="android.permission.USE_FINGERPRINT"/>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
