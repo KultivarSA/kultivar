@@ -9,6 +9,8 @@ See `BUILD.md` for the release process, version-bump rules, and git tag scheme.
 
 ## [Unreleased]
 
+## [1.0.1] — 2026-07-09
+
 ### Performance
 - **Cold start no longer blocks on RevenueCat's network fetch (~15 s
   splash hang fixed).**  `main()` awaited `SubscriptionService.init()`,
@@ -291,5 +293,6 @@ Initial public release.
 - App Lock with biometrics (Face ID / Touch ID / Android BiometricPrompt)
   + PIN fallback.
 
-[Unreleased]: https://github.com/KultivarSA/kultivar/compare/v1.0.0...HEAD
+[Unreleased]: https://github.com/KultivarSA/kultivar/compare/v1.0.1...HEAD
+[1.0.1]: https://github.com/KultivarSA/kultivar/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/KultivarSA/kultivar/releases/tag/v1.0.0
