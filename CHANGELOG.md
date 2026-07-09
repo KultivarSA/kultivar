@@ -9,6 +9,24 @@ See `BUILD.md` for the release process, version-bump rules, and git tag scheme.
 
 ## [Unreleased]
 
+## [1.0.2] — 2026-07-09
+
+### Changed
+- **Production RevenueCat Android key compiled in** — replaces the
+  Test Store key that shipped in 1.0.0/1.0.1 internal builds.  Real
+  Google Play Billing purchases now resolve; this is the first
+  submission-safe build.
+- **Paywall marks community benchmarks "(soon)"** — the Supabase
+  backend isn't provisioned yet, so the Pro Cloud feature table and
+  the Settings upsell no longer sell benchmarks as live.  Revert when
+  the backend ships.
+
+### Fixed
+- **Dropped `READ_EXTERNAL_STORAGE` + `READ_MEDIA_IMAGES` permissions.**
+  Neither was used: photo attachment goes through the system photo
+  picker and all media lives in app-private storage.  Clears the Play
+  Console photo-permissions declaration entirely.
+
 ## [1.0.1] — 2026-07-09
 
 ### Performance
@@ -293,6 +311,7 @@ Initial public release.
 - App Lock with biometrics (Face ID / Touch ID / Android BiometricPrompt)
   + PIN fallback.
 
-[Unreleased]: https://github.com/KultivarSA/kultivar/compare/v1.0.1...HEAD
+[Unreleased]: https://github.com/KultivarSA/kultivar/compare/v1.0.2...HEAD
+[1.0.2]: https://github.com/KultivarSA/kultivar/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/KultivarSA/kultivar/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/KultivarSA/kultivar/releases/tag/v1.0.0
