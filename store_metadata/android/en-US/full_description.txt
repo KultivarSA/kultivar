@@ -18,7 +18,7 @@ WHY GROWERS USE KULTIVAR
 • Free-form tags on plants and notes — search and group however you like.
 • Backup + restore with AES-256-GCM encrypted ZIPs (passphrase-protected; tampering is detected on decrypt).
 • App Lock with biometrics + PIN fallback.
-• 7 languages out of the box — English, German, Spanish, French, Italian, Dutch, Portuguese.
+• 9 languages out of the box — English, German, Spanish, French, Italian, Dutch, Portuguese, Afrikaans, isiZulu.
 
 PRICING
 
