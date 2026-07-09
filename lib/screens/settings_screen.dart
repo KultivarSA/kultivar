@@ -1589,7 +1589,7 @@ class _SettingsScreenState extends State<SettingsScreen>
                     iconColor: AppColors.accent,
                     label: 'Add cloud features',
                     subtitle:
-                        'Subscribe to Pro Cloud for community data and sync',
+                        'Pro Cloud — community benchmarks and sync, rolling out soon',
                     onTap: () => PaywallScreen.show(ctx),
                   ),
                   Divider(color: ctx.colBorderFaint, height: 1),

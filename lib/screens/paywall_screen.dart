@@ -987,7 +987,7 @@ const _kFeatures = [
   _Feature(Icons.picture_as_pdf_rounded, 'PDF / CSV export',           '✗',       '✓',         '✓'),
   _Feature(Icons.widgets_rounded,        'Home screen widget',         '✗',       '✓',         '✓'),
   _Feature(Icons.lock_outline_rounded,   'Local encrypted backups',    '✓',       '✓',         '✓'),
-  _Feature(Icons.groups_rounded,         'Community percentile data',  '✗',       '✗',         '✓'),
+  _Feature(Icons.groups_rounded,         'Community benchmarks (soon)', '✗',      '✗',         '✓'),
   _Feature(Icons.sync_rounded,           'Cross-device sync (soon)',   '✗',       '✗',         '✓'),
   _Feature(Icons.cloud_upload_rounded,   'Cloud auto-backup (soon)',   '✗',       '✗',         '✓'),
   _Feature(Icons.support_agent_rounded,  'Priority support',           '✗',       'Email',     '✓'),
