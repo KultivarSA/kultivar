@@ -5,6 +5,7 @@ import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:package_info_plus/package_info_plus.dart';
 import 'package:provider/provider.dart';
 
+import '../config/subscription_tier_config.dart';
 import '../config/whats_new_content.dart';
 import '../l10n/app_localizations.dart';
 import '../main.dart';
@@ -14,6 +15,7 @@ import '../models/plant.dart';
 import '../models/plant_note.dart';
 import '../repository/grow_repository.dart';
 import '../services/notification_service.dart';
+import '../services/subscription_service.dart';
 import '../services/telemetry_consent_service.dart';
 import '../services/whats_new_service.dart';
 import '../theme/app_colors.dart';
@@ -24,6 +26,7 @@ import '../widgets/add_expense_sheet.dart';
 import '../widgets/app_sheet.dart';
 import '../widgets/app_toast.dart';
 import '../widgets/demo_banner.dart';
+import '../widgets/pro_gate.dart';
 import '../widgets/strain_autocomplete_field.dart';
 import '../widgets/telemetry_consent_sheet.dart';
 import '../widgets/whats_new_sheet.dart';
@@ -168,6 +171,15 @@ class _ShellScreenState extends State<ShellScreen>
           color: AppColors.primary,
           onTap: () {
             _closeFab();
+            final tier = context.read<SubscriptionService>().tier;
+            if (!FreeTierGate.canAddSpace(tier, repo.growSpaces.length)) {
+              _blockOnLimit(
+                'Free plan includes ${FreeTierLimits.maxSpaces} grow '
+                'space — upgrade for unlimited spaces.',
+                onUpgraded: () => _showAddSpaceSheet(context, repo),
+              );
+              return;
+            }
             _showAddSpaceSheet(context, repo);
           },
         ),
@@ -182,6 +194,15 @@ class _ShellScreenState extends State<ShellScreen>
                 context,
                 'Create a grow space first',
                 type: ToastType.info,
+              );
+              return;
+            }
+            final tier = context.read<SubscriptionService>().tier;
+            if (!FreeTierGate.canAddPlants(tier, repo.plants)) {
+              _blockOnLimit(
+                'Free plan is limited to ${FreeTierLimits.maxActivePlants} '
+                'active plants — upgrade for unlimited plants.',
+                onUpgraded: () => _showAddPlantSheet(context, repo),
               );
               return;
             }
@@ -338,6 +359,18 @@ class _ShellScreenState extends State<ShellScreen>
         ),
       ),
     );
+  }
+
+  // ── Free-tier limit block ─────────────────────
+
+  /// Announces a hit free-tier cap via toast, then opens the paywall.
+  /// If the user upgrades from it, [onUpgraded] resumes the flow they
+  /// were blocked from (e.g. re-opens the add-plant sheet).
+  void _blockOnLimit(String message, {VoidCallback? onUpgraded}) {
+    AppToast.show(context, message, type: ToastType.info);
+    showPaywall(context).then((upgraded) {
+      if (upgraded && mounted) onUpgraded?.call();
+    });
   }
 
   // ── Action sheets ─────────────────────────────

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:provider/provider.dart';
 
+import '../config/subscription_tier_config.dart';
 import '../l10n/app_localizations.dart';
 import '../main.dart';
 import '../models/grow_space.dart';
@@ -16,6 +17,7 @@ import '../services/analytics_service.dart';
 import '../services/hive_service.dart';
 import '../services/insight_notification_bridge.dart';
 import '../services/local_crash_log.dart';
+import '../services/subscription_service.dart';
 import '../services/ui_preferences_service.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_spacing.dart';
@@ -35,6 +37,7 @@ import '../widgets/app_toast.dart';
 import '../widgets/dashboard_stat_card.dart';
 import '../widgets/insights_feed.dart';
 import '../widgets/multi_line_chart.dart';
+import '../widgets/pro_gate.dart';
 import '../widgets/time_window_selector.dart';
 import 'calendar_screen.dart';
 import 'cross_grow_comparison_screen.dart';
@@ -117,17 +120,18 @@ class _DashboardScreenState extends State<DashboardScreen> {
   String? _lastLoggedChartKey;
 
   void _maybeLogChartSnapshot(
+    TimeWindow window,
     List<SeriesPoint> raw,
     List<SeriesPoint> display,
   ) {
-    final key = '${_window.name}|$_smoothingEnabled|'
+    final key = '${window.name}|$_smoothingEnabled|'
         '$_showConfidenceBands|${_hiddenSeries.toList().join(",")}|'
         '${raw.length}|${display.length}';
     if (key == _lastLoggedChartKey) return;
     _lastLoggedChartKey = key;
     LocalCrashLog.info(
       'dashboard.chart',
-      'window=${_window.name} '
+      'window=${window.name} '
           'smoothing=$_smoothingEnabled bands=$_showConfidenceBands '
           'hidden=${_hiddenSeries.join(",")} '
           'demo=${KultivarApp.isDemoModeNotifier.value}\n'
@@ -332,6 +336,19 @@ class _DashboardScreenState extends State<DashboardScreen> {
     final repo = context.watch<GrowRepository>();
     final analytics = context.watch<AnalyticsService>();
 
+    // ── Free-tier history clamp ────────────────
+    // context.select so a live tier change (purchase, restore, expiry
+    // pushed by the CustomerInfoUpdateListener) rebuilds the gates.
+    // Demo mode is exempt: it forces TimeWindow.all so the seeded
+    // 140-day sample history stays visible (screenshot flow above).
+    final tier =
+        context.select<SubscriptionService, SubscriptionTier>((s) => s.tier);
+    final isDemo = KultivarApp.isDemoModeNotifier.value;
+    final effectiveWindow =
+        isDemo ? _window : FreeTierGate.clampTimeWindow(tier, _window);
+    final lockedWindows =
+        isDemo ? const <TimeWindow>{} : FreeTierGate.lockedTimeWindows(tier);
+
     // ── Dashboard stats (STEP 4) ───────────────
     final plants = repo.plants;
 
@@ -479,7 +496,8 @@ class _DashboardScreenState extends State<DashboardScreen> {
     );
 
     // ── Build yield series ────────────────────
-    final rawSeries = buildYieldSeries(repo.plants, repo.growSpaces, _window, repo.harvestLogs);
+    final rawSeries = buildYieldSeries(
+        repo.plants, repo.growSpaces, effectiveWindow, repo.harvestLogs);
 
     final smoothedSeries = applyRollingAverage(rawSeries, windowSize: 3);
 
@@ -491,7 +509,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
     // surfaces the actual values.  Throttled to one dump per chart
     // input combination (window/smoothing/bands/hidden) so a normal
     // browsing session doesn't bloat the log.
-    _maybeLogChartSnapshot(rawSeries, displaySeries);
+    _maybeLogChartSnapshot(effectiveWindow, rawSeries, displaySeries);
 
     // ── Per-space forecasts ───────────────────
     // Group display series by space name, then build a forecast for each
@@ -565,6 +583,13 @@ class _DashboardScreenState extends State<DashboardScreen> {
             onSelected: (action) async {
               switch (action) {
                 case _DashAction.export:
+                  // CSV export is a paid feature (Lifetime + Pro).
+                  if (!context
+                      .read<SubscriptionService>()
+                      .hasUnlimitedFeatures) {
+                    await showPaywall(context);
+                    return;
+                  }
                   await CsvExportService.exportHarvestLogs(
                     repo.harvestLogs,
                     repo.plants,
@@ -587,17 +612,25 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   );
               }
             },
-            itemBuilder: (_) => const [
+            itemBuilder: (_) => [
               PopupMenuItem(
                 value: _DashAction.export,
                 child: ListTile(
-                  leading: Icon(Icons.download_rounded),
-                  title: Text('Export CSV'),
+                  leading: const Icon(Icons.download_rounded),
+                  title: Row(
+                    children: [
+                      const Text('Export CSV'),
+                      if (!tier.hasUnlimitedFeatures) ...[
+                        const SizedBox(width: AppSpacing.xs),
+                        const ProBadge(),
+                      ],
+                    ],
+                  ),
                   contentPadding: EdgeInsets.zero,
                   dense: true,
                 ),
               ),
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: _DashAction.history,
                 child: ListTile(
                   leading: Icon(Icons.history_rounded),
@@ -606,7 +639,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   dense: true,
                 ),
               ),
-              PopupMenuItem(
+              const PopupMenuItem(
                 value: _DashAction.compare,
                 child: ListTile(
                   leading: Icon(Icons.compare_arrows_rounded),
@@ -626,7 +659,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
           children: [
             // ── Time window ─────────────────────
             TimeWindowSelector(
-              selected: _window,
+              selected: effectiveWindow,
+              locked: lockedWindows,
+              onLockedTap: () => showPaywall(context),
               onChanged: (w) {
                 setState(() => _window = w);
                 UiPreferencesService.saveTimeWindow(w);
@@ -820,7 +855,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               duration: const Duration(milliseconds: 300),
               child: MultiLineChart(
                 key: ValueKey(
-                  '$_window$_smoothingEnabled$_showConfidenceBands'
+                  '$effectiveWindow$_smoothingEnabled$_showConfidenceBands'
                   '${_hiddenSeries.join()}',
                 ),
                 series: displaySeries,
@@ -904,8 +939,9 @@ class _DashboardScreenState extends State<DashboardScreen> {
             // ── Insights ────────────────────────
             InsightsFeed(
               insights: insights,
-              timeWindowLabel:
-                  _window.label == 'All' ? 'All time' : 'Last ${_window.label}',
+              timeWindowLabel: effectiveWindow.label == 'All'
+                  ? 'All time'
+                  : 'Last ${effectiveWindow.label}',
               onNotify: (msg) async {
                 AppToast.show(context, msg, type: ToastType.info);
                 // Use firstOrNull — insights may have refreshed (time window

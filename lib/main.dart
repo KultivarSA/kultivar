@@ -384,9 +384,16 @@ class _AppEntryState extends State<_AppEntry> with WidgetsBindingObserver {
   }
 
   /// Pushes the latest env + care summary to the home-screen widget.
+  /// The widget is a paid feature (Lifetime + Pro) — on Free we push a
+  /// locked placeholder instead so no live data reaches it and nothing
+  /// stale lingers after a downgrade.
   void _refreshHomeWidget() {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
+      if (!context.read<SubscriptionService>().hasUnlimitedFeatures) {
+        WidgetUpdateService.writeLocked();
+        return;
+      }
       final repo = context.read<GrowRepository>();
       WidgetUpdateService.update(
         spaces: repo.growSpaces,

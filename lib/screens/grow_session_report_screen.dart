@@ -18,6 +18,7 @@ import '../repository/grow_repository.dart';
 import '../services/community_service.dart';
 import '../services/hive_service.dart';
 import '../services/review_prompt_service.dart';
+import '../services/subscription_service.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_spacing.dart';
 import '../theme/app_typography.dart';
@@ -27,6 +28,7 @@ import '../utils/plant_environment_analytics.dart';
 import '../widgets/harvest_quality_sheet.dart';
 import '../widgets/health_score_card.dart';
 import '../widgets/plant_environment_card.dart';
+import '../widgets/pro_gate.dart';
 
 class GrowSessionReportScreen extends StatelessWidget {
   final Plant plant;
@@ -103,6 +105,12 @@ class GrowSessionReportScreen extends StatelessWidget {
             icon: const Icon(Icons.share_rounded),
             tooltip: 'Share PDF',
             onPressed: () async {
+              // PDF reports are a paid feature (Lifetime + Pro).
+              if (!context.read<SubscriptionService>().hasUnlimitedFeatures) {
+                await showPaywall(context);
+                return;
+              }
+
               // Task #87 — Capture the GrowRepository reference *before*
               // we await any async work so we don't drag a BuildContext
               // across the share-sheet gap (which trips
@@ -138,17 +146,24 @@ class GrowSessionReportScreen extends StatelessWidget {
           IconButton(
             icon: const Icon(Icons.picture_as_pdf, color: AppColors.primary),
             tooltip: 'Export PDF',
-            onPressed: () => _exportPdf(
-              context: context,
-              plant: currentPlant,
-              harvestLog: harvestLog,
-              notes: notes,
-              space: space,
-              insights: insights,
-              recommendations: recommendations,
-              daysTotal: daysTotal,
-              yieldPct: yieldPct,
-            ),
+            onPressed: () {
+              // PDF reports are a paid feature (Lifetime + Pro).
+              if (!context.read<SubscriptionService>().hasUnlimitedFeatures) {
+                showPaywall(context);
+                return;
+              }
+              _exportPdf(
+                context: context,
+                plant: currentPlant,
+                harvestLog: harvestLog,
+                notes: notes,
+                space: space,
+                insights: insights,
+                recommendations: recommendations,
+                daysTotal: daysTotal,
+                yieldPct: yieldPct,
+              );
+            },
           ),
         ],
       ),

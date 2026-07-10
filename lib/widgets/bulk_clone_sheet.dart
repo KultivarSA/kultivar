@@ -1,14 +1,17 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../config/subscription_tier_config.dart';
 import '../models/grow_space.dart';
 import '../models/plant.dart';
 import '../repository/grow_repository.dart';
+import '../services/subscription_service.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_spacing.dart';
 import '../theme/app_typography.dart';
 import 'app_sheet.dart';
 import 'app_toast.dart';
+import 'pro_gate.dart';
 
 /// F4 — Bulk-clone sheet.
 ///
@@ -101,6 +104,14 @@ class _BulkCloneSheetBodyState extends State<_BulkCloneSheetBody> {
   Widget build(BuildContext context) {
     final repo = context.watch<GrowRepository>();
     final mediaQuery = MediaQuery.of(context);
+
+    // Free-tier plant cap: clones are new plants, so the batch must fit
+    // inside the remaining slots.  Watched (not read) so a purchase made
+    // from the banner's paywall unlocks the button without reopening.
+    final tier =
+        context.select<SubscriptionService, SubscriptionTier>((s) => s.tier);
+    final capBlocked =
+        !FreeTierGate.canAddPlants(tier, repo.plants, count: _count);
 
     return AppSheet(
       title: 'Take Clones',
@@ -308,6 +319,15 @@ class _BulkCloneSheetBodyState extends State<_BulkCloneSheetBody> {
 
         const SizedBox(height: AppSpacing.lg),
 
+        if (capBlocked) ...[
+          const ProLimitBanner(
+            message: 'Free plan is limited to '
+                '${FreeTierLimits.maxActivePlants} active plants — '
+                'this batch would exceed it.',
+          ),
+          const SizedBox(height: AppSpacing.sm),
+        ],
+
         SizedBox(
           width: double.infinity,
           child: ElevatedButton.icon(
@@ -318,7 +338,9 @@ class _BulkCloneSheetBodyState extends State<_BulkCloneSheetBody> {
               foregroundColor: Colors.white,
               padding: const EdgeInsets.symmetric(vertical: 14),
             ),
-            onPressed: _spaceId == null ? null : () => _create(context, repo),
+            onPressed: _spaceId == null || capBlocked
+                ? null
+                : () => _create(context, repo),
           ),
         ),
 
@@ -343,6 +365,14 @@ class _BulkCloneSheetBodyState extends State<_BulkCloneSheetBody> {
     final m = widget.mother;
     final spaceId = _spaceId;
     if (spaceId == null) return;
+    // Re-check the free-tier cap at commit time — the button is disabled
+    // when blocked, but plants could have been added while the sheet sat
+    // open (e.g. another device restoring a backup).
+    final tier = context.read<SubscriptionService>().tier;
+    if (!FreeTierGate.canAddPlants(tier, repo.plants, count: _count)) {
+      showPaywall(context);
+      return;
+    }
     // Guard: the user could have picked a stale space ID if the space was
     // deleted in another tab while the sheet was open.
     final spaceExists = repo.growSpaces.any((s) => s.id == spaceId);

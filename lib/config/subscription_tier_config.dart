@@ -8,6 +8,8 @@
 
 import 'package:flutter/foundation.dart';
 
+import '../models/plant.dart';
+import '../models/time_window.dart';
 import '../services/subscription_service.dart';
 
 // ─────────────────────────────────────────────────────────────────────────────
@@ -35,6 +37,93 @@ class FreeTierLimits {
   static const Duration analyticsHistoryWindow = Duration(days: 60);
 
   const FreeTierLimits._();
+}
+
+// ─────────────────────────────────────────────────────────────────────────────
+// Free-tier gate logic
+//
+// Pure functions the call-site gates (FAB actions, clone sheet, analytics
+// windows) delegate to, so the "what counts toward a cap" rules live in one
+// testable place.  Two invariants every caller relies on:
+//
+//   1. Archived / completed plants NEVER count toward the plant cap — the
+//      limit must not get more punishing the longer a user grows.
+//   2. Existing over-limit data is never deleted or hidden.  A user who
+//      created 5 plants before the caps shipped keeps all 5; the gates only
+//      refuse to create NEW entities while over the cap.  (This is also why
+//      backup restore and the repository itself stay ungated — enforcement
+//      happens at the UI creation flows only.)
+// ─────────────────────────────────────────────────────────────────────────────
+
+class FreeTierGate {
+  /// Plants that count toward [FreeTierLimits.maxActivePlants].
+  /// `isArchived` covers both completed and removed/culled plants.
+  static int activePlantCount(Iterable<Plant> plants) =>
+      plants.where((p) => !p.isArchived).length;
+
+  /// True when [tier] may create [count] more plant(s) on top of [existing].
+  static bool canAddPlants(
+    SubscriptionTier tier,
+    Iterable<Plant> existing, {
+    int count = 1,
+  }) {
+    if (tier.hasUnlimitedFeatures) return true;
+    return activePlantCount(existing) + count <= FreeTierLimits.maxActivePlants;
+  }
+
+  /// True when the user is at (or past) the free plant cap — drives the
+  /// ProLimitBanner on the Home screen.  Always false on paid tiers.
+  static bool atPlantCap(SubscriptionTier tier, Iterable<Plant> existing) =>
+      !tier.hasUnlimitedFeatures &&
+      activePlantCount(existing) >= FreeTierLimits.maxActivePlants;
+
+  /// True when [tier] may create another grow space.
+  static bool canAddSpace(SubscriptionTier tier, int existingSpaceCount) {
+    if (tier.hasUnlimitedFeatures) return true;
+    return existingSpaceCount < FreeTierLimits.maxSpaces;
+  }
+
+  /// Clamps a chart-history window expressed in days (null / negative =
+  /// "all time") to [FreeTierLimits.analyticsHistoryWindow] on Free.
+  /// Paid tiers pass through unchanged.
+  static int? clampHistoryDays(SubscriptionTier tier, int? requestedDays) {
+    if (tier.hasUnlimitedFeatures) return requestedDays;
+    final cap = FreeTierLimits.analyticsHistoryWindow.inDays;
+    if (requestedDays == null || requestedDays < 0 || requestedDays > cap) {
+      return cap;
+    }
+    return requestedDays;
+  }
+
+  /// [TimeWindow] flavour of [clampHistoryDays] for the dashboard selector.
+  /// On Free, windows wider than the cap fall back to the widest preset
+  /// that still fits inside it.
+  static TimeWindow clampTimeWindow(
+      SubscriptionTier tier, TimeWindow requested) {
+    if (tier.hasUnlimitedFeatures) return requested;
+    final cap = FreeTierLimits.analyticsHistoryWindow.inDays;
+    final days = requested.days;
+    if (days != null && days <= cap) return requested;
+    TimeWindow widest = TimeWindow.values.first;
+    for (final w in TimeWindow.values) {
+      final d = w.days;
+      if (d != null && d <= cap && d > (widest.days ?? -1)) widest = w;
+    }
+    return widest;
+  }
+
+  /// Window presets [tier] may NOT select — rendered locked in the
+  /// selector, tapping them routes to the paywall.
+  static Set<TimeWindow> lockedTimeWindows(SubscriptionTier tier) {
+    if (tier.hasUnlimitedFeatures) return const {};
+    final cap = FreeTierLimits.analyticsHistoryWindow.inDays;
+    return {
+      for (final w in TimeWindow.values)
+        if (w.days == null || w.days! > cap) w,
+    };
+  }
+
+  const FreeTierGate._();
 }
 
 // ─────────────────────────────────────────────────────────────────────────────

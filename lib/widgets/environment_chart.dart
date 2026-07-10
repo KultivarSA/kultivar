@@ -2,15 +2,19 @@ import 'dart:math';
 
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../config/subscription_tier_config.dart';
 import '../models/environment_log.dart';
 import '../models/grow_space.dart';
+import '../services/subscription_service.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_spacing.dart';
 import '../theme/app_typography.dart';
 import '../utils/date_format.dart';
 import '../utils/temp_format.dart';
 import 'chart_theme.dart';
+import 'pro_gate.dart';
 
 class EnvironmentChart extends StatefulWidget {
   final List<EnvironmentLog> logs;
@@ -30,19 +34,25 @@ class _EnvironmentChartState extends State<EnvironmentChart> {
   // Time-window selector state.
   String _range = '30d'; // '7d' | '30d' | 'all'
 
-  // Returns logs sorted oldest → newest and clipped to the chosen window.
-  List<EnvironmentLog> get _filtered {
+  // Returns logs sorted oldest → newest and clipped to the chosen window,
+  // itself clamped to the tier's analytics-history allowance ('all' and
+  // any window past 60 days collapse to 60 days on Free).
+  List<EnvironmentLog> _filtered(SubscriptionTier tier) {
     final sorted = [...widget.logs]
       ..sort((a, b) => a.recordedAt.compareTo(b.recordedAt));
-    if (_range == 'all') return sorted;
-    final days = _range == '7d' ? 7 : 30;
+    final requested = _range == 'all' ? null : (_range == '7d' ? 7 : 30);
+    final days = FreeTierGate.clampHistoryDays(tier, requested);
+    if (days == null) return sorted;
     final cutoff = DateTime.now().subtract(Duration(days: days));
     return sorted.where((l) => l.recordedAt.isAfter(cutoff)).toList();
   }
 
   @override
   Widget build(BuildContext context) {
-    final logs = _filtered;
+    final tier =
+        context.select<SubscriptionService, SubscriptionTier>((s) => s.tier);
+    final logs = _filtered(tier);
+    final allLocked = !tier.hasUnlimitedFeatures;
 
     // Need at least two points to draw a line.
     final hasTempData = logs.where((l) => l.temperature != null).length >= 2;
@@ -89,7 +99,7 @@ class _EnvironmentChartState extends State<EnvironmentChart> {
               const SizedBox(width: AppSpacing.xs),
               _rangeChip(context, '30d'),
               const SizedBox(width: AppSpacing.xs),
-              _rangeChip(context, 'all'),
+              _rangeChip(context, 'all', locked: allLocked),
             ],
           ),
 
@@ -286,10 +296,13 @@ class _EnvironmentChartState extends State<EnvironmentChart> {
 
   // ── Range chip ────────────────────────────────
 
-  Widget _rangeChip(BuildContext context, String range) {
+  Widget _rangeChip(BuildContext context, String range,
+      {bool locked = false}) {
     final selected = _range == range;
     return GestureDetector(
-      onTap: () => setState(() => _range = range),
+      onTap: locked
+          ? () => showPaywall(context)
+          : () => setState(() => _range = range),
       child: AnimatedContainer(
         duration: const Duration(milliseconds: 180),
         padding:
@@ -301,12 +314,22 @@ class _EnvironmentChartState extends State<EnvironmentChart> {
             color: selected ? AppColors.primary : context.colBorder,
           ),
         ),
-        child: Text(
-          range == 'all' ? 'All' : range.toUpperCase(),
-          style: AppTypography.labelSmall(context).copyWith(
-            color: selected ? Colors.black : context.colTextSecondary,
-            fontSize: 11,
-          ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            if (locked) ...[
+              const Icon(Icons.workspace_premium_rounded,
+                  size: 11, color: AppColors.accent),
+              const SizedBox(width: 3),
+            ],
+            Text(
+              range == 'all' ? 'All' : range.toUpperCase(),
+              style: AppTypography.labelSmall(context).copyWith(
+                color: selected ? Colors.black : context.colTextSecondary,
+                fontSize: 11,
+              ),
+            ),
+          ],
         ),
       ),
     );

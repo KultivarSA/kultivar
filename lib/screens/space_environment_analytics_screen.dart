@@ -1,8 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:provider/provider.dart';
 
+import '../config/subscription_tier_config.dart';
 import '../models/environment_log.dart';
 import '../models/grow_space.dart';
 import '../models/plant.dart';
+import '../services/subscription_service.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_spacing.dart';
 import '../theme/app_typography.dart';
@@ -10,6 +13,7 @@ import '../utils/plant_environment_analytics.dart';
 import '../utils/temp_format.dart';
 import '../utils/vpd_analytics.dart';
 import '../widgets/app_card.dart';
+import '../widgets/pro_gate.dart';
 
 // ── Aggregated per-phase stats ────────────────────────────────────────────────
 //
@@ -93,8 +97,20 @@ class _SpaceEnvironmentAnalyticsScreenState
 
   // ── Data helpers ──────────────────────────────────────────────────────────
 
+  /// Free tier only sees [FreeTierLimits.analyticsHistoryWindow] of
+  /// history — every section on this screen (headline stats, streaks,
+  /// phase breakdown, per-plant VPD) reads through this clamp so the
+  /// paywall's "60 days" row is enforced uniformly.  Paid tiers get
+  /// [widget.logs] back untouched.
+  List<EnvironmentLog> _tierClampedLogs(SubscriptionTier tier) {
+    final capDays = FreeTierGate.clampHistoryDays(tier, null);
+    if (capDays == null) return widget.logs;
+    final cutoff = DateTime.now().subtract(Duration(days: capDays));
+    return widget.logs.where((l) => l.recordedAt.isAfter(cutoff)).toList();
+  }
+
   /// All logs for this space, newest-first.
-  List<EnvironmentLog> _spaceLogs() => widget.logs
+  List<EnvironmentLog> _spaceLogs(List<EnvironmentLog> logs) => logs
       .where((l) => l.growSpaceId == widget.space.id)
       .toList()
     ..sort((a, b) => b.recordedAt.compareTo(a.recordedAt));
@@ -155,10 +171,12 @@ class _SpaceEnvironmentAnalyticsScreenState
   }
 
   /// Pairs each plant with its VPD summary; omits plants with insufficient data.
-  List<(Plant, PlantVpdSummary)> _plantSummaries() => widget.plants
-      .map((p) => (p, computePlantVpdAnalytics(p, widget.logs)))
-      .where((pair) => pair.$2.hasData)
-      .toList();
+  List<(Plant, PlantVpdSummary)> _plantSummaries(
+          List<EnvironmentLog> logs) =>
+      widget.plants
+          .map((p) => (p, computePlantVpdAnalytics(p, logs)))
+          .where((pair) => pair.$2.hasData)
+          .toList();
 
   /// Returns the current streak (consecutive equal-status readings from latest).
   ({int streak, bool inRange})? _currentStreak(List<EnvironmentLog> logs) {
@@ -202,7 +220,13 @@ class _SpaceEnvironmentAnalyticsScreenState
 
   @override
   Widget build(BuildContext context) {
-    final allLogs = _spaceLogs();
+    // context.select so a live tier change re-clamps immediately.
+    final tier =
+        context.select<SubscriptionService, SubscriptionTier>((s) => s.tier);
+    final logs = _tierClampedLogs(tier);
+    final allTimeLocked = !tier.hasUnlimitedFeatures;
+
+    final allLogs = _spaceLogs(logs);
     final winLogs = _windowed(allLogs);
     final pct = _optimalPct(winLogs);
     final avgT = _avgTemp(winLogs);
@@ -211,7 +235,7 @@ class _SpaceEnvironmentAnalyticsScreenState
     final hasPhaseData = phases.values.any((a) => a.hasData);
     final streak = _currentStreak(allLogs);
     final longest = _longestInRange(allLogs);
-    final summaries = _plantSummaries();
+    final summaries = _plantSummaries(logs);
 
     return Scaffold(
       appBar: AppBar(
@@ -238,7 +262,7 @@ class _SpaceEnvironmentAnalyticsScreenState
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   // ── Time window selector ──────────
-                  _buildWindowSelector(context),
+                  _buildWindowSelector(context, allTimeLocked),
                   const SizedBox(height: AppSpacing.lg),
 
                   // ── Headline stats ────────────────
@@ -275,7 +299,7 @@ class _SpaceEnvironmentAnalyticsScreenState
                           plant: pair.$1,
                           summary: pair.$2,
                           space: widget.space,
-                          logs: widget.logs,
+                          logs: logs,
                         ),
                       ),
                     ),
@@ -316,14 +340,19 @@ class _SpaceEnvironmentAnalyticsScreenState
 
   // ── Window selector ───────────────────────────────────────────────────────
 
-  Widget _buildWindowSelector(BuildContext context) {
+  Widget _buildWindowSelector(BuildContext context, bool allTimeLocked) {
     return Row(
       children: _windows.map((opt) {
         final selected = _windowDays == opt.days;
+        // "All time" exceeds the free tier's 60-day analytics window —
+        // the chip stays visible but routes to the paywall.
+        final locked = allTimeLocked && opt.days < 0;
         return Padding(
           padding: const EdgeInsets.only(right: AppSpacing.xs),
           child: GestureDetector(
-            onTap: () => setState(() => _windowDays = opt.days),
+            onTap: locked
+                ? () => showPaywall(context)
+                : () => setState(() => _windowDays = opt.days),
             child: AnimatedContainer(
               duration: const Duration(milliseconds: 160),
               padding:
@@ -340,13 +369,24 @@ class _SpaceEnvironmentAnalyticsScreenState
                       : context.colBorder,
                 ),
               ),
-              child: Text(
-                opt.label,
-                style: AppTypography.labelLarge(context).copyWith(
-                  color:
-                      selected ? AppColors.secondary : context.colTextMuted,
-                  fontSize: 12,
-                ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  if (locked) ...[
+                    const Icon(Icons.workspace_premium_rounded,
+                        size: 12, color: AppColors.accent),
+                    const SizedBox(width: 4),
+                  ],
+                  Text(
+                    opt.label,
+                    style: AppTypography.labelLarge(context).copyWith(
+                      color: selected
+                          ? AppColors.secondary
+                          : context.colTextMuted,
+                      fontSize: 12,
+                    ),
+                  ),
+                ],
               ),
             ),
           ),
