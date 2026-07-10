@@ -10,6 +10,32 @@
   "settingsGroupBackupOptions": "More backup options",
   "settingsGroupMaintenance": "Maintenance",
 
+  "freeTierSpaceLimitMessage": "Free plan includes {count} grow space — upgrade for unlimited spaces.",
+  "@freeTierSpaceLimitMessage": {
+    "description": "Toast when a Free user tries to add a grow space past the cap.",
+    "placeholders": { "count": { "type": "int", "example": "1" } }
+  },
+  "freeTierPlantLimitMessage": "Free plan is limited to {count} active plants — upgrade for unlimited plants.",
+  "@freeTierPlantLimitMessage": {
+    "description": "Toast when a Free user tries to add a plant past the cap.",
+    "placeholders": { "count": { "type": "int", "example": "3" } }
+  },
+  "freeTierCloneBatchMessage": "Free plan is limited to {count} active plants — this batch would exceed it.",
+  "@freeTierCloneBatchMessage": {
+    "description": "Banner in the bulk-clone sheet when the batch would exceed the free plant cap.",
+    "placeholders": { "count": { "type": "int", "example": "3" } }
+  },
+  "freeTierHomeCapBanner": "You've reached the free plan's {count}-plant limit.",
+  "@freeTierHomeCapBanner": {
+    "description": "Home-screen banner shown while a Free user is at the plant cap.",
+    "placeholders": { "count": { "type": "int", "example": "3" } }
+  },
+  "widgetLockedUpgradeHint": "Widget is a Pro feature — upgrade in the app",
+  "proGateExportFeature": "PDF / CSV Export",
+  "proGateExportDescription": "Export your plants, harvests, logs and expenses as CSV files and PDF reports.",
+  "dashboardExportCsv": "Export CSV",
+  "proGateUpgradeAction": "Upgrade",
+
   "@appTitle": {
     "description": "App display name shown in the app bar."
   },

@@ -1,7 +1,7 @@
 {
   "@@locale": "zu",
   "@@x-author": "Kultivar (F12 — South Africa expansion)",
-  "@@x-review-note": "⚠ MANDATORY pre-release native-speaker review.  isiZulu is a Bantu language with noun-class agreement that English-trained translators routinely get subtly wrong; cannabis-specific terminology in particular (curing, strain, IPM, VPD) lacks canonical isiZulu equivalents and tends to be code-switched to English in real grower conversation.  The translation below favours readability over literary purity — short, declarative phrasing common in modern South African mobile-app vernacular — but it is NOT a substitute for review by a fluent isiZulu UX writer.  Specific terms to flag:  • 'insangu' is the historical isiZulu word for cannabis (Apple/Google listings prefer this over loanwords); kept where the word 'cannabis' would appear in the English source.  • 'ukuvuthwa' is used for 'curing' (verb sense 'to ripen / mature') — closest semantic match; growers may prefer the English 'curing' code-switched.  • 'I-VPD' / 'i-IPM' kept as English loanwords with noun-class i- prefix — standard modern Zulu pattern for technical acronyms.",
+  "@@x-review-note": "NATIVE-SPEAKER REVIEW PASSED 2026-07-10 — including the flagged terms ('insangu' for cannabis, 'ukuvuthwa' for curing, i-prefixed loanwords for technical acronyms), all approved.  Original caveats retained for future contributors: isiZulu noun-class agreement is easy to get subtly wrong; favour short declarative phrasing common in SA mobile-app vernacular.  Keys added AFTER the review (translated in-house following the reviewed patterns; spot-check at next review opportunity): freeTierSpaceLimitMessage, freeTierPlantLimitMessage, freeTierCloneBatchMessage, freeTierHomeCapBanner, widgetLockedUpgradeHint, proGateExportFeature, proGateExportDescription, dashboardExportCsv, proGateUpgradeAction.",
 
   "appTitle": "Kultivar",
 
@@ -10,6 +10,16 @@
   "settingsGroupExportByType": "Khipha ngohlobo",
   "settingsGroupBackupOptions": "Ezinye izinketho ze-backup",
   "settingsGroupMaintenance": "Ukugcinwa",
+
+  "freeTierSpaceLimitMessage": "Uhlelo lwamahhala lufaka indawo yokukhulisa engu-{count} — thuthukisa ukuze uthole izindawo ezingenamkhawulo.",
+  "freeTierPlantLimitMessage": "Uhlelo lwamahhala lugcina ezitshalweni ezisebenzayo ezingu-{count} — thuthukisa ukuze uthole izitshalo ezingenamkhawulo.",
+  "freeTierCloneBatchMessage": "Uhlelo lwamahhala lugcina ezitshalweni ezisebenzayo ezingu-{count} — le ngqumbi izokweqa umkhawulo.",
+  "freeTierHomeCapBanner": "Usufinyelele umkhawulo wezitshalo ezingu-{count} wohlelo lwamahhala.",
+  "widgetLockedUpgradeHint": "I-widget iyisici se-Pro — thuthukisa ku-app",
+  "proGateExportFeature": "Ukukhipha i-PDF / CSV",
+  "proGateExportDescription": "Khipha izitshalo, izivuno, amalogu nezindleko zakho njengamafayela e-CSV nemibiko ye-PDF.",
+  "dashboardExportCsv": "Khipha i-CSV",
+  "proGateUpgradeAction": "Thuthukisa",
 
   "navHome": "Ikhaya",
   "navAnalytics": "Ukuhlaziya",

@@ -8,6 +8,16 @@
   "settingsGroupBackupOptions": "Mais opções de backup",
   "settingsGroupMaintenance": "Manutenção",
 
+  "freeTierSpaceLimitMessage": "O plano gratuito inclui {count} espaço de cultivo — faça upgrade para espaços ilimitados.",
+  "freeTierPlantLimitMessage": "O plano gratuito está limitado a {count} plantas ativas — faça upgrade para plantas ilimitadas.",
+  "freeTierCloneBatchMessage": "O plano gratuito está limitado a {count} plantas ativas — este lote excederia o limite.",
+  "freeTierHomeCapBanner": "Atingiu o limite de {count} plantas do plano gratuito.",
+  "widgetLockedUpgradeHint": "O widget é uma função Pro — faça upgrade na app",
+  "proGateExportFeature": "Exportação PDF / CSV",
+  "proGateExportDescription": "Exporte as suas plantas, colheitas, registos e despesas como ficheiros CSV e relatórios PDF.",
+  "dashboardExportCsv": "Exportar CSV",
+  "proGateUpgradeAction": "Fazer upgrade",
+
   "navHome": "Início",
   "navAnalytics": "Análise",
   "navArchive": "Arquivo",

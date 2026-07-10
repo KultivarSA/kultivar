@@ -9,6 +9,22 @@ See `BUILD.md` for the release process, version-bump rules, and git tag scheme.
 
 ## [Unreleased]
 
+### Changed
+- **Free-tier gate copy localized across all 9 locales.**  The nine
+  monetization strings the enforcement work introduced (space/plant cap
+  toasts, home + clone-batch limit banners, export lock card, widget
+  upgrade hint, dashboard "Export CSV", the banner's "Upgrade" action)
+  moved from hardcoded English into the ARB pipeline, reusing each
+  locale's reviewed vocabulary (de "Growraum", af "kweekruimte",
+  zu "indawo yokukhulisa", …).  `WidgetUpdateService.writeLocked` gained
+  an `upgradeHint` parameter so the context-free service can receive a
+  localized string from its caller.
+- **Afrikaans + isiZulu native-speaker review recorded as PASSED
+  (2026-07-10)** in both ARB `@@x-review-note` headers — including the
+  flagged cannabis terms ('insangu', 'ukuvuthwa', i-prefixed loanwords).
+  The nine post-review keys above are listed there for spot-check at the
+  next review opportunity.
+
 ### Added
 - **Free-tier limits are now enforced** — the paywall's feature matrix
   was previously aspirational; every gate existed but nothing called it.

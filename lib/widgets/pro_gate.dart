@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../l10n/app_localizations.dart';
 import '../screens/paywall_screen.dart';
 import '../services/subscription_service.dart';
 import '../theme/app_colors.dart';
@@ -375,7 +376,7 @@ class ProLimitBanner extends StatelessWidget {
             ),
             const SizedBox(width: AppSpacing.sm),
             Text(
-              'Upgrade →',
+              '${AppLocalizations.of(context).proGateUpgradeAction} →',
               style: AppTypography.bodySmall(context).copyWith(
                 color: AppColors.accent,
                 fontSize: 12,

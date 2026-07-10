@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../config/subscription_tier_config.dart';
+import '../l10n/app_localizations.dart';
 import '../models/grow_space.dart';
 import '../models/plant.dart';
 import '../repository/grow_repository.dart';
@@ -320,10 +321,9 @@ class _BulkCloneSheetBodyState extends State<_BulkCloneSheetBody> {
         const SizedBox(height: AppSpacing.lg),
 
         if (capBlocked) ...[
-          const ProLimitBanner(
-            message: 'Free plan is limited to '
-                '${FreeTierLimits.maxActivePlants} active plants — '
-                'this batch would exceed it.',
+          ProLimitBanner(
+            message: AppLocalizations.of(context)
+                .freeTierCloneBatchMessage(FreeTierLimits.maxActivePlants),
           ),
           const SizedBox(height: AppSpacing.sm),
         ],

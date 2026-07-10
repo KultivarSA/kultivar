@@ -1,7 +1,7 @@
 {
   "@@locale": "af",
   "@@x-author": "Kultivar (F12 — South Africa expansion)",
-  "@@x-review-note": "Afrikaans translation derived from the Dutch source by Germanic-cognate substitution. Reads naturally to a fluent Afrikaans speaker BUT should be reviewed by a native speaker before public release — particularly cannabis-specific terminology (curing / strain / IPM) which lacks a single canonical Afrikaans equivalent and tends to vary by region.",
+  "@@x-review-note": "NATIVE-SPEAKER REVIEW PASSED 2026-07-10. Original note: translation derived from the Dutch source by Germanic-cognate substitution; cannabis-specific terminology (curing / strain / IPM) flagged for review — all approved. Keys added AFTER the review (translated in-house, reusing reviewed vocabulary; spot-check at next review opportunity): freeTierSpaceLimitMessage, freeTierPlantLimitMessage, freeTierCloneBatchMessage, freeTierHomeCapBanner, widgetLockedUpgradeHint, proGateExportFeature, proGateExportDescription, dashboardExportCsv, proGateUpgradeAction.",
 
   "appTitle": "Kultivar",
 
@@ -10,6 +10,16 @@
   "settingsGroupExportByType": "Voer uit volgens tipe",
   "settingsGroupBackupOptions": "Meer rugsteun-opsies",
   "settingsGroupMaintenance": "Onderhoud",
+
+  "freeTierSpaceLimitMessage": "Die gratis plan sluit {count} kweekruimte in — gradeer op vir onbeperkte ruimtes.",
+  "freeTierPlantLimitMessage": "Die gratis plan is beperk tot {count} aktiewe plante — gradeer op vir onbeperkte plante.",
+  "freeTierCloneBatchMessage": "Die gratis plan is beperk tot {count} aktiewe plante — hierdie groep sal die limiet oorskry.",
+  "freeTierHomeCapBanner": "Jy het die gratis plan se limiet van {count} plante bereik.",
+  "widgetLockedUpgradeHint": "Die widget is 'n Pro-funksie — gradeer op in die app",
+  "proGateExportFeature": "PDF/CSV-uitvoer",
+  "proGateExportDescription": "Voer jou plante, oeste, logs en uitgawes uit as CSV-lêers en PDF-verslae.",
+  "dashboardExportCsv": "Voer CSV uit",
+  "proGateUpgradeAction": "Gradeer op",
 
   "navHome": "Tuis",
   "navAnalytics": "Analise",

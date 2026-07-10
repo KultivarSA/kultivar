@@ -174,8 +174,7 @@ class _ShellScreenState extends State<ShellScreen>
             final tier = context.read<SubscriptionService>().tier;
             if (!FreeTierGate.canAddSpace(tier, repo.growSpaces.length)) {
               _blockOnLimit(
-                'Free plan includes ${FreeTierLimits.maxSpaces} grow '
-                'space — upgrade for unlimited spaces.',
+                l.freeTierSpaceLimitMessage(FreeTierLimits.maxSpaces),
                 onUpgraded: () => _showAddSpaceSheet(context, repo),
               );
               return;
@@ -200,8 +199,7 @@ class _ShellScreenState extends State<ShellScreen>
             final tier = context.read<SubscriptionService>().tier;
             if (!FreeTierGate.canAddPlants(tier, repo.plants)) {
               _blockOnLimit(
-                'Free plan is limited to ${FreeTierLimits.maxActivePlants} '
-                'active plants — upgrade for unlimited plants.',
+                l.freeTierPlantLimitMessage(FreeTierLimits.maxActivePlants),
                 onUpgraded: () => _showAddPlantSheet(context, repo),
               );
               return;

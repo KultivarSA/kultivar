@@ -619,7 +619,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   leading: const Icon(Icons.download_rounded),
                   title: Row(
                     children: [
-                      const Text('Export CSV'),
+                      Text(AppLocalizations.of(context).dashboardExportCsv),
                       if (!tier.hasUnlimitedFeatures) ...[
                         const SizedBox(width: AppSpacing.xs),
                         const ProBadge(),
