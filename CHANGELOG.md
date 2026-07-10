@@ -9,6 +9,8 @@ See `BUILD.md` for the release process, version-bump rules, and git tag scheme.
 
 ## [Unreleased]
 
+## [1.0.4] — 2026-07-10
+
 ### Changed
 - **Free-tier gate copy localized across all 9 locales.**  The nine
   monetization strings the enforcement work introduced (space/plant cap
@@ -367,7 +369,8 @@ Initial public release.
 - App Lock with biometrics (Face ID / Touch ID / Android BiometricPrompt)
   + PIN fallback.
 
-[Unreleased]: https://github.com/KultivarSA/kultivar/compare/v1.0.3...HEAD
+[Unreleased]: https://github.com/KultivarSA/kultivar/compare/v1.0.4...HEAD
+[1.0.4]: https://github.com/KultivarSA/kultivar/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/KultivarSA/kultivar/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/KultivarSA/kultivar/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/KultivarSA/kultivar/compare/v1.0.0...v1.0.1
