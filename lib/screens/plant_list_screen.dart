@@ -6,6 +6,7 @@ import '../models/grow_space.dart';
 import '../models/plant.dart';
 import '../repository/grow_repository.dart';
 import '../services/notification_service.dart';
+import '../services/subscription_service.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_spacing.dart';
 import '../theme/app_typography.dart';
@@ -14,6 +15,7 @@ import '../widgets/app_toast.dart';
 import '../widgets/confirm_sheet.dart';
 import '../widgets/empty_state.dart';
 import '../widgets/empty_state_art.dart';
+import '../widgets/pro_gate.dart';
 import '../widgets/undo_overlay.dart';
 import 'plant_detail_screen.dart';
 
@@ -239,6 +241,11 @@ class _PlantListScreenState extends State<PlantListScreen> {
 
   Future<void> _exportSelected(
       BuildContext context, GrowRepository repo, List<Plant> allPlants) async {
+    // PDF reports are a paid feature (Lifetime + Pro).
+    if (!context.read<SubscriptionService>().hasUnlimitedFeatures) {
+      await showPaywall(context);
+      return;
+    }
     final ids = Set<String>.from(_selected);
     final selected = allPlants.where((p) => ids.contains(p.id)).toList();
     if (selected.isEmpty) return;

@@ -80,6 +80,35 @@ class WidgetUpdateService {
     }
   }
 
+  /// Free-tier variant of [update]: blanks the widget's live data and shows
+  /// an upgrade hint instead.  The home-screen widget is a paid feature
+  /// (Lifetime + Pro per the paywall matrix); pushing real data to Free
+  /// users would silently un-gate it — and letting stale data linger after
+  /// a downgrade would be worse.  Same error contract as [update].
+  static Future<void> writeLocked() async {
+    if (kIsWeb) return;
+    try {
+      await HomeWidget.setAppGroupId(_appGroupId);
+      await Future.wait([
+        HomeWidget.saveWidgetData<String>(_kSpaceName, 'Kultivar'),
+        HomeWidget.saveWidgetData<String>(_kTemp, '—'),
+        HomeWidget.saveWidgetData<String>(_kHumidity, '—'),
+        HomeWidget.saveWidgetData<String>(_kVpd, '—'),
+        HomeWidget.saveWidgetData<String>(_kVpdStatus, ''),
+        HomeWidget.saveWidgetData<String>(_kAge, '—'),
+        HomeWidget.saveWidgetData<String>(
+            _kNextCare, 'Widget is a Pro feature — upgrade in the app'),
+        HomeWidget.saveWidgetData<int>(_kPlantCount, 0),
+      ]);
+      await HomeWidget.updateWidget(
+        iOSName: _iosWidgetName,
+        androidName: _androidWidgetName,
+      );
+    } catch (e, stack) {
+      ErrorReporter.report('WidgetUpdateService.writeLocked', e, stack);
+    }
+  }
+
   // ── Data computation ──────────────────────────────────────────────────────
 
   static Future<void> _writeData({

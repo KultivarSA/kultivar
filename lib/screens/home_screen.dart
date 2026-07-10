@@ -3,12 +3,15 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
+import '../config/subscription_tier_config.dart';
 import '../l10n/app_localizations.dart';
+import '../main.dart';
 import '../models/environment_log.dart';
 import '../models/grow_space.dart';
 import '../models/plant.dart';
 import '../models/plant_note.dart';
 import '../repository/grow_repository.dart';
+import '../services/subscription_service.dart';
 import '../theme/app_colors.dart';
 import '../theme/app_spacing.dart';
 import '../theme/app_typography.dart';
@@ -22,6 +25,7 @@ import '../widgets/app_toast.dart';
 import '../widgets/batch_care_sheet.dart';
 import '../widgets/empty_state_art.dart';
 import '../widgets/open_issues_banner.dart';
+import '../widgets/pro_gate.dart';
 import '../widgets/skeleton.dart';
 import '../widgets/status_badge.dart';
 import 'nutrient_calculator_screen.dart';
@@ -339,6 +343,30 @@ class _HomeScreenState extends State<HomeScreen> {
                   ]),
                 ),
               ),
+            // ── Free-tier plant cap banner ────────
+            // Existing over-limit plants are never hidden or deleted;
+            // this only tells the user why the NEXT plant won't create.
+            SliverToBoxAdapter(
+              child: Builder(builder: (context) {
+                final tier = context
+                    .select<SubscriptionService, SubscriptionTier>(
+                        (s) => s.tier);
+                // Demo mode seeds more sample plants than the free cap;
+                // nagging about limits over throwaway data helps nobody.
+                if (KultivarApp.isDemoModeNotifier.value ||
+                    !FreeTierGate.atPlantCap(tier, repo.plants)) {
+                  return const SizedBox.shrink();
+                }
+                return const Padding(
+                  padding: EdgeInsets.only(bottom: AppSpacing.sm),
+                  child: ProLimitBanner(
+                    message: 'You\'ve reached the free plan\'s '
+                        '${FreeTierLimits.maxActivePlants}-plant limit.',
+                  ),
+                );
+              }),
+            ),
+
             // ── Open issues banner ────────────────
             SliverToBoxAdapter(
               child: OpenIssuesBanner(

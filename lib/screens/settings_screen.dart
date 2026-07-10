@@ -35,6 +35,7 @@ import '../utils/csv_export_service.dart';
 import '../widgets/app_card.dart';
 import '../widgets/app_toast.dart';
 import '../widgets/confirm_sheet.dart';
+import '../widgets/pro_gate.dart';
 import 'app_lock_screen.dart';
 import 'legal_document_screen.dart';
 import 'onboarding_screen.dart';
@@ -551,6 +552,20 @@ class _SettingsScreenState extends State<SettingsScreen>
 
           // ── Data ────────────────────────────
           _sectionHeader(AppLocalizations.of(context).settingsSectionDataExport),
+          // CSV/PDF export is a paid feature (Lifetime Local + Pro Cloud).
+          // Free renders a locked card that routes to the paywall.  Backup
+          // & Restore below stays ungated — local encrypted backups are
+          // included in the free tier per the paywall matrix.
+          if (!context.select<SubscriptionService, bool>(
+              (s) => s.hasUnlimitedFeatures))
+            ProGate.card(
+              feature: 'PDF / CSV Export',
+              description:
+                  'Export your plants, harvests, logs and expenses as '
+                  'CSV files and PDF reports.',
+              icon: Icons.folder_zip_rounded,
+            )
+          else
           AppCard(
             child: Column(children: [
               _actionTile(

@@ -9,6 +9,34 @@ See `BUILD.md` for the release process, version-bump rules, and git tag scheme.
 
 ## [Unreleased]
 
+### Added
+- **Free-tier limits are now enforced** — the paywall's feature matrix
+  was previously aspirational; every gate existed but nothing called it.
+  New `FreeTierGate` (config/subscription_tier_config.dart) centralises
+  the rules, and the call sites now enforce:
+  - **Plants:** creating a 4th active plant on Free is blocked (FAB add
+    flow + bulk-clone sheet).  Archived/completed plants never count
+    toward the cap.  Existing over-limit data is never deleted or hidden
+    — only creating *new* plants is refused, and a tappable limit banner
+    on Home explains why.
+  - **Spaces:** a 2nd grow space on Free routes to the paywall.
+  - **Analytics history:** clamped to 60 days on Free across the
+    dashboard trend chart, space environment analytics, and the space
+    history chart.  Wider presets ("90d"/"All") render locked with a
+    premium icon and open the paywall.  Demo mode is exempt so sample
+    data stays presentable.
+  - **PDF/CSV export:** settings export card, dashboard CSV export,
+    grow-report share/export PDF, and bulk plant reports are
+    Lifetime/Pro only.  Local encrypted backups remain free.
+  - **Home-screen widget:** on Free the widget shows an upgrade hint
+    instead of live data (also prevents stale data lingering after a
+    downgrade).
+  - Strain library + comparisons stay free — the paywall matrix lists
+    them ✓ on every tier.
+  - Gates react to live tier changes (purchase/restore/expiry pushed by
+    the CustomerInfoUpdateListener) without an app restart; a successful
+    upgrade from a blocked add-flow resumes that flow.
+
 ## [1.0.3] — 2026-07-09
 
 ### Fixed

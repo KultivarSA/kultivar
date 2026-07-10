@@ -964,9 +964,11 @@ class _AlreadyPurchasedScreen extends StatelessWidget {
 // nothing to provide and the comparison tool is a strong taste of the
 // analytics depth the paid tiers expand on.
 //
-// Note: when a row says "✗" for Pro Cloud or "✓" for Free, double-check
-// that the call site enforces it — the codebase doesn't yet hard-limit
-// plant counts so those rows are aspirational until the cap is wired in.
+// Every row here is enforced at its call site via FreeTierGate
+// (config/subscription_tier_config.dart) — plant/space caps in the FAB
+// add flows + bulk-clone sheet, the 60-day analytics clamp in the
+// dashboard/space analytics/history charts, and export + widget gates.
+// If you change a row, move the matching gate in the same commit.
 // ─────────────────────────────────────────────────────────────────────────────
 
 class _Feature {
