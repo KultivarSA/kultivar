@@ -204,6 +204,19 @@ class SubscriptionService extends ChangeNotifier {
 
       final config = PurchasesConfiguration(apiKey);
       await Purchases.configure(config);
+
+      // React to every entitlement change the SDK learns about —
+      // including server-side validation that completes moments AFTER
+      // purchasePackage() already returned.  Without this listener a
+      // freshly-bought tier could stay invisible until the next app
+      // launch: the purchase call's synchronous CustomerInfo sometimes
+      // lags validation, and the follow-up push had no subscriber.
+      // Also covers renewals, cancellations, and cross-device changes.
+      Purchases.addCustomerInfoUpdateListener((info) {
+        _customerInfo = info;
+        _setTier(_resolveTier(info));
+        notifyListeners();
+      });
     } catch (e, stack) {
       // StoreKit / Billing unavailable — fail silently, user stays Free.
       ErrorReporter.report('SubscriptionService.init', e, stack);

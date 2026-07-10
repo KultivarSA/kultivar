@@ -9,6 +9,18 @@ See `BUILD.md` for the release process, version-bump rules, and git tag scheme.
 
 ## [Unreleased]
 
+## [1.0.3] — 2026-07-09
+
+### Fixed
+- **Purchased tier now appears immediately — no app restart needed.**
+  RevenueCat's server-side validation can complete moments after
+  `purchasePackage()` returns; when it did, the entitlement update had
+  no subscriber and the UI stayed on the old tier until the next cold
+  start re-read the cache.  `SubscriptionService` now registers
+  `Purchases.addCustomerInfoUpdateListener` at configure time, so any
+  entitlement change (delayed validation, renewals, cancellations,
+  cross-device) flows straight into the tier + notifies the UI.
+
 ## [1.0.2] — 2026-07-09
 
 ### Changed
@@ -311,7 +323,8 @@ Initial public release.
 - App Lock with biometrics (Face ID / Touch ID / Android BiometricPrompt)
   + PIN fallback.
 
-[Unreleased]: https://github.com/KultivarSA/kultivar/compare/v1.0.2...HEAD
+[Unreleased]: https://github.com/KultivarSA/kultivar/compare/v1.0.3...HEAD
+[1.0.3]: https://github.com/KultivarSA/kultivar/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/KultivarSA/kultivar/compare/v1.0.1...v1.0.2
 [1.0.1]: https://github.com/KultivarSA/kultivar/compare/v1.0.0...v1.0.1
 [1.0.0]: https://github.com/KultivarSA/kultivar/releases/tag/v1.0.0
