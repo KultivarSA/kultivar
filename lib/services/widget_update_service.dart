@@ -85,7 +85,11 @@ class WidgetUpdateService {
   /// (Lifetime + Pro per the paywall matrix); pushing real data to Free
   /// users would silently un-gate it — and letting stale data linger after
   /// a downgrade would be worse.  Same error contract as [update].
-  static Future<void> writeLocked() async {
+  ///
+  /// [upgradeHint] lets the caller pass a localized string — the service
+  /// has no BuildContext of its own; the English default keeps any
+  /// context-free caller working.
+  static Future<void> writeLocked({String? upgradeHint}) async {
     if (kIsWeb) return;
     try {
       await HomeWidget.setAppGroupId(_appGroupId);
@@ -97,7 +101,8 @@ class WidgetUpdateService {
         HomeWidget.saveWidgetData<String>(_kVpdStatus, ''),
         HomeWidget.saveWidgetData<String>(_kAge, '—'),
         HomeWidget.saveWidgetData<String>(
-            _kNextCare, 'Widget is a Pro feature — upgrade in the app'),
+            _kNextCare,
+            upgradeHint ?? 'Widget is a Pro feature — upgrade in the app'),
         HomeWidget.saveWidgetData<int>(_kPlantCount, 0),
       ]);
       await HomeWidget.updateWidget(

@@ -357,11 +357,11 @@ class _HomeScreenState extends State<HomeScreen> {
                     !FreeTierGate.atPlantCap(tier, repo.plants)) {
                   return const SizedBox.shrink();
                 }
-                return const Padding(
-                  padding: EdgeInsets.only(bottom: AppSpacing.sm),
+                return Padding(
+                  padding: const EdgeInsets.only(bottom: AppSpacing.sm),
                   child: ProLimitBanner(
-                    message: 'You\'ve reached the free plan\'s '
-                        '${FreeTierLimits.maxActivePlants}-plant limit.',
+                    message: AppLocalizations.of(context)
+                        .freeTierHomeCapBanner(FreeTierLimits.maxActivePlants),
                   ),
                 );
               }),

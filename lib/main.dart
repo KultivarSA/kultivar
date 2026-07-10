@@ -391,7 +391,10 @@ class _AppEntryState extends State<_AppEntry> with WidgetsBindingObserver {
     WidgetsBinding.instance.addPostFrameCallback((_) {
       if (!mounted) return;
       if (!context.read<SubscriptionService>().hasUnlimitedFeatures) {
-        WidgetUpdateService.writeLocked();
+        WidgetUpdateService.writeLocked(
+          upgradeHint:
+              AppLocalizations.of(context).widgetLockedUpgradeHint,
+        );
         return;
       }
       final repo = context.read<GrowRepository>();

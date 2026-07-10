@@ -8,6 +8,16 @@
   "settingsGroupBackupOptions": "Meer back-upopties",
   "settingsGroupMaintenance": "Onderhoud",
 
+  "freeTierSpaceLimitMessage": "Het gratis plan bevat {count} groeiruimte — upgrade voor onbeperkte ruimtes.",
+  "freeTierPlantLimitMessage": "Het gratis plan is beperkt tot {count} actieve planten — upgrade voor onbeperkte planten.",
+  "freeTierCloneBatchMessage": "Het gratis plan is beperkt tot {count} actieve planten — deze batch zou daaroverheen gaan.",
+  "freeTierHomeCapBanner": "Je hebt de limiet van {count} planten van het gratis plan bereikt.",
+  "widgetLockedUpgradeHint": "De widget is een Pro-functie — upgrade in de app",
+  "proGateExportFeature": "PDF/CSV-export",
+  "proGateExportDescription": "Exporteer je planten, oogsten, logs en uitgaven als CSV-bestanden en PDF-rapporten.",
+  "dashboardExportCsv": "CSV exporteren",
+  "proGateUpgradeAction": "Upgraden",
+
   "navHome": "Start",
   "navAnalytics": "Analyse",
   "navArchive": "Archief",

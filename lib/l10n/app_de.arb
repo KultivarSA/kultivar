@@ -8,6 +8,16 @@
   "settingsGroupBackupOptions": "Weitere Backup-Optionen",
   "settingsGroupMaintenance": "Wartung",
 
+  "freeTierSpaceLimitMessage": "Der Free-Plan umfasst {count} Growraum — Upgrade für unbegrenzte Räume.",
+  "freeTierPlantLimitMessage": "Der Free-Plan ist auf {count} aktive Pflanzen begrenzt — Upgrade für unbegrenzte Pflanzen.",
+  "freeTierCloneBatchMessage": "Der Free-Plan ist auf {count} aktive Pflanzen begrenzt — diese Gruppe würde das Limit überschreiten.",
+  "freeTierHomeCapBanner": "Du hast das Limit von {count} Pflanzen im Free-Plan erreicht.",
+  "widgetLockedUpgradeHint": "Das Widget ist eine Pro-Funktion — Upgrade in der App",
+  "proGateExportFeature": "PDF-/CSV-Export",
+  "proGateExportDescription": "Exportiere deine Pflanzen, Ernten, Logs und Ausgaben als CSV-Dateien und PDF-Berichte.",
+  "dashboardExportCsv": "CSV exportieren",
+  "proGateUpgradeAction": "Upgrade",
+
   "navHome": "Start",
   "navAnalytics": "Analyse",
   "navArchive": "Archiv",

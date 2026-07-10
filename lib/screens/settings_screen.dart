@@ -559,10 +559,9 @@ class _SettingsScreenState extends State<SettingsScreen>
           if (!context.select<SubscriptionService, bool>(
               (s) => s.hasUnlimitedFeatures))
             ProGate.card(
-              feature: 'PDF / CSV Export',
+              feature: AppLocalizations.of(context).proGateExportFeature,
               description:
-                  'Export your plants, harvests, logs and expenses as '
-                  'CSV files and PDF reports.',
+                  AppLocalizations.of(context).proGateExportDescription,
               icon: Icons.folder_zip_rounded,
             )
           else

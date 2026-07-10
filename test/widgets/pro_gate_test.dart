@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
+import 'package:kultivar/l10n/app_localizations.dart';
 import 'package:kultivar/services/subscription_service.dart';
 import 'package:kultivar/widgets/pro_gate.dart';
 import 'package:provider/provider.dart';
@@ -8,12 +9,18 @@ import 'package:shared_preferences/shared_preferences.dart';
 /// Pumps [child] under a real SubscriptionService provider.  The service
 /// never touches RevenueCat here — no API key is configured in tests, and
 /// we drive the tier through debugSetTier (SharedPreferences is mocked).
+/// Localization delegates are wired because ProLimitBanner resolves its
+/// "Upgrade" action label through AppLocalizations.
 Future<SubscriptionService> _pump(WidgetTester tester, Widget child) async {
   final svc = SubscriptionService();
   await tester.pumpWidget(
     ChangeNotifierProvider<SubscriptionService>.value(
       value: svc,
-      child: MaterialApp(home: Scaffold(body: child)),
+      child: MaterialApp(
+        localizationsDelegates: AppLocalizations.localizationsDelegates,
+        supportedLocales: AppLocalizations.supportedLocales,
+        home: Scaffold(body: child),
+      ),
     ),
   );
   return svc;
