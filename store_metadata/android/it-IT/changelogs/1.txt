@@ -1,9 +1,9 @@
-Ti diamo il benvenuto in Kultivar 1.0.
+Ti diamo il benvenuto in Kultivar 1.0 — il diario di coltivazione privacy-first, dal seme alla concia.
 
-Il tracker completo del ciclo di coltivazione per i coltivatori amatoriali — dal seme alla concia. Diario per pianta, monitoraggio ambientale con VPD, valutazione qualità al raccolto, tracker spese con analisi di costo al grammo, report PDF completi e libreria varietà con confronti.
+Diario per pianta, monitoraggio ambientale con VPD, valutazione del raccolto, costo al grammo, report PDF e libreria varietà.
 
-Disponibile in inglese, tedesco, spagnolo, francese, italiano, olandese e portoghese.
+Disponibile in nove lingue, tra cui afrikaans e isiZulu.
 
-La versione gratuita copre una prima coltivazione completa. Lifetime Local sblocca l'uso illimitato con un acquisto una tantum. Pro Cloud aggiunge i benchmark della community.
+Il piano gratuito copre una prima coltivazione. Lifetime Local sblocca tutto con un acquisto; Pro Cloud aggiunge i benchmark della community (in arrivo).
 
-Privacy-first — il tuo diario resta cifrato sul dispositivo.
+Il tuo diario resta cifrato sul dispositivo.

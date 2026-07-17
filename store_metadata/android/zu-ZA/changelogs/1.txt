@@ -1,9 +1,9 @@
-Siyakwemukela ku-Kultivar 1.0 — idayari epheleleyo yokukhulisa kusukela embewini kuya ekuvuthweni.
+Siyakwemukela ku-Kultivar 1.0 — idayari yokukhulisa ebeka ubumfihlo kuqala, kusukela embewini kuya ekuvuthweni.
 
-Landela isitshalo ngasinye, lalela i-environment nge-VPD, hlola ikhwalithi yokuvuna, landela izindleko ngegremu, khiqiza imibiko ye-PDF, futhi sebenzisa ilabhulali yezinhlobo enokuqhathaniswa.
+Idayari ngesitshalo ngasinye, i-VPD, ukuhlola isivuno, izindleko ngegremu, imibiko ye-PDF nelabhulali yezinhlobo.
 
 Iyatholakala ngezilimi eziyi-9, kuhlanganise nesiBhunu nesiZulu.
 
-Izinga lamahhala lihlanganisa ukukhulisa kokuqala okuphelele. I-Lifetime Local ivula ukusebenzisa okungenamkhawulo ngokuthenga kanye. I-Pro Cloud yengeza izilinganiso zomphakathi.
+Izinga lamahhala lihlanganisa ukukhulisa kokuqala. I-Lifetime Local ivula konke ngokuthenga kanye; i-Pro Cloud yengeza izilinganiso zomphakathi (kuza maduze).
 
-Ubumfihlo — idayari yakho ihlala i-encrypted etholweni yakho.
+Idayari yakho ihlala ikhiyiwe kudivayisi yakho.

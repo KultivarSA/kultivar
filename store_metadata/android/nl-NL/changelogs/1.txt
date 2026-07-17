@@ -1,9 +1,9 @@
-Welkom bij Kultivar 1.0.
+Welkom bij Kultivar 1.0 — het privacy-first kweekdagboek, van zaad tot uitharding.
 
-De volledige kweekcyclus-tracker voor thuiskwekers — van zaad tot uitharding. Plantdagboek, klimaatmonitoring met VPD, kwaliteitsbeoordeling bij oogst, uitgaventracker met kosten-per-gram-analyse, volledige PDF-kweekverslagen en een ingebouwde rassenbibliotheek met vergelijkingen.
+Plantdagboek, klimaatmonitoring met VPD, oogstbeoordeling, kosten per gram, PDF-verslagen en een ingebouwde rassenbibliotheek.
 
-Beschikbaar in Engels, Duits, Spaans, Frans, Italiaans, Nederlands en Portugees.
+Beschikbaar in negen talen, waaronder Afrikaans en isiZulu.
 
-De gratis versie dekt een volledige eerste kweek. Lifetime Local ontgrendelt onbeperkt gebruik met één aankoop. Pro Cloud voegt community-benchmarks toe.
+Het gratis plan dekt een volledige eerste kweek. Lifetime Local ontgrendelt alles met één aankoop; Pro Cloud voegt community-benchmarks toe (binnenkort).
 
-Privacy-first — je dagboek blijft versleuteld op je apparaat.
+Je dagboek blijft versleuteld op je apparaat.

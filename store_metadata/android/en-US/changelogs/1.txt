@@ -1,9 +1,9 @@
-Welcome to Kultivar 1.0.
+Welcome to Kultivar 1.0 — the privacy-first grow journal, seed to cure.
 
-The full lifecycle tracker for home growers — seed to cure, every cycle. Per-plant journal, environment monitoring with VPD, harvest quality assessment, expense tracking with cost-per-gram analytics, full PDF grow reports, and a built-in strain library with comparisons.
+Per-plant journal, environment monitoring with VPD, harvest quality ratings, cost-per-gram expense tracking, PDF grow reports, and a built-in strain library.
 
-Available in English, German, Spanish, French, Italian, Dutch, and Portuguese.
+Available in nine languages, including Afrikaans and isiZulu.
 
-Free tier covers a full first grow. Lifetime Local unlocks unlimited use, one-time. Pro Cloud adds community benchmarking.
+The free tier covers a full first grow. Lifetime Local unlocks unlimited use once; Pro Cloud adds community benchmarks (rolling out soon).
 
-Privacy-first by design — your journal stays encrypted on your device.
+Your journal stays encrypted on your device.

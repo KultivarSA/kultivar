@@ -1,9 +1,9 @@
-Bienvenue dans Kultivar 1.0.
+Bienvenue dans Kultivar 1.0 — le journal de culture qui respecte ta vie privée, de la graine à l'affinage.
 
-Le suivi complet du cycle de culture pour les cultivateurs amateurs — de la graine à l'affinage. Journal par plante, suivi environnemental avec VPD, évaluation qualité à la récolte, suivi des dépenses avec coût au gramme, rapports PDF complets et bibliothèque de variétés avec comparaisons.
+Journal par plante, suivi environnemental avec VPD, évaluation des récoltes, coût au gramme, rapports PDF et bibliothèque de variétés.
 
-Disponible en anglais, allemand, espagnol, français, italien, néerlandais et portugais.
+Disponible en neuf langues, dont l'afrikaans et l'isiZulu.
 
-La version gratuite couvre une première culture complète. Lifetime Local déverrouille l'usage illimité en un achat unique. Pro Cloud ajoute les benchmarks communautaires.
+Le plan gratuit couvre une première culture. Lifetime Local débloque tout en un achat ; Pro Cloud ajoute les benchmarks communautaires (bientôt).
 
-Conçu autour de la vie privée — votre journal reste chiffré sur votre appareil.
+Ton journal reste chiffré sur ton appareil.
