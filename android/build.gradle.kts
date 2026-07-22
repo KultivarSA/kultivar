@@ -34,14 +34,23 @@ subprojects {
 // on every subproject (matching :app) keeps the toolchain consistent
 // across all plugins at once.  Runs in afterEvaluate so each plugin's
 // `android` extension is registered before we configure it.
-// Both compilers are configured with lazy `configureEach` (NOT
-// afterEvaluate): the pre-existing `evaluationDependsOn(":app")` above
-// means some subprojects are already evaluated by the time this block
-// runs, and calling afterEvaluate on an evaluated project throws
-// "Cannot run Project.afterEvaluate when the project is already
-// evaluated".  configureEach applies at task-realization time, which is
-// safe regardless of evaluation state and runs after AGP's own setup,
-// so our target wins.
+// Pin every plugin module to JVM target 17 (matching :app).  Several
+// Flutter plugins (home_widget 0.9.1, audioplayers_android, …) hardcode
+// `compileOptions { VERSION_1_8 }` + `kotlinOptions.jvmTarget "1.8"` in
+// their own build.gradle.  The purchases_flutter 8 -> 10 upgrade (Play
+// Billing Library 8) shifted the Kotlin toolchain so those defaults now
+// fail two ways: home_widget can't inline its JVM-11 AndroidX deps into
+// 1.8 bytecode, and any module we lift to Kotlin 17 while its Java stays
+// 1.8 trips the "Inconsistent JVM-target compatibility" check.
+//
+//   * Kotlin: `configureEach` is lazy and wins over the plugin's
+//     kotlinOptions.
+//   * Java: the plugin bakes compileOptions into its `android` extension
+//     during ITS OWN evaluation, so we must re-set them in afterEvaluate
+//     (after that build.gradle runs).  Guarded on `state.executed`
+//     because the `evaluationDependsOn(":app")` chain leaves some
+//     projects already evaluated, and afterEvaluate on an evaluated
+//     project throws.
 subprojects {
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>()
         .configureEach {
@@ -49,10 +58,16 @@ subprojects {
                 jvmTarget = "17"
             }
         }
-    tasks.withType<JavaCompile>().configureEach {
-        sourceCompatibility = JavaVersion.VERSION_17.toString()
-        targetCompatibility = JavaVersion.VERSION_17.toString()
+
+    val bumpJavaTo17 = {
+        (extensions.findByName("android") as? com.android.build.gradle.BaseExtension)
+            ?.compileOptions {
+                sourceCompatibility = JavaVersion.VERSION_17
+                targetCompatibility = JavaVersion.VERSION_17
+            }
+        Unit
     }
+    if (state.executed) bumpJavaTo17() else afterEvaluate { bumpJavaTo17() }
 }
 
 tasks.register<Delete>("clean") {
