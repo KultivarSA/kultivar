@@ -34,23 +34,24 @@ subprojects {
 // on every subproject (matching :app) keeps the toolchain consistent
 // across all plugins at once.  Runs in afterEvaluate so each plugin's
 // `android` extension is registered before we configure it.
-// Pin every plugin module to JVM target 17 (matching :app).  Several
-// Flutter plugins (home_widget 0.9.1, audioplayers_android, …) hardcode
-// `compileOptions { VERSION_1_8 }` + `kotlinOptions.jvmTarget "1.8"` in
-// their own build.gradle.  The purchases_flutter 8 -> 10 upgrade (Play
-// Billing Library 8) shifted the Kotlin toolchain so those defaults now
-// fail two ways: home_widget can't inline its JVM-11 AndroidX deps into
-// 1.8 bytecode, and any module we lift to Kotlin 17 while its Java stays
-// 1.8 trips the "Inconsistent JVM-target compatibility" check.
+// Lift every module's Kotlin compilation to jvmTarget 17.
 //
-//   * Kotlin: `configureEach` is lazy and wins over the plugin's
-//     kotlinOptions.
-//   * Java: the plugin bakes compileOptions into its `android` extension
-//     during ITS OWN evaluation, so we must re-set them in afterEvaluate
-//     (after that build.gradle runs).  Guarded on `state.executed`
-//     because the `evaluationDependsOn(":app")` chain leaves some
-//     projects already evaluated, and afterEvaluate on an evaluated
-//     project throws.
+// The purchases_flutter 8 -> 10 upgrade (Play Billing Library 8) shifted
+// the Kotlin toolchain and broke home_widget 0.9.1, whose Kotlin was
+// compiled at jvmTarget 1.8 while inlining JVM-11 bytecode from its
+// AndroidX deps:
+//   Cannot inline bytecode built with JVM target 11 into bytecode that
+//   is being built with JVM target 1.8.
+// configureEach is lazy and overrides each plugin's own
+// `kotlinOptions.jvmTarget "1.8"`.
+//
+// We deliberately do NOT try to lift the plugins' Java compileOptions to
+// match: several plugins (home_widget, audioplayers_android, …) hardcode
+// `compileOptions { VERSION_1_8 }` and AGP finalizes those before we can
+// override them.  Instead the resulting Kotlin-17 / Java-8 split within a
+// plugin AAR is allowed via `kotlin.jvm.target.validation.mode=warning`
+// (android/gradle.properties) — the mixed class-file versions are dexed
+// to a single DEX by D8 at app assembly, so it's safe.
 subprojects {
     tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>()
         .configureEach {
@@ -58,16 +59,6 @@ subprojects {
                 jvmTarget = "17"
             }
         }
-
-    val bumpJavaTo17 = {
-        (extensions.findByName("android") as? com.android.build.gradle.BaseExtension)
-            ?.compileOptions {
-                sourceCompatibility = JavaVersion.VERSION_17
-                targetCompatibility = JavaVersion.VERSION_17
-            }
-        Unit
-    }
-    if (state.executed) bumpJavaTo17() else afterEvaluate { bumpJavaTo17() }
 }
 
 tasks.register<Delete>("clean") {
