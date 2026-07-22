@@ -34,21 +34,24 @@ subprojects {
 // on every subproject (matching :app) keeps the toolchain consistent
 // across all plugins at once.  Runs in afterEvaluate so each plugin's
 // `android` extension is registered before we configure it.
+// Both compilers are configured with lazy `configureEach` (NOT
+// afterEvaluate): the pre-existing `evaluationDependsOn(":app")` above
+// means some subprojects are already evaluated by the time this block
+// runs, and calling afterEvaluate on an evaluated project throws
+// "Cannot run Project.afterEvaluate when the project is already
+// evaluated".  configureEach applies at task-realization time, which is
+// safe regardless of evaluation state and runs after AGP's own setup,
+// so our target wins.
 subprojects {
-    afterEvaluate {
-        val androidExt = project.extensions.findByName("android")
-        if (androidExt is com.android.build.gradle.BaseExtension) {
-            androidExt.compileOptions {
-                sourceCompatibility = JavaVersion.VERSION_17
-                targetCompatibility = JavaVersion.VERSION_17
+    tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>()
+        .configureEach {
+            kotlinOptions {
+                jvmTarget = "17"
             }
         }
-        tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>()
-            .configureEach {
-                kotlinOptions {
-                    jvmTarget = "17"
-                }
-            }
+    tasks.withType<JavaCompile>().configureEach {
+        sourceCompatibility = JavaVersion.VERSION_17.toString()
+        targetCompatibility = JavaVersion.VERSION_17.toString()
     }
 }
 
