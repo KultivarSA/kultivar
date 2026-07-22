@@ -287,7 +287,13 @@ class SubscriptionService extends ChangeNotifier {
     notifyListeners();
 
     try {
-      final info = await Purchases.purchasePackage(package);
+      // purchases_flutter 10.x: purchasePackage() is deprecated in favour
+      // of purchase(PurchaseParams); the call returns a PurchaseResult
+      // (CustomerInfo + StoreTransaction) rather than a bare CustomerInfo.
+      // We only need the refreshed entitlements to resolve the tier.
+      final result =
+          await Purchases.purchase(PurchaseParams.package(package));
+      final info = result.customerInfo;
       _customerInfo = info;
       final newTier = _resolveTier(info);
       final upgraded = newTier.index > _tier.index;

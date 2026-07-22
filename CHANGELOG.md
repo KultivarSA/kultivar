@@ -9,6 +9,19 @@ See `BUILD.md` for the release process, version-bump rules, and git tag scheme.
 
 ## [Unreleased]
 
+## [1.0.5] — 2026-07-11
+
+### Changed
+- **Upgraded `purchases_flutter` 8.11 → 10.4.2 to satisfy Google Play's
+  Billing Library 8 requirement** (mandatory for updates from
+  2026-08-31; Google flagged the old Billing Client 7 that
+  purchases_flutter 8.x bundled).  The 10.x native SDK pulls the `bc8`
+  (Billing Client 8) variant.  API migration: `Purchases.purchasePackage`
+  (deprecated, and now returns `PurchaseResult` rather than
+  `CustomerInfo`) → `Purchases.purchase(PurchaseParams.package(...))`,
+  reading `result.customerInfo`.  `restorePurchases` / `getCustomerInfo`
+  are unchanged.  minSdk 24 already clears the 10.x floor of 23.
+
 ## [1.0.4] — 2026-07-10
 
 ### Changed
@@ -369,7 +382,8 @@ Initial public release.
 - App Lock with biometrics (Face ID / Touch ID / Android BiometricPrompt)
   + PIN fallback.
 
-[Unreleased]: https://github.com/KultivarSA/kultivar/compare/v1.0.4...HEAD
+[Unreleased]: https://github.com/KultivarSA/kultivar/compare/v1.0.5...HEAD
+[1.0.5]: https://github.com/KultivarSA/kultivar/compare/v1.0.4...v1.0.5
 [1.0.4]: https://github.com/KultivarSA/kultivar/compare/v1.0.3...v1.0.4
 [1.0.3]: https://github.com/KultivarSA/kultivar/compare/v1.0.2...v1.0.3
 [1.0.2]: https://github.com/KultivarSA/kultivar/compare/v1.0.1...v1.0.2
