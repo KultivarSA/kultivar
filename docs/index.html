@@ -194,6 +194,14 @@
   }
   .btn-secondary:hover { border-color: var(--primary); color: var(--primary); }
 
+  .play-badge {
+    display: inline-flex;
+    border-radius: 10px;
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+  }
+  .play-badge svg { height: 54px; width: auto; display: block; }
+  .play-badge:hover { transform: translateY(-1px); box-shadow: 0 12px 30px rgba(0, 0, 0, 0.45); }
+
   .cta-note {
     color: var(--text-muted);
     font-size: 13px;
@@ -541,7 +549,7 @@
     <!-- ── Hero ──────────────────────────────────────────────────── -->
     <section class="hero">
       <div class="narrow">
-        <span class="eyebrow">Coming soon to Google Play</span>
+        <span class="eyebrow">Now on Google Play</span>
         <h1 class="headline">
           Your grow journal.<br>
           <span class="accent">Not theirs.</span>
@@ -553,10 +561,25 @@
           on you.  No data sold.
         </p>
         <div class="cta-group">
-          <a class="btn-primary" aria-disabled="true" href="#south-africa">Coming soon</a>
+          <a class="play-badge" href="https://play.google.com/store/apps/details?id=io.kultivar.app"
+             target="_blank" rel="noopener" aria-label="Get it on Google Play">
+            <svg viewBox="0 0 182 54" role="img" aria-hidden="true" focusable="false">
+              <rect x="1" y="1" width="180" height="52" rx="10" fill="#000" stroke="#3a4a42" stroke-width="1"/>
+              <g transform="translate(20,15)">
+                <polygon points="0,0 20,6 11,12 0,12" fill="#00A1FF"/>
+                <polygon points="0,12 11,12 20,18 0,24" fill="#00E676"/>
+                <polygon points="20,6 25,12 11,12" fill="#FFD500"/>
+                <polygon points="11,12 25,12 20,18" fill="#FF3A44"/>
+              </g>
+              <text x="57" y="22" fill="#fff" font-size="10.5" letter-spacing="1"
+                    font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif">GET IT ON</text>
+              <text x="56" y="40" fill="#fff" font-size="20" font-weight="500"
+                    font-family="-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Helvetica,Arial,sans-serif">Google Play</text>
+            </svg>
+          </a>
           <a class="btn-secondary" href="#features">See how it works</a>
         </div>
-        <p class="cta-note">Android first.  iOS planned for Q2 2026.</p>
+        <p class="cta-note">Available now on Android.  iOS planned for a future release.</p>
 
         <!-- Phone mockup — drop a real screenshot in here as <img> when ready -->
         <div class="phone-mockup" aria-hidden="true">
@@ -679,7 +702,8 @@
             <p>
               Your data lives on your device, encrypted at rest.  No
               required account.  No required cloud.  Pro Cloud is strictly
-              opt-in for users who want sync and community benchmarks.
+              opt-in &mdash; its cloud features (sync, community benchmarks)
+              are rolling out over time.
             </p>
           </div>
 
@@ -790,7 +814,7 @@
 
           <div class="tier highlight">
             <div class="tier-name">Lifetime Local</div>
-            <div class="tier-price">~R299<span class="unit"> one-time</span></div>
+            <div class="tier-price">R499<span class="unit"> one-time</span></div>
             <p class="tier-tagline">Pay once.  Grow as much as you want.</p>
             <ul>
               <li>Everything in Free, plus:</li>
@@ -803,23 +827,23 @@
               <li>Unlimited exports</li>
             </ul>
             <div style="color: var(--text-muted); font-size: 13px;">
-              Final pricing confirmed at launch.
+              One-time purchase &mdash; no subscription, no recurring fees.
             </div>
           </div>
 
           <div class="tier">
             <div class="tier-name">Pro Cloud</div>
-            <div class="tier-price">~R59<span class="unit"> /month</span></div>
+            <div class="tier-price">R59.99<span class="unit"> /month</span></div>
             <p class="tier-tagline">For the serious community grower.</p>
             <ul>
               <li>Everything in Lifetime Local, plus:</li>
-              <li>Community yield benchmarks</li>
+              <li>Community yield benchmarks<small style="color: var(--text-muted);"> (planned)</small></li>
               <li>Cross-device sync<small style="color: var(--text-muted);"> (planned)</small></li>
               <li>Priority support</li>
               <li>Early access to new features</li>
             </ul>
             <div style="color: var(--text-muted); font-size: 13px;">
-              Cancel anytime via Google Play.
+              Or R349/year &mdash; save 51%.  Cancel anytime via Google Play.
             </div>
           </div>
         </div>
