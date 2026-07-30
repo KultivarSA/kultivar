@@ -1068,6 +1068,33 @@ class _SettingsScreenState extends State<SettingsScreen>
                 subtitle: 'Hand off to another app',
                 onTap: () => _shareDiagnostics(context),
               ),
+              // ── Follow Kultivar ──
+              // Brand names + handles are proper nouns, so these tiles
+              // stay unlocalised (matching the rest of this Support card).
+              Divider(color: context.colBorderFaint, height: 1),
+              _actionTile(
+                icon: Icons.alternate_email,
+                iconColor: AppColors.secondary,
+                label: 'X',
+                subtitle: '@KultivarSA',
+                onTap: () => _openSocial(context, 'https://x.com/KultivarSA'),
+              ),
+              _actionTile(
+                icon: Icons.camera_alt_rounded,
+                iconColor: AppColors.accent,
+                label: 'Instagram',
+                subtitle: '@kultivar.io',
+                onTap: () => _openSocial(
+                    context, 'https://www.instagram.com/kultivar.io/'),
+              ),
+              _actionTile(
+                icon: Icons.smart_display_rounded,
+                iconColor: AppColors.danger,
+                label: 'YouTube',
+                subtitle: 'Kultivar SA',
+                onTap: () => _openSocial(context,
+                    'https://www.youtube.com/channel/UC9t9vyPr3eilxQ8OapSLqcw'),
+              ),
             ]),
           ),
           const SizedBox(height: AppSpacing.lg),
@@ -2055,6 +2082,23 @@ class _SettingsScreenState extends State<SettingsScreen>
     } catch (e) {
       if (!context.mounted) return;
       AppToast.show(context, 'Email launch failed: $e', type: ToastType.error);
+    }
+  }
+
+  /// Opens a social / web link in the external browser or app.  Failures
+  /// (no handler, malformed URL) degrade to a toast rather than crashing.
+  Future<void> _openSocial(BuildContext context, String url) async {
+    try {
+      final ok = await launchUrl(
+        Uri.parse(url),
+        mode: LaunchMode.externalApplication,
+      );
+      if (!ok && context.mounted) {
+        AppToast.show(context, 'Couldn\'t open the link', type: ToastType.info);
+      }
+    } catch (e) {
+      if (!context.mounted) return;
+      AppToast.show(context, 'Couldn\'t open the link', type: ToastType.error);
     }
   }
 

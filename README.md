@@ -2,6 +2,11 @@
 
 **The grow-cycle journal that respects your privacy.**
 
+[![Get it on Google Play](https://img.shields.io/badge/Google%20Play-Download-3DDC84?style=for-the-badge&logo=googleplay&logoColor=white)](https://play.google.com/store/apps/details?id=io.kultivar.app)
+[![X](https://img.shields.io/badge/@KultivarSA-000000?style=for-the-badge&logo=x&logoColor=white)](https://x.com/KultivarSA)
+[![Instagram](https://img.shields.io/badge/@kultivar.io-E4405F?style=for-the-badge&logo=instagram&logoColor=white)](https://www.instagram.com/kultivar.io/)
+[![YouTube](https://img.shields.io/badge/Kultivar-FF0000?style=for-the-badge&logo=youtube&logoColor=white)](https://www.youtube.com/channel/UC9t9vyPr3eilxQ8OapSLqcw)
+
 A polished, offline-first cannabis grow tracker for adult home growers
 in jurisdictions where cultivation is legal. Every photo, every note,
 every harvest stays on your device. No account required. No cloud
@@ -84,8 +89,8 @@ caps just decide how much new data you can add without upgrading.
 
 ## Available on
 
-- iOS App Store — *coming soon*
-- Google Play Store — *coming soon*
+- **[Google Play Store](https://play.google.com/store/apps/details?id=io.kultivar.app) — live now** 🎉
+- iOS App Store — *planned*
 
 Initial launch markets: 🇿🇦 South Africa, 🇺🇸 USA, 🇩🇪 Germany, 🇪🇸 Spain,
 🇫🇷 France, 🇮🇹 Italy, 🇳🇱 Netherlands, 🇵🇹 Portugal — pending platform

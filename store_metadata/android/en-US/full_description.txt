@@ -24,13 +24,17 @@ PRICING
 
 • Free — 1 grow space, 3 active plants, 60 days of analytics history, full built-in strain library + comparisons.
 • Lifetime Local — one-time purchase, unlimited plants and spaces, full analytics, exports, widget, premium strain tools. No cloud services, no recurring fees.
-• Pro Cloud — subscription that adds community percentile benchmarking and (coming soon) cross-device sync.
+• Pro Cloud — subscription that adds community benchmarks and cross-device sync (both rolling out soon).
 
 You can use Kultivar end-to-end without ever creating an account. No tracking, no ads, no data sale.
 
 PRIVACY
 
 Kultivar is privacy-first. Your grow journal lives in encrypted local storage. Community benchmarks are opt-in and only fire when you're on Pro Cloud. Crash reports go through Sentry only when you've explicitly granted consent. Full privacy policy in-app under Settings → Privacy.
+
+FOLLOW US
+
+X: @KultivarSA   ·   Instagram: @kultivar.io   ·   YouTube: Kultivar SA   ·   Web: kultivar.io
 
 DISCLAIMER
 
