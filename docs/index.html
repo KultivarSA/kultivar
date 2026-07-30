@@ -504,6 +504,20 @@
   .footer-col a:hover { color: var(--primary); }
   .footer-col p { color: var(--text-muted); font-size: 13px; line-height: 1.55; margin: 0; }
 
+  .footer-social {
+    display: flex;
+    gap: 16px;
+    margin-top: 16px;
+  }
+  .footer-social a {
+    display: inline-flex;
+    padding: 0;
+    color: var(--text-secondary);
+    transition: color 0.15s ease, transform 0.15s ease;
+  }
+  .footer-social a:hover { color: var(--primary); transform: translateY(-2px); }
+  .footer-social svg { width: 21px; height: 21px; display: block; }
+
   .footer-bottom {
     border-top: 1px solid var(--border-faint);
     padding-top: 24px;
@@ -906,12 +920,17 @@
         <div class="footer-col">
           <h5>Contact</h5>
           <a href="mailto:support@kultivar.io">support@kultivar.io</a>
-          <!-- Add social links once the handles are claimed and active.
-               Reserve slots so the column doesn't reflow when populated:
-          <a href="https://instagram.com/kultivar.app">Instagram</a>
-          <a href="https://twitter.com/kultivarapp">Twitter / X</a>
-          <a href="https://www.tiktok.com/@kultivar.app">TikTok</a>
-          -->
+          <div class="footer-social">
+            <a href="https://x.com/KultivarSA" target="_blank" rel="noopener me" aria-label="Kultivar on X (@KultivarSA)" title="X — @KultivarSA">
+              <svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231 5.451-6.231Zm-1.161 17.52h1.833L7.084 4.126H5.117L17.083 19.77Z"/></svg>
+            </a>
+            <a href="https://www.instagram.com/kultivar.io/" target="_blank" rel="noopener me" aria-label="Kultivar on Instagram (@kultivar.io)" title="Instagram — @kultivar.io">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="5"/><circle cx="12" cy="12" r="4"/><circle cx="17.3" cy="6.7" r="1.15" fill="currentColor" stroke="none"/></svg>
+            </a>
+            <a href="https://www.youtube.com/channel/UC9t9vyPr3eilxQ8OapSLqcw" target="_blank" rel="noopener me" aria-label="Kultivar on YouTube" title="YouTube — Kultivar">
+              <svg viewBox="0 0 24 24" fill="currentColor" fill-rule="evenodd" aria-hidden="true"><path d="M23.5 6.507a3.02 3.02 0 0 0-2.124-2.138C19.505 3.86 12 3.86 12 3.86s-7.505 0-9.376.509A3.02 3.02 0 0 0 .5 6.507 31.6 31.6 0 0 0 0 12a31.6 31.6 0 0 0 .5 5.493 3.02 3.02 0 0 0 2.124 2.138C4.495 20.14 12 20.14 12 20.14s7.505 0 9.376-.509a3.02 3.02 0 0 0 2.124-2.138A31.6 31.6 0 0 0 24 12a31.6 31.6 0 0 0-.5-5.493ZM9.6 15.6V8.4l6.24 3.6L9.6 15.6Z"/></svg>
+            </a>
+          </div>
         </div>
       </div>
 
