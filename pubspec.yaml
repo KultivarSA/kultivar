@@ -2,7 +2,7 @@ name: kultivar
 description: "Kultivar — Grow Cycle Tracker"
 publish_to: "none"
 
-version: 1.0.5+6
+version: 1.0.6+7
 
 environment:
   sdk: ">=3.0.0 <4.0.0"
@@ -80,11 +80,16 @@ dependencies:
   printing: ^5.12.0
   provider: ^6.1.2
   # purchases_flutter 10.x bundles Google Play Billing Library 8.3.0 —
-  # required by Google Play (Billing Library >= 8.0.0 mandatory for
-  # updates from 2026-08-31).  The 9.0.0 major changed purchasePackage()
-  # to return a PurchaseResult (read .customerInfo); 10.0.0 raised the
-  # min Android SDK to 23 (we ship minSdk 24, so unaffected).
-  purchases_flutter: ^10.4.0
+  # satisfies Google Play's mandate (Billing Library >= 8.0.0 for updates
+  # from 2026-08-31).  Play Billing Library 9 exists (9.1.0) and is Google's
+  # *recommended* version, but RevenueCat has NOT shipped a Flutter build on
+  # Billing 9 yet — latest purchases_flutter (10.10.x) is still on Billing
+  # 8.3.0 — so 8.3.0 is the current ceiling while we stay on RevenueCat.
+  # Revisit for Billing 9 once RC's purchases-android ships it.
+  # History: the 9.0.0 major changed purchasePackage() to return a
+  # PurchaseResult (read .customerInfo); 10.0.0 raised min Android SDK to 23
+  # (we ship minSdk 24, so unaffected).
+  purchases_flutter: ^10.10.1
   # F7 voice notes — capture half.  `record` handles mic input
   # (m4a/AAC on mobile, wav on desktop fallback); see `audioplayers`
   # above for the playback side.
